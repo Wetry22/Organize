@@ -10,14 +10,14 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest" crossorigin="anonymous"></script>
     <!-- Google Identity Services & GAPI Client -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="https://apis.google.com/js/api.js" async defer></script>
+    <script src="https://accounts.google.com/gsi/client" async="" defer=""></script>
+    <script src="https://apis.google.com/js/api.js" async="" defer=""></script>
     <!-- Google Fonts: Inter & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -183,7 +183,7 @@
             background: linear-gradient(to right, var(--banner-grad), transparent) !important;
         }
 
-        /* Ajustes de contraste para Temas Claros (Rosa Bebê e Azul Bebê) */
+        /* Ajustes de contraste para Temas Claros */
         [data-theme="pink"] .text-white:not(.keep-white),
         [data-theme="pink"] .text-slate-100,
         [data-theme="pink"] .text-slate-200,
@@ -230,11 +230,156 @@
             color: inherit !important;
         }
 
-        [data-theme="pink"] .bg-slate-800,
-        [data-theme="pink"] .bg-slate-900,
-        [data-theme="blue"] .bg-slate-800,
-        [data-theme="blue"] .bg-slate-900 {
-            background-color: var(--bg-card) !important;
+        /* Fundo Personalizável para TODOS os Temas */
+        #nezukoPinkBg {
+            display: block;
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: var(--theme-custom-bg, none);
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            opacity: var(--theme-bg-opacity, 0.22);
+            transition: background-image 0.4s ease, opacity 0.3s ease;
+        }
+
+        [data-theme="pink"] #nezukoPinkBg {
+            background-image: var(--theme-custom-bg, url('chibi-nezuko-kamado-demon-slayer-desktop-wallpaper-4k.jpg'));
+        }
+
+        aside#sidebar,
+        header,
+        .bg-tactical-surface {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+        }
+
+        .module-section {
+            animation: fadeSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(12px) scale(0.99); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Efeito de elevação e brilho nos cards */
+        .bg-tactical-surface {
+            position: relative;
+        }
+
+        .bg-tactical-surface:hover {
+            box-shadow: 0 12px 32px -8px var(--accent-soft), 0 0 1px 1px var(--border-primary);
+        }
+
+        /* Card interativo com efeito 3D suave */
+        .interactive-card {
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-main) !important;
+            box-shadow: 0 14px 30px -10px var(--accent-soft);
+        }
+
+        /* Efeito Shimmer (Brilho Corrente) nas Barras de Progresso */
+        @keyframes progressShimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .progress-shimmer {
+            background: linear-gradient(
+                90deg,
+                var(--accent-main) 0%,
+                var(--accent-hover) 45%,
+                #ffffff 50%,
+                var(--accent-hover) 55%,
+                var(--accent-main) 100%
+            );
+            background-size: 200% 100%;
+            animation: progressShimmer 3.5s infinite linear;
+            box-shadow: 0 0 12px var(--accent-soft);
+        }
+
+        /* Luz ambiente flutuante de fundo */
+        #ambientGlow {
+            position: fixed;
+            top: -120px;
+            right: -120px;
+            width: 420px;
+            height: 420px;
+            border-radius: 9999px;
+            background: radial-gradient(circle, var(--accent-soft) 0%, transparent 70%);
+            filter: blur(55px);
+            pointer-events: none;
+            z-index: 0;
+            animation: floatGlow 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-40px, 35px) scale(1.12); }
+        }
+
+        .nav-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn:hover {
+            transform: translateX(4px);
+        }
+
+        button:active:not(:disabled) {
+            transform: scale(0.96);
+        }
+
+        .module-section {
+            animation: fadeSlideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bg-tactical-surface:hover {
+            box-shadow: 0 10px 28px -8px var(--accent-soft);
+        }
+
+        .nav-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn:hover {
+            transform: translateX(3px);
+        }
+
+        button:active:not(:disabled) {
+            transform: scale(0.97);
+        }
+
+        [data-theme="pink"] aside#sidebar,
+        [data-theme="pink"] header,
+        [data-theme="pink"] .bg-tactical-surface {
+            background-color: rgba(255, 255, 255, 0.84) !important;
+        }
+
+        [data-theme="blue"] aside#sidebar,
+        [data-theme="blue"] header,
+        [data-theme="blue"] .bg-tactical-surface {
+            background-color: rgba(255, 255, 255, 0.86) !important;
+        }
+
+        [data-theme="dark"] .bg-tactical-surface,
+        [data-theme="military"] .bg-tactical-surface,
+        [data-theme="flamengo"] .bg-tactical-surface {
+            background-color: color-mix(in srgb, var(--bg-surface) 88%, transparent) !important;
         }
 
         input:not([type="checkbox"]):not([type="file"]):not([type="color"]),
@@ -306,9 +451,14 @@
 </head>
 <body class="min-h-screen flex flex-col md:flex-row bg-tactical-bg bg-tactical-grid selection:bg-tactical-accent selection:text-white">
 
-    <!-- Canvas e Vídeo ocultos para Picture-in-Picture (PiP) -->
+    <!-- Wallpaper Transparente & Luz Ambiente -->
+    <div id="nezukoPinkBg" aria-hidden="true"></div>
+    <div id="ambientGlow" aria-hidden="true"></div>
+    <input type="file" id="nezukoCustomBgInput" accept="image/*" class="hidden" onchange="handleCustomNezukoBg(event)">
+
+    <!-- Canvas e Vídeo ocultos para PiP -->
     <canvas id="pipCanvas" width="360" height="200" class="hidden"></canvas>
-    <video id="pipVideo" autoplay muted class="hidden"></video>
+    <video id="pipVideo" autoplay="" muted="" class="hidden"></video>
 
     <!-- SIDEBAR BACKDROP MOBILE -->
     <div id="mobileSidebarBackdrop" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-black/70 z-40 hidden md:hidden backdrop-blur-sm"></div>
@@ -347,20 +497,34 @@
             </div>
         </div>
 
-        <!-- Edital Alvo -->
-        <div class="px-4 py-3 border-b border-tactical-border bg-tactical-card/40">
-            <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
-                <span class="font-medium text-[10px] uppercase tracking-wider">Edital Alvo</span>
-                <span id="sidebarGlobalProgressTxt" class="font-mono theme-accent-text font-bold">0%</span>
-            </div>
-            <div class="flex items-center justify-between gap-2 mb-2">
-                <div class="text-xs font-semibold text-white truncate" id="targetExamName">Definir Edital Alvo</div>
-                <button onclick="openModal('modalEditTargetExam')" title="Alterar Edital Alvo" class="p-1 rounded hover:bg-tactical-card text-slate-400 hover:theme-accent-text transition shrink-0">
-                    <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-                </button>
-            </div>
-            <div class="w-full h-1.5 bg-tactical-bg rounded-full overflow-hidden">
-                <div id="sidebarGlobalProgressBar" class="h-full bg-tactical-accent transition-all duration-500" style="width: 0%"></div>
+        <!-- Edital Alvo (Múltiplos Perfis Isolados - Grid Corrigida) -->
+        <div class="p-3.5 border-b border-tactical-border bg-tactical-card/40">
+            <div class="p-3 rounded-xl bg-tactical-bg/90 border border-tactical-border space-y-2.5 shadow-inner">
+                <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                        <span class="w-2 h-2 rounded-full bg-tactical-accent animate-pulse shrink-0"></span>
+                        <span class="font-mono text-[10px] uppercase tracking-wider text-slate-400 truncate">Perfil / Edital Alvo</span>
+                    </div>
+                    <span id="sidebarGlobalProgressTxt" class="font-mono text-xs theme-accent-text font-extrabold shrink-0">0%</span>
+                </div>
+
+                <!-- Nome oculto para compatibilidade de script -->
+                <span id="targetExamName" class="hidden">Definir Edital Alvo</span>
+
+                <div class="grid grid-cols-12 gap-1.5 items-center">
+                    <div class="col-span-9 min-w-0">
+                        <select id="profileSwitcherSelect" onchange="switchExamProfile(this.value)" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-bold truncate cursor-pointer"></select>
+                    </div>
+                    <div class="col-span-3 flex justify-end">
+                        <button type="button" onclick="openModal('modalEditTargetExam')" title="Gerenciar / Criar Novo Edital" class="w-full py-1.5 rounded-lg bg-tactical-card hover:bg-tactical-accent hover:text-white border border-tactical-border text-slate-300 transition flex items-center justify-center">
+                            <i data-lucide="folder-plus" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="w-full h-2 bg-tactical-card rounded-full overflow-hidden p-0.5 border border-tactical-subtle">
+                    <div id="sidebarGlobalProgressBar" class="h-full rounded-full progress-shimmer transition-all duration-500" style="width: 0%"></div>
+                </div>
             </div>
         </div>
 
@@ -460,7 +624,7 @@
                     <i data-lucide="clock" class="w-4 h-4 theme-accent-text hidden sm:inline"></i>
                     <div class="hidden md:block text-left">
                         <div id="miniTimerLabel" class="text-[10px] font-mono text-slate-400 max-w-[100px] truncate">Cronômetro</div>
-                        <div id="miniTimerModality" class="text-[9px] uppercase tracking-wider theme-accent-text font-semibold">Teoria</div>
+                        <div id="miniTimerModality" class="text-[9px] uppercase tracking-wider theme-accent-text font-semibold">Teoria/Questões</div>
                     </div>
                     <div id="miniTimerDisplay" class="font-mono text-sm sm:text-base font-bold text-white tracking-wider px-2 py-0.5 bg-tactical-card rounded-lg border border-tactical-subtle">
                         00:00:00
@@ -476,16 +640,22 @@
                     </button>
                 </div>
 
-                <!-- Seletor de Temas (Incluindo Flamengo) -->
+                <!-- Seletor de Temas + Imagem de Fundo -->
                 <div class="flex items-center gap-1.5">
                     <i data-lucide="palette" class="w-4 h-4 theme-accent-text hidden sm:inline"></i>
                     <select id="themeSelectDropdown" onchange="applyTheme(this.value)" class="px-2.5 py-2 rounded-xl bg-tactical-card border border-tactical-border text-xs font-semibold text-white cursor-pointer">
                         <option value="dark">🌑 Escuro Tático</option>
-                        <option value="pink">🌸 Rosa Bebê & Branco</option>
+                        <option value="pink">🌸 Rosa Bebê & Nezuko</option>
                         <option value="blue">💎 Azul Bebê & Branco</option>
                         <option value="military">🪖 Verde Militar & Preto</option>
                         <option value="flamengo">🔴⚫ Flamengo</option>
                     </select>
+                    <button type="button" id="btnCustomNezukoBg" onclick="document.getElementById('nezukoCustomBgInput').click()" title="Escolher Imagem de Fundo para este Tema" class="p-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs theme-accent-text transition flex items-center gap-1">
+                        <i data-lucide="image" class="w-4 h-4"></i>
+                    </button>
+                    <button type="button" id="btnRemoveCustomBg" onclick="clearCurrentThemeBg()" title="Remover Imagem de Fundo deste Tema" class="hidden p-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs text-slate-400 hover:theme-accent-text transition">
+                        <i data-lucide="image-off" class="w-4 h-4"></i>
+                    </button>
                 </div>
 
                 <!-- Botão Rápido Google Drive -->
@@ -547,7 +717,7 @@
                  MÓDULO 2: AGENDA DO DIA & GRADE SEMANAL
                  ========================================== -->
             <section id="sec-mod2" class="module-section hidden space-y-6">
-                <!-- Abas da Agenda: Diária vs Grade de Segunda a Sexta -->
+                <!-- Abas da Agenda: Diária vs Grade de Segunda a Domingo -->
                 <div class="flex items-center gap-2 border-b border-tactical-border pb-3">
                     <button onclick="setAgendaSubTab('DAILY')" id="subTabAgendaDaily" class="px-4 py-2 rounded-xl text-xs font-semibold transition theme-accent-bg">
                         Metas do Dia
@@ -558,14 +728,15 @@
                 </div>
 
                 <!-- SUB-ABA 1: METAS DO DIA -->
-                <div id="agendaViewDaily" class="space-y-5">
+                <div id="agendaViewDaily" class="space-y-6">
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                         <div class="lg:col-span-4 bg-tactical-surface border border-tactical-border rounded-2xl p-5 h-fit space-y-4 shadow-sm">
                             <h3 class="text-base font-bold text-white border-b border-tactical-border pb-3 flex items-center gap-2">
-                                <i data-lucide="calendar-plus" class="w-5 h-5 theme-accent-text"></i> Nova Meta
+                                <i data-lucide="calendar-plus" class="w-5 h-5 theme-accent-text"></i> Agendar ou Registrar Estudo
                             </h3>
 
                             <form id="formAddAgendaGoal" onsubmit="handleAddAgendaGoal(event)" class="space-y-3.5">
+                                <input type="hidden" id="agendaSubmitMode" value="Concluído">
                                 <div>
                                     <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Data</label>
                                     <input type="date" id="agendaInputDate" required class="w-full px-3.5 py-2 rounded-xl text-sm">
@@ -578,37 +749,67 @@
                                     <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Assunto</label>
                                     <select id="agendaInputSubtopic" required class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
                                 </div>
-                                <div class="grid grid-cols-2 gap-3">
+                                <div class="grid grid-cols-2 gap-2.5">
                                     <div>
                                         <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Modalidade</label>
-                                        <select id="agendaInputType" class="w-full px-3 py-2 rounded-xl text-sm">
-                                            <option value="Teoria">Teoria</option>
-                                            <option value="Questões">Questões</option>
+                                        <select id="agendaInputType" class="w-full px-3 py-2 rounded-xl text-xs sm:text-sm">
+                                            <option value="Teoria/Questões">Teoria/Questões</option>
+                                            <option value="Simulado">Simulado</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Minutos</label>
-                                        <input type="number" id="agendaInputMinutes" value="60" min="5" max="480" required class="w-full px-3 py-2 rounded-xl text-sm font-mono">
+                                        <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Banca (se fez questões)</label>
+                                        <select id="agendaInputBanca" class="w-full px-3 py-2 rounded-xl text-xs sm:text-sm"></select>
                                     </div>
                                 </div>
-                                <div>
-                                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Observação (Opcional)</label>
-                                    <input type="text" id="agendaInputNotes" placeholder="Ex: PDF página 10 à 45" class="w-full px-3.5 py-2 rounded-xl text-sm">
+
+                                <!-- Bloco de Horas Estudadas e Questões Respondidas -->
+                                <div class="p-3 rounded-xl bg-tactical-bg border border-tactical-border space-y-2.5">
+                                    <div class="text-[10px] font-mono uppercase theme-accent-text font-bold flex items-center gap-1">
+                                        <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i> Registro de Horas & Questões (Opcional)
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <div>
+                                            <label class="block text-[10px] font-mono uppercase text-slate-400 mb-1">Horas (ex: 1.5)</label>
+                                            <input type="number" id="agendaInputStudyHours" step="0.1" min="0" max="24" placeholder="0" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[10px] font-mono uppercase text-slate-400 mb-1">Q. Certas</label>
+                                            <input type="number" id="agendaInputQCorrect" min="0" placeholder="0" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[10px] font-mono uppercase text-slate-400 mb-1">Q. Erradas</label>
+                                            <input type="number" id="agendaInputQWrong" min="0" placeholder="0" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
+                                        </div>
+                                    </div>
                                 </div>
-                                <button type="submit" class="w-full py-2.5 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white font-semibold text-sm flex items-center justify-center gap-2 transition">
-                                    <i data-lucide="plus" class="w-4 h-4"></i> Agendar Meta
-                                </button>
+
+                                <div>
+                                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Observação / O que estudou (Opcional)</label>
+                                    <input type="text" id="agendaInputNotes" placeholder="Ex: PDF pág. 10 à 45 + resumo" class="w-full px-3.5 py-2 rounded-xl text-sm">
+                                </div>
+                                <div class="space-y-2 pt-1">
+                                    <button type="submit" onclick="document.getElementById('agendaSubmitMode').value='Concluído'" class="w-full py-2.5 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition shadow-md">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4"></i> Registrar o que já vi (Concluído)
+                                    </button>
+                                    <button type="submit" onclick="document.getElementById('agendaSubmitMode').value='Pendente'" class="w-full py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-slate-200 font-semibold text-xs flex items-center justify-center gap-2 transition">
+                                        <i data-lucide="calendar" class="w-4 h-4 theme-accent-text"></i> Agendar como Meta Pendente
+                                    </button>
+                                </div>
                             </form>
                         </div>
 
                         <div class="lg:col-span-8 space-y-4">
                             <div class="flex flex-wrap items-center justify-between gap-3 bg-tactical-surface border border-tactical-border rounded-2xl p-4 shadow-sm">
-                                <div class="flex items-center gap-3">
+                                <div class="flex flex-wrap items-center gap-2 sm:gap-3">
                                     <label class="text-xs font-mono uppercase text-slate-400">Data:</label>
                                     <input type="date" id="agendaFilterDate" onchange="renderAgendaModule()" class="px-3 py-1.5 rounded-xl text-xs font-mono">
                                     <button onclick="setAgendaDateToday()" class="px-2.5 py-1.5 rounded-lg theme-accent-soft-bg text-xs font-medium transition">Hoje</button>
+                                    <button onclick="importWeeklyScheduleToDay()" title="Puxar matérias da Grade Semanal para esta data" class="px-3 py-1.5 rounded-lg bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-white flex items-center gap-1.5 transition">
+                                        <i data-lucide="download-cloud" class="w-3.5 h-3.5 theme-accent-text"></i> Puxar da Grade Semanal
+                                    </button>
                                 </div>
-                                <div id="agendaDayProgressText" class="text-xs font-mono theme-accent-text font-semibold">0 concluídas</div>
+                                <div id="agendaDayProgressText" class="text-xs font-mono theme-accent-text font-semibold">0/0 concluídas</div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -628,12 +829,25 @@
                                     <div id="colAgendaConcluido" class="space-y-3 flex-1"></div>
                                 </div>
                             </div>
+
+                            <!-- HISTÓRICO DE DIAS ANTERIORES (MATÉRIAS, ASSUNTOS, QUESTÕES E HORAS) -->
+                            <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 space-y-4 shadow-sm">
+                                <div class="flex items-center justify-between border-b border-tactical-border pb-3">
+                                    <div>
+                                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                                            <i data-lucide="history" class="w-4 h-4 theme-accent-text"></i> Histórico de Estudos & Dias Anteriores
+                                        </h4>
+                                        <p class="text-[11px] text-slate-400">Tudo o que você estudou, assuntos vistos, horas e questões respondidas por data.</p>
+                                    </div>
+                                </div>
+                                <div id="agendaPreviousDaysHistory" class="space-y-3 max-h-96 overflow-y-auto pr-1"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- SUB-ABA 2: GRADE SEMANAL (SEGUNDA A DOMINGO) -->
-                <div id="agendaViewWeeklyPlan" class="hidden space-y-5">
+                <div id="agendaViewWeeklyPlan" class="space-y-5 hidden">
                     <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
                         <div>
                             <h3 class="text-base font-bold text-white flex items-center gap-2">
@@ -648,7 +862,6 @@
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-7 gap-4" id="weeklyPlanContainer">
-                        <!-- Gerado via renderWeeklyPlanGrid() -->
                     </div>
                 </div>
             </section>
@@ -893,7 +1106,13 @@
                             </button>
                         </div>
 
-                        <div class="flex items-center gap-2">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button onclick="editCurrentFlashcard()" title="Editar este Flashcard" class="px-3 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-slate-200 flex items-center gap-1">
+                                <i data-lucide="edit-2" class="w-3.5 h-3.5 theme-accent-text"></i> Editar
+                            </button>
+                            <button onclick="deleteCurrentFlashcardOnly()" title="Excluir apenas dos Flashcards (mantém na Lista)" class="px-3 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-slate-200 flex items-center gap-1">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5 theme-accent-text"></i> Excluir Flashcard
+                            </button>
                             <button onclick="markFlashcardMastery('Revisar')" class="px-3.5 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-slate-300">
                                 Revisar
                             </button>
@@ -906,7 +1125,7 @@
             </section>
 
             <!-- ==========================================
-                 MÓDULO 6: CRONÔMETRO (APENAS TEORIA & QUESTÕES + PICTURE-IN-PICTURE)
+                 MÓDULO 6: CRONÔMETRO (TEORIA/QUESTÕES & SIMULADO + PICTURE-IN-PICTURE)
                  ========================================== -->
             <section id="sec-mod6" class="module-section hidden space-y-6">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -921,23 +1140,25 @@
                         </div>
 
                         <div class="space-y-3">
-                            <div>
-                                <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Disciplina</label>
-                                <select id="timerSubjectSelect" onchange="populateSubtopicSelect('timerSubjectSelect', 'timerSubtopicSelect'); syncTimerContext()" class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Assunto</label>
-                                <select id="timerSubtopicSelect" onchange="syncTimerContext()" class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
+                            <div id="timerSubjectTopicBox" class="space-y-3">
+                                <div>
+                                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Disciplina</label>
+                                    <select id="timerSubjectSelect" onchange="populateSubtopicSelect('timerSubjectSelect', 'timerSubtopicSelect'); syncTimerContext()" class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Assunto</label>
+                                    <select id="timerSubtopicSelect" onchange="syncTimerContext()" class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
+                                </div>
                             </div>
                             <div>
                                 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Modalidade</label>
-                                <!-- Apenas Teoria e Questões -->
+                                <!-- Teoria/Questões e Simulado -->
                                 <div class="grid grid-cols-2 gap-2">
-                                    <button type="button" onclick="selectTimerModality('Teoria')" id="modBtn-Teoria" class="modality-btn px-3 py-2.5 rounded-xl border border-tactical-accent bg-tactical-accent text-white keep-white text-xs font-semibold flex items-center justify-center gap-2 transition">
-                                        <i data-lucide="book-open" class="w-4 h-4"></i> Teoria
+                                    <button type="button" onclick="selectTimerModality('Teoria/Questões')" id="modBtn-TeoriaQuestoes" class="modality-btn px-3 py-2.5 rounded-xl border border-tactical-accent bg-tactical-accent text-white keep-white text-xs font-semibold flex items-center justify-center gap-2 transition">
+                                        <i data-lucide="book-open" class="w-4 h-4"></i> Teoria/Questões
                                     </button>
-                                    <button type="button" onclick="selectTimerModality('Questões')" id="modBtn-Questões" class="modality-btn px-3 py-2.5 rounded-xl border border-tactical-border text-xs font-semibold flex items-center justify-center gap-2 transition text-slate-300">
-                                        <i data-lucide="crosshair" class="w-4 h-4"></i> Questões
+                                    <button type="button" onclick="selectTimerModality('Simulado')" id="modBtn-Simulado" class="modality-btn px-3 py-2.5 rounded-xl border border-tactical-border text-xs font-semibold flex items-center justify-center gap-2 transition text-slate-300">
+                                        <i data-lucide="file-check-2" class="w-4 h-4"></i> Simulado
                                     </button>
                                 </div>
                             </div>
@@ -1000,10 +1221,10 @@
                  ========================================== -->
             <section id="sec-mod7" class="module-section space-y-6">
                 <!-- Card Perfil Aluno -->
-                <div class="brand-header-banner bg-tactical-surface border border-tactical-border rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+                <div class="brand-header-banner bg-tactical-surface border border-tactical-border rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm interactive-card">
                     <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
                         <div class="relative group cursor-pointer" onclick="openModal('modalEditUserProfile')">
-                            <div class="w-16 h-16 rounded-2xl bg-tactical-card border-2 border-tactical-accent overflow-hidden shadow-md flex items-center justify-center shrink-0">
+                            <div class="w-16 h-16 rounded-2xl bg-tactical-card border-2 border-tactical-accent overflow-hidden shadow-md flex items-center justify-center shrink-0 group-hover:scale-105 transition">
                                 <img id="dashUserProfileImg" src="" alt="Foto" class="w-full h-full object-cover hidden">
                                 <div id="dashUserProfileFallback" class="flex items-center justify-center text-slate-400">
                                     <i data-lucide="user" class="w-7 h-7 theme-accent-text"></i>
@@ -1011,19 +1232,26 @@
                             </div>
                         </div>
                         <div>
-                            <span class="text-xs font-mono theme-accent-text uppercase" id="dashUserTargetExamLabel">Edital Alvo: Definir Edital Alvo</span>
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full theme-accent-soft-bg text-[11px] font-mono uppercase font-bold mb-1" id="dashUserTargetExamLabel">
+                                Edital Alvo: Definir Edital Alvo
+                            </div>
                             <h3 id="dashUserName" class="text-xl font-extrabold text-white tracking-tight">Nome do Aluno</h3>
                         </div>
                     </div>
 
-                    <button onclick="openModal('modalEditUserProfile')" class="px-4 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-slate-200 flex items-center gap-2 transition">
-                        <i data-lucide="user-cog" class="w-4 h-4 theme-accent-text"></i> Perfil
-                    </button>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button onclick="openModal('modalEditTargetExam')" class="px-3.5 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-slate-200 flex items-center gap-1.5 transition">
+                            <i data-lucide="layers" class="w-4 h-4 theme-accent-text"></i> Trocar / Novo Edital
+                        </button>
+                        <button onclick="openModal('modalEditUserProfile')" class="px-4 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold flex items-center gap-2 transition shadow-md">
+                            <i data-lucide="user-cog" class="w-4 h-4"></i> Editar Perfil
+                        </button>
+                    </div>
                 </div>
 
                 <!-- KPIs Principais -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                    <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 shadow-sm">
+                    <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 shadow-sm interactive-card">
                         <div class="flex items-start justify-between">
                             <div>
                                 <p class="text-xs font-mono uppercase text-slate-400">Horas Líquidas</p>
@@ -1035,7 +1263,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 shadow-sm">
+                    <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 shadow-sm interactive-card">
                         <div class="flex items-start justify-between">
                             <div>
                                 <p class="text-xs font-mono uppercase text-slate-400">Progresso do Edital</p>
@@ -1046,13 +1274,13 @@
                             </div>
                         </div>
                         <div class="mt-3">
-                            <div class="w-full h-1.5 bg-tactical-bg rounded-full overflow-hidden">
-                                <div id="kpiEditalBar" class="h-full bg-tactical-accent transition-all duration-500" style="width: 0%"></div>
+                            <div class="w-full h-2 bg-tactical-bg rounded-full overflow-hidden">
+                                <div id="kpiEditalBar" class="h-full progress-shimmer transition-all duration-500" style="width: 0%"></div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 shadow-sm">
+                    <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 shadow-sm interactive-card">
                         <div class="flex items-start justify-between">
                             <div>
                                 <p class="text-xs font-mono uppercase text-slate-400">Assertividade</p>
@@ -1064,7 +1292,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 shadow-sm">
+                    <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 shadow-sm interactive-card">
                         <div class="flex items-start justify-between">
                             <div>
                                 <p class="text-xs font-mono uppercase text-slate-400">Revisões</p>
@@ -1110,7 +1338,7 @@
          MODAIS
          ========================================== -->
 
-    <!-- MODAL: CADASTRAR/EDITAR ITEM DA GRADE SEMANAL (SEGUNDA A SEXTA) -->
+    <!-- MODAL: CADASTRAR/EDITAR ITEM DA GRADE SEMANAL (SEGUNDA A DOMINGO) -->
     <div id="modalAddWeeklyPlanItem" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
             <div class="flex items-center justify-between border-b border-tactical-border pb-3">
@@ -1147,9 +1375,8 @@
                     <div>
                         <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Modalidade</label>
                         <select id="weeklyPlanInputModality" class="w-full px-3.5 py-2 rounded-xl text-sm">
-                            <option value="Teoria">Teoria</option>
-                            <option value="Questões">Questões</option>
-                            <option value="Teoria + Questões">Teoria + Questões</option>
+                            <option value="Teoria/Questões">Teoria/Questões</option>
+                            <option value="Simulado">Simulado</option>
                         </select>
                     </div>
                 </div>
@@ -1161,60 +1388,127 @@
         </div>
     </div>
 
-    <!-- MODAL: CONTABILIZAR QUESTÕES APÓS CRONÔMETRO -->
+    <!-- MODAL: CONTABILIZAR QUESTÕES APÓS CRONÔMETRO (TEORIA/QUESTÕES) -->
     <div id="modalPostTimerQuestions" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
             <div class="flex items-center justify-between border-b border-tactical-border pb-3">
                 <h3 class="text-base font-bold text-white flex items-center gap-2">
-                    <i data-lucide="crosshair" class="w-5 h-5 theme-accent-text"></i> Contabilizar Questões
+                    <i data-lucide="crosshair" class="w-5 h-5 theme-accent-text"></i> Quantas questões você fez?
                 </h3>
                 <button onclick="closeModal('modalPostTimerQuestions')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <div class="text-xs text-slate-300 space-y-1 bg-tactical-bg p-3 rounded-xl border border-tactical-border">
+                <div><strong>Modalidade:</strong> Teoria/Questões</div>
                 <div><strong>Matéria:</strong> <span id="postTimerSubjLabel">--</span></div>
                 <div><strong>Assunto:</strong> <span id="postTimerTopicLabel">--</span></div>
-                <div><strong>Tempo:</strong> <span id="postTimerMinsLabel">--</span> min</div>
+                <div><strong>Tempo Líquido:</strong> <span id="postTimerMinsLabel">--</span> min</div>
             </div>
             <form onsubmit="confirmPostTimerQuestions(event)" class="space-y-3.5">
                 <div>
-                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Banca</label>
+                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Banca Utilizada</label>
                     <select id="postTimerBanca" class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-mono uppercase text-slate-300 mb-1">Acertos</label>
-                        <input type="number" id="postTimerCorrect" value="0" min="0" required class="w-full px-3.5 py-2 rounded-xl text-base font-mono font-bold">
+                        <label class="block text-xs font-mono uppercase text-slate-300 mb-1">Questões Certas</label>
+                        <input type="number" id="postTimerCorrect" oninput="updatePostTimerTheoryTotal()" value="0" min="0" required class="w-full px-3.5 py-2 rounded-xl text-base font-mono font-bold">
                     </div>
                     <div>
-                        <label class="block text-xs font-mono uppercase text-slate-300 mb-1">Erros</label>
-                        <input type="number" id="postTimerWrong" value="0" min="0" required class="w-full px-3.5 py-2 rounded-xl text-base font-mono font-bold">
+                        <label class="block text-xs font-mono uppercase text-slate-300 mb-1">Questões Erradas</label>
+                        <input type="number" id="postTimerWrong" oninput="updatePostTimerTheoryTotal()" value="0" min="0" required class="w-full px-3.5 py-2 rounded-xl text-base font-mono font-bold">
                     </div>
                 </div>
+                <div class="p-2.5 rounded-xl bg-tactical-bg border border-tactical-border flex items-center justify-between text-xs font-mono">
+                    <span class="text-slate-400">Total de Questões Feitas:</span>
+                    <span id="postTimerTotalPreview" class="font-bold theme-accent-text">0 questões</span>
+                </div>
                 <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="skipPostTimerQuestions()" class="px-4 py-2 rounded-xl bg-tactical-card text-slate-300 text-xs font-semibold">Apenas Salvar Tempo</button>
-                    <button type="submit" class="px-5 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold">Salvar</button>
+                    <button type="button" onclick="skipPostTimerQuestions()" class="px-4 py-2 rounded-xl bg-tactical-card text-slate-300 text-xs font-semibold">Não fiz questões</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold">Salvar & Contabilizar</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL: EDITAR EDITAL ALVO -->
-    <div id="modalEditTargetExam" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+    <!-- MODAL: FINALIZAR SIMULADO POR MATÉRIA -->
+    <div id="modalPostTimerSimulado" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+        <div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl my-auto">
             <div class="flex items-center justify-between border-b border-tactical-border pb-3">
-                <h3 class="text-base font-bold text-white">Edital Alvo</h3>
-                <button onclick="closeModal('modalEditTargetExam')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </div>
-            <form onsubmit="handleSaveTargetExam(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Nome do Concurso</label>
-                    <input type="text" id="targetExamInputName" required placeholder="Digite o nome do concurso..." class="w-full px-3.5 py-2.5 rounded-xl text-sm">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                        <i data-lucide="file-check-2" class="w-5 h-5 theme-accent-text"></i> Resultado do Simulado por Matéria
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Tempo líquido registrado: <strong id="simuladoMinsLabel" class="theme-accent-text">0</strong> min</p>
                 </div>
-                <div class="flex justify-end gap-2">
-                    <button type="button" onclick="closeModal('modalEditTargetExam')" class="px-4 py-2 rounded-xl bg-tactical-card text-slate-300 text-xs font-semibold">Cancelar</button>
-                    <button type="submit" class="px-5 py-2 rounded-xl bg-tactical-accent text-white keep-white text-xs font-semibold">Salvar</button>
+                <button type="button" onclick="closeModal('modalPostTimerSimulado')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+
+            <form onsubmit="confirmPostTimerSimulado(event)" class="space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+                    <div class="flex-1">
+                        <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Banca Utilizada no Simulado</label>
+                        <select id="simuladoBancaSelect" required class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
+                    </div>
+                    <button type="button" onclick="addSimuladoSubjectRow()" class="px-3.5 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold theme-accent-text flex items-center gap-1.5 shrink-0">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Outra Matéria
+                    </button>
+                </div>
+
+                <div class="space-y-2 max-h-72 overflow-y-auto pr-1" id="simuladoSubjectsRowsContainer"></div>
+
+                <div class="p-3 rounded-xl bg-tactical-bg border border-tactical-border flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+                    <span class="text-slate-400">Resumo do Simulado:</span>
+                    <span id="simuladoLiveSummary" class="font-bold theme-accent-text">0 feitas • 0 certas • 0 erradas (0.0%)</span>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('modalPostTimerSimulado')" class="px-4 py-2 rounded-xl bg-tactical-card text-slate-300 text-xs font-semibold">Apenas Salvar Tempo</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold">Contabilizar Simulado</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- MODAL: GERENCIAR / CRIAR NOVO EDITAL ALVO (MÚLTIPLOS PERFIS ISOLADOS) -->
+    <div id="modalEditTargetExam" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-tactical-border pb-3">
+                <div>
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                        <i data-lucide="layers" class="w-5 h-5 theme-accent-text"></i> Gerenciar Editais Alvo (Perfis Isolados)
+                    </h3>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Cada edital funciona como um perfil separado: matérias, horas e questões não se misturam.</p>
+                </div>
+                <button onclick="closeModal('modalEditTargetExam')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+
+            <!-- Renomear Edital Atual -->
+            <form onsubmit="handleSaveTargetExam(event)" class="space-y-2 pb-4 border-b border-tactical-border">
+                <label class="block text-xs font-mono uppercase text-slate-400">Renomear Edital Ativo Atual</label>
+                <div class="flex gap-2">
+                    <input type="text" id="targetExamInputName" required placeholder="Nome do edital ativo..." class="flex-1 px-3.5 py-2 rounded-xl text-sm">
+                    <button type="submit" class="px-4 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-white">Renomear</button>
+                </div>
+            </form>
+
+            <!-- Criar Novo Edital Separado -->
+            <form onsubmit="handleCreateNewExamProfile(event)" class="space-y-2 pb-4 border-b border-tactical-border">
+                <label class="block text-xs font-mono uppercase theme-accent-text font-bold">+ Criar Novo Edital Independente</label>
+                <div class="flex gap-2">
+                    <input type="text" id="newExamProfileNameInput" required placeholder="Ex: Polícia Federal, TJ-SP, INSS..." class="flex-1 px-3.5 py-2 rounded-xl text-sm">
+                    <button type="submit" class="px-4 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold shrink-0">Criar Perfil</button>
+                </div>
+            </form>
+
+            <!-- Lista de Todos os Editais Cadastrados -->
+            <div class="space-y-2">
+                <label class="block text-xs font-mono uppercase text-slate-400">Seus Editais Salvos</label>
+                <div id="profilesModalList" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="button" onclick="closeModal('modalEditTargetExam')" class="px-4 py-2 rounded-xl bg-tactical-card text-slate-300 text-xs font-semibold">Fechar</button>
+            </div>
         </div>
     </div>
 
@@ -1341,11 +1635,11 @@
         </div>
     </div>
 
-    <!-- MODAL: NOVO CADERNO DE ERROS / FLASHCARD -->
+    <!-- MODAL: NOVO / EDITAR CADERNO DE ERROS / FLASHCARD -->
     <div id="modalAddErrorCard" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
         <div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl my-auto">
             <div class="flex items-center justify-between border-b border-tactical-border pb-3">
-                <h3 class="text-base font-bold text-white">Novo Card de Erro</h3>
+                <h3 class="text-base font-bold text-white" id="modalErrorCardTitle">Novo Card de Erro</h3>
                 <button onclick="closeModal('modalAddErrorCard')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
 
@@ -1358,7 +1652,7 @@
                 <button type="button" onmousedown="event.preventDefault(); applyHighlight('#facc15')" class="px-2.5 py-1 rounded-lg bg-tactical-surface border border-tactical-border text-xs font-semibold text-white hover:border-tactical-accent" title="Marca-Texto Amarelo">
                     🖍️ Marca-Texto
                 </button>
-                <button type="button" onmousedown="event.preventDefault(); applyHighlight('#4ade80')" class="px-2 py-1 rounded-lg bg-tactical-surface border border-tactical-border text-xs font-semibold text-white hover:border-tactical-accent" title="Marca-Texto Verde">
+                <button type="button" onmousedown="event.preventDefault(); applyHighlight('#4ade80')" class="px-2.5 py-1 rounded-lg bg-tactical-surface border border-tactical-border text-xs font-semibold text-white hover:border-tactical-accent" title="Marca-Texto Verde">
                     🖍️ Destaque
                 </button>
                 <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-tactical-surface border border-tactical-border">
@@ -1371,6 +1665,7 @@
             </div>
 
             <form onsubmit="handleAddErrorCard(event)" class="space-y-3.5">
+                <input type="hidden" id="errEditCardId" value="">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Disciplina</label>
@@ -1479,10 +1774,13 @@
          ========================================== -->
     <script>
         const STORAGE_KEY = 'ORGANIZE_APP_DATA_V2';
+        const MULTI_PROFILES_KEY = 'ORGANIZE_MULTI_PROFILES_V1';
         const THEME_STORAGE_KEY = 'ORGANIZE_THEME_KEY_V2';
         const GDRIVE_CREDS_KEY = 'ORGANIZE_GDRIVE_CREDS_V2';
+        const THEME_CUSTOM_BG_PREFIX = 'ORGANIZE_CUSTOM_BG_THEME_';
         const REVIEW_CYCLES = [1, 4, 10, 20, 30, 60, 90, 120];
 
+        let multiProfilesStore = null;
         let appState = null;
         let currentTheme = 'dark';
         let currentTab = 'mod7';
@@ -1496,21 +1794,19 @@
         let timerInterval = null;
         let timerSeconds = 0;
         let timerRunning = false;
-        let timerModality = 'Teoria'; // Apenas Teoria ou Questões
+        let timerModality = 'Teoria/Questões';
         let pendingSessionForQuestions = null;
+        let pendingSimuladoMinutes = 0;
 
-        // Picture-in-Picture Stream
         let pipCanvasCtx = null;
         let pipStream = null;
 
-        // Google Drive Sync State
         let tokenClient = null;
         let gapiInited = false;
         let gisInited = false;
         let driveAccessToken = null;
         let remoteDriveFileId = null;
 
-        // Formatação Rica para o Caderno de Erros / Flashcards
         function formatRichText(command, value = null) {
             document.execCommand(command, false, value);
         }
@@ -1519,6 +1815,49 @@
             const sel = window.getSelection();
             if (!sel || sel.isCollapsed) return;
             document.execCommand('hiliteColor', false, colorHex);
+        }
+
+        function loadThemeCustomBg(theme) {
+            const savedBg = localStorage.getItem(THEME_CUSTOM_BG_PREFIX + theme) || (theme === 'pink' ? localStorage.getItem('ORGANIZE_NEZUKO_CUSTOM_BG_V1') : null);
+            const removeBtn = document.getElementById('btnRemoveCustomBg');
+
+            if (savedBg) {
+                document.documentElement.style.setProperty('--theme-custom-bg', `url('${savedBg}')`);
+                if (removeBtn) removeBtn.classList.remove('hidden');
+            } else {
+                if (theme === 'pink') {
+                    document.documentElement.style.setProperty('--theme-custom-bg', `url('chibi-nezuko-kamado-demon-slayer-desktop-wallpaper-4k.jpg')`);
+                } else {
+                    document.documentElement.style.setProperty('--theme-custom-bg', 'none');
+                }
+                if (removeBtn) removeBtn.classList.add('hidden');
+            }
+        }
+
+        function handleCustomNezukoBg(event) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const dataUrl = e.target.result;
+                try {
+                    localStorage.setItem(THEME_CUSTOM_BG_PREFIX + currentTheme, dataUrl);
+                } catch (err) {
+                    console.warn('Imagem grande para localStorage');
+                }
+                document.documentElement.style.setProperty('--theme-custom-bg', `url('${dataUrl}')`);
+                const removeBtn = document.getElementById('btnRemoveCustomBg');
+                if (removeBtn) removeBtn.classList.remove('hidden');
+                showToast('Imagem de fundo aplicada ao tema atual!', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearCurrentThemeBg() {
+            localStorage.removeItem(THEME_CUSTOM_BG_PREFIX + currentTheme);
+            if (currentTheme === 'pink') localStorage.removeItem('ORGANIZE_NEZUKO_CUSTOM_BG_V1');
+            loadThemeCustomBg(currentTheme);
+            showToast('Imagem de fundo personalizada removida!', 'info');
         }
 
         function loadThemePreference() {
@@ -1541,6 +1880,7 @@
             const sel = document.getElementById('themeSelectDropdown');
             if (sel) sel.value = theme;
 
+            loadThemeCustomBg(theme);
             lucide.createIcons();
             updatePipCanvas();
             if (notify) showToast('Tema atualizado!', 'info');
@@ -1596,13 +1936,7 @@
                 edital: [],
                 agenda: [],
                 weeklyPlan: {
-                    segunda: [],
-                    terca: [],
-                    quarta: [],
-                    quinta: [],
-                    sexta: [],
-                    sabado: [],
-                    domingo: []
+                    segunda: [], terca: [], quarta: [], quinta: [], sexta: [], sabado: [], domingo: []
                 },
                 reviews: [],
                 questionLogs: [],
@@ -1612,7 +1946,6 @@
         }
 
         function getInitialDemoData() {
-            const today = getTodayISO();
             return {
                 targetExamName: 'Concurso Público Alvo',
                 userProfile: { name: 'Nome do Aluno', photoBase64: '' },
@@ -1652,16 +1985,136 @@
 
         function loadAppState() {
             try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                if (raw) {
-                    appState = normalizeImportedState(JSON.parse(raw));
-                } else {
-                    appState = getInitialDemoData();
-                    saveAppState(false);
+                const rawMulti = localStorage.getItem(MULTI_PROFILES_KEY);
+                if (rawMulti) {
+                    const parsedMulti = JSON.parse(rawMulti);
+                    if (parsedMulti && parsedMulti.profiles && Object.keys(parsedMulti.profiles).length > 0) {
+                        multiProfilesStore = parsedMulti;
+                        Object.keys(multiProfilesStore.profiles).forEach(pid => {
+                            multiProfilesStore.profiles[pid] = normalizeImportedState(multiProfilesStore.profiles[pid]);
+                        });
+                        if (!multiProfilesStore.profiles[multiProfilesStore.activeProfileId]) {
+                            multiProfilesStore.activeProfileId = Object.keys(multiProfilesStore.profiles)[0];
+                        }
+                        appState = multiProfilesStore.profiles[multiProfilesStore.activeProfileId];
+                        return;
+                    }
                 }
+
+                const rawSingle = localStorage.getItem(STORAGE_KEY);
+                const initialProfile = rawSingle ? normalizeImportedState(JSON.parse(rawSingle)) : getInitialDemoData();
+                const firstId = 'edital-1';
+                multiProfilesStore = {
+                    activeProfileId: firstId,
+                    profiles: {
+                        [firstId]: initialProfile
+                    }
+                };
+                appState = multiProfilesStore.profiles[firstId];
+                saveAppState(false);
             } catch (err) {
+                const fallbackId = 'edital-1';
                 appState = getEmptyFactoryState();
+                multiProfilesStore = {
+                    activeProfileId: fallbackId,
+                    profiles: { [fallbackId]: appState }
+                };
             }
+        }
+
+        function switchExamProfile(profileId) {
+            if (!multiProfilesStore || !multiProfilesStore.profiles[profileId]) return;
+            multiProfilesStore.activeProfileId = profileId;
+            appState = multiProfilesStore.profiles[profileId];
+            saveAppState(true);
+            renderActiveModule();
+            if (currentTab === 'mod2' && currentAgendaSubTab === 'WEEKLY_PLAN') {
+                renderWeeklyPlanGrid();
+            }
+            showToast(`Edital alterado para: ${appState.targetExamName}`, 'info');
+        }
+
+        function handleCreateNewExamProfile(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById('newExamProfileNameInput');
+            const newName = (nameInput?.value || '').trim();
+            if (!newName) return;
+
+            const newId = 'edital-' + Date.now();
+            const newProfileState = getEmptyFactoryState();
+            newProfileState.targetExamName = newName;
+            if (appState && appState.userProfile) {
+                newProfileState.userProfile = { ...appState.userProfile };
+            }
+
+            multiProfilesStore.profiles[newId] = newProfileState;
+            multiProfilesStore.activeProfileId = newId;
+            appState = newProfileState;
+
+            if (nameInput) nameInput.value = '';
+            saveAppState(true);
+            renderProfilesModalList();
+            renderActiveModule();
+            closeModal('modalEditTargetExam');
+            showToast(`Novo perfil "${newName}" criado e ativado!`, 'success');
+        }
+
+        function deleteExamProfile(profileId) {
+            const keys = Object.keys(multiProfilesStore.profiles);
+            if (keys.length <= 1) {
+                showToast('Você precisa manter pelo menos 1 Edital Alvo ativo.', 'warning');
+                return;
+            }
+            const deletedName = multiProfilesStore.profiles[profileId]?.targetExamName || 'Edital';
+            delete multiProfilesStore.profiles[profileId];
+
+            if (multiProfilesStore.activeProfileId === profileId) {
+                const remainingIds = Object.keys(multiProfilesStore.profiles);
+                multiProfilesStore.activeProfileId = remainingIds[0];
+                appState = multiProfilesStore.profiles[multiProfilesStore.activeProfileId];
+            }
+
+            saveAppState(true);
+            renderProfilesModalList();
+            renderActiveModule();
+            showToast(`Edital "${deletedName}" removido.`, 'info');
+        }
+
+        function renderProfilesModalList() {
+            const container = document.getElementById('profilesModalList');
+            if (!container || !multiProfilesStore) return;
+
+            const ids = Object.keys(multiProfilesStore.profiles);
+            container.innerHTML = ids.map(pid => {
+                const prof = multiProfilesStore.profiles[pid];
+                const isActive = pid === multiProfilesStore.activeProfileId;
+                return `
+                    <div class="p-3 rounded-xl bg-tactical-bg border ${isActive ? 'border-tactical-accent' : 'border-tactical-border'} flex items-center justify-between gap-2">
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-white truncate">${prof.targetExamName || 'Edital sem nome'}</span>
+                                ${isActive ? `<span class="px-2 py-0.5 rounded text-[10px] font-mono theme-accent-soft-bg font-bold">Ativo</span>` : ''}
+                            </div>
+                            <div class="text-[10px] font-mono text-slate-400 mt-0.5">
+                                ${prof.edital?.length || 0} matérias • ${prof.questionLogs?.length || 0} registros de questões
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            ${!isActive ? `
+                                <button type="button" onclick="switchExamProfile('${pid}'); closeModal('modalEditTargetExam');" class="px-2.5 py-1 rounded-lg bg-tactical-accent text-white keep-white text-[11px] font-semibold">
+                                    Usar
+                                </button>
+                            ` : ''}
+                            ${ids.length > 1 ? `
+                                <button type="button" onclick="deleteExamProfile('${pid}')" title="Excluir este Edital" class="p-1.5 rounded-lg bg-tactical-card hover:bg-tactical-surface text-slate-400 hover:theme-accent-text">
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
         }
 
         function normalizeImportedState(parsed) {
@@ -1682,7 +2135,13 @@
             if (Array.isArray(parsed.agenda)) base.agenda = parsed.agenda;
             if (Array.isArray(parsed.reviews)) base.reviews = parsed.reviews;
             if (Array.isArray(parsed.questionLogs)) base.questionLogs = parsed.questionLogs;
-            if (Array.isArray(parsed.errorCards)) base.errorCards = parsed.errorCards;
+            if (Array.isArray(parsed.errorCards)) {
+                base.errorCards = parsed.errorCards.map(c => ({
+                    ...c,
+                    showInList: c.showInList !== false,
+                    showInFlashcard: c.showInFlashcard !== false
+                }));
+            }
             if (Array.isArray(parsed.timeSessions)) base.timeSessions = parsed.timeSessions;
 
             const days = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'domingo'];
@@ -1696,6 +2155,10 @@
 
         function saveAppState(triggerDrive = true) {
             try {
+                if (multiProfilesStore && multiProfilesStore.activeProfileId) {
+                    multiProfilesStore.profiles[multiProfilesStore.activeProfileId] = appState;
+                    localStorage.setItem(MULTI_PROFILES_KEY, JSON.stringify(multiProfilesStore));
+                }
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
                 updateGlobalHeaderAndSidebar();
                 if (triggerDrive && driveAccessToken) {
@@ -2047,7 +2510,7 @@
             let totalMinutes = 0;
             let last7DaysMinutes = 0;
             const bySubject = {};
-            const byModality = { 'Teoria': 0, 'Questões': 0 };
+            const byModality = { 'Teoria/Questões': 0, 'Simulado': 0 };
 
             appState.timeSessions.forEach(sess => {
                 totalMinutes += sess.minutes;
@@ -2056,7 +2519,7 @@
                     last7DaysMinutes += sess.minutes;
                 }
                 bySubject[sess.subjectName] = (bySubject[sess.subjectName] || 0) + sess.minutes;
-                const mod = sess.modality === 'Questões' ? 'Questões' : 'Teoria';
+                const mod = (sess.modality === 'Simulado' || sess.modality === 'Questões') ? 'Simulado' : 'Teoria/Questões';
                 byModality[mod] = (byModality[mod] || 0) + sess.minutes;
             });
 
@@ -2066,20 +2529,40 @@
 
         function updateGlobalHeaderAndSidebar() {
             const editalStats = calculateEditalStats();
-            document.getElementById('sidebarGlobalProgressTxt').textContent = `${editalStats.globalPct}%`;
-            document.getElementById('sidebarGlobalProgressBar').style.width = `${editalStats.globalPct}%`;
-            document.getElementById('badge-mod1').textContent = `${editalStats.globalPct}%`;
+            const progTxt = document.getElementById('sidebarGlobalProgressTxt');
+            const progBar = document.getElementById('sidebarGlobalProgressBar');
+            const badgeMod1 = document.getElementById('badge-mod1');
+
+            if (progTxt) progTxt.textContent = `${editalStats.globalPct}%`;
+            if (progBar) progBar.style.width = `${editalStats.globalPct}%`;
+            if (badgeMod1) badgeMod1.textContent = `${editalStats.globalPct}%`;
 
             const today = getTodayISO();
-            document.getElementById('targetExamName').textContent = appState.targetExamName || 'Definir Edital Alvo';
+            const targetExamEl = document.getElementById('targetExamName');
+            if (targetExamEl) {
+                targetExamEl.textContent = appState.targetExamName || 'Definir Edital Alvo';
+            }
+
+            const switcher = document.getElementById('profileSwitcherSelect');
+            if (switcher && multiProfilesStore && multiProfilesStore.profiles) {
+                switcher.innerHTML = Object.keys(multiProfilesStore.profiles).map(pid => {
+                    const p = multiProfilesStore.profiles[pid];
+                    const selected = pid === multiProfilesStore.activeProfileId ? 'selected' : '';
+                    return `<option value="${pid}" ${selected}>🎯 ${p.targetExamName || 'Edital'}</option>`;
+                }).join('');
+            }
 
             const todayPendingGoals = appState.agenda.filter(g => g.date === today && g.status !== 'Concluído').length;
-            document.getElementById('badge-mod2').textContent = todayPendingGoals;
+            const badgeMod2 = document.getElementById('badge-mod2');
+            if (badgeMod2) badgeMod2.textContent = todayPendingGoals;
 
             const urgentReviews = appState.reviews.filter(r => !r.completedAll && diffDaysFromToday(r.dueDate) <= 0).length;
-            document.getElementById('badge-mod3').textContent = urgentReviews;
+            const badgeMod3 = document.getElementById('badge-mod3');
+            if (badgeMod3) badgeMod3.textContent = urgentReviews;
 
-            document.getElementById('badge-mod5').textContent = appState.errorCards.length;
+            const activeErrorCardsCount = appState.errorCards.filter(c => c.showInList !== false || c.showInFlashcard !== false).length;
+            const badgeMod5 = document.getElementById('badge-mod5');
+            if (badgeMod5) badgeMod5.textContent = activeErrorCardsCount;
         }
 
         function handleSaveTargetExam(e) {
@@ -2088,9 +2571,9 @@
             if (val) {
                 appState.targetExamName = val;
                 saveAppState();
-                closeModal('modalEditTargetExam');
+                renderProfilesModalList();
                 renderActiveModule();
-                showToast('Edital Alvo salvo!', 'success');
+                showToast('Nome do Edital atualizado!', 'success');
             }
         }
 
@@ -2133,30 +2616,25 @@
             const w = canvas.width;
             const h = canvas.height;
 
-            // Fundo escuro com estilo do tema
             pipCanvasCtx.fillStyle = '#0f141c';
             pipCanvasCtx.fillRect(0, 0, w, h);
 
-            // Borda do tema
             const computedStyle = getComputedStyle(document.documentElement);
             const accentColor = computedStyle.getPropertyValue('--accent-main').trim() || '#0b61f5';
             pipCanvasCtx.strokeStyle = accentColor;
             pipCanvasCtx.lineWidth = 4;
             pipCanvasCtx.strokeRect(2, 2, w - 4, h - 4);
 
-            // Título / Matéria
             pipCanvasCtx.fillStyle = '#94a3b8';
             pipCanvasCtx.font = '12px Inter, sans-serif';
             pipCanvasCtx.textAlign = 'center';
             const subj = document.getElementById('timerSubjectSelect')?.value || 'Estudos';
             pipCanvasCtx.fillText(`${subj} • ${timerModality}`.toUpperCase(), w / 2, 45);
 
-            // Tempo formatado
             pipCanvasCtx.fillStyle = '#ffffff';
             pipCanvasCtx.font = 'bold 44px JetBrains Mono, monospace';
             pipCanvasCtx.fillText(formatSecondsToHHMMSS(timerSeconds), w / 2, 115);
 
-            // Status
             pipCanvasCtx.fillStyle = timerRunning ? accentColor : '#94a3b8';
             pipCanvasCtx.font = '12px Inter, sans-serif';
             pipCanvasCtx.fillText(timerRunning ? '● EM ANDAMENTO' : 'PAUSADO', w / 2, 160);
@@ -2241,6 +2719,9 @@
                                 <div class="flex items-center justify-between">
                                     <span class="px-2 py-0.5 rounded text-[10px] font-mono theme-accent-soft-bg font-semibold">${item.modality}</span>
                                     <div class="flex items-center gap-1">
+                                        <button onclick="sendWeeklyItemToTodayAgenda('${day}', '${item.id}')" title="Enviar para a Agenda do Dia como Meta" class="p-1 rounded text-slate-400 hover:theme-accent-text transition">
+                                            <i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i>
+                                        </button>
                                         <button onclick="editWeeklyPlanItem('${day}', '${item.id}')" title="Editar" class="p-1 rounded text-slate-400 hover:text-white transition">
                                             <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
                                         </button>
@@ -2253,6 +2734,7 @@
                                 ${item.focus ? `<div class="text-[11px] text-slate-300">${item.focus}</div>` : ''}
                                 <div class="text-[10px] font-mono text-slate-400 pt-1 flex items-center justify-between">
                                     <span>Carga: ${item.hours}</span>
+                                    <button onclick="sendWeeklyItemToTodayAgenda('${day}', '${item.id}')" class="text-[10px] theme-accent-text hover:underline font-semibold">+ Virar Meta</button>
                                 </div>
                             </div>
                         `;
@@ -2273,6 +2755,67 @@
             });
 
             lucide.createIcons();
+        }
+
+        function sendWeeklyItemToTodayAgenda(day, id) {
+            const item = (appState.weeklyPlan[day] || []).find(i => i.id === id);
+            if (!item) return;
+            const targetDate = document.getElementById('agendaFilterDate')?.value || getTodayISO();
+
+            appState.agenda.push({
+                id: 'ag-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+                date: targetDate,
+                subjectName: item.subject,
+                subtopicId: 'grade-semanal',
+                subtopicName: item.focus || 'Planejamento da Grade Semanal',
+                type: item.modality === 'Simulado' ? 'Simulado' : 'Teoria/Questões',
+                status: 'Pendente',
+                notes: item.hours ? `Carga prevista: ${item.hours}` : 'Importado da Grade Semanal'
+            });
+
+            saveAppState();
+            renderAgendaModule();
+            showToast(`"${item.subject}" enviado como meta para ${formatDateBR(targetDate)}!`, 'success');
+        }
+
+        function importWeeklyScheduleToDay() {
+            const selectedDate = document.getElementById('agendaFilterDate')?.value || getTodayISO();
+            const [y, m, d] = selectedDate.split('-').map(Number);
+            const jsDay = new Date(y, m - 1, d).getDay();
+            const dayKeyMap = ['domingo', 'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
+            const dayKey = dayKeyMap[jsDay];
+            const items = appState.weeklyPlan[dayKey] || [];
+
+            if (items.length === 0) {
+                showToast(`Nenhuma matéria cadastrada na Grade Semanal para ${DAY_LABELS[dayKey]}.`, 'warning');
+                return;
+            }
+
+            let added = 0;
+            items.forEach((item, idx) => {
+                const alreadyExists = appState.agenda.some(g => g.date === selectedDate && g.subjectName === item.subject && g.subtopicName === (item.focus || 'Planejamento da Grade Semanal'));
+                if (!alreadyExists) {
+                    appState.agenda.push({
+                        id: 'ag-' + Date.now() + '-' + idx,
+                        date: selectedDate,
+                        subjectName: item.subject,
+                        subtopicId: 'grade-semanal',
+                        subtopicName: item.focus || 'Planejamento da Grade Semanal',
+                        type: item.modality === 'Simulado' ? 'Simulado' : 'Teoria/Questões',
+                        status: 'Pendente',
+                        notes: item.hours ? `Carga da Grade: ${item.hours}` : ''
+                    });
+                    added++;
+                }
+            });
+
+            saveAppState();
+            renderAgendaModule();
+            if (added > 0) {
+                showToast(`${added} meta(s) de ${DAY_LABELS[dayKey]} importadas para a Agenda!`, 'success');
+            } else {
+                showToast(`As matérias de ${DAY_LABELS[dayKey]} já estão na agenda deste dia.`, 'info');
+            }
         }
 
         function openAddWeeklyPlanItemForDay(day) {
@@ -2362,28 +2905,124 @@
                 <div class="p-3.5 rounded-xl bg-tactical-bg border border-tactical-border space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="px-2 py-0.5 rounded text-[10px] font-mono theme-accent-soft-bg font-semibold">${g.type}</span>
-                        <span class="text-[11px] font-mono text-slate-400">${g.targetMinutes}m</span>
+                        <span class="text-[10px] font-mono ${g.status === 'Concluído' ? 'theme-accent-text font-bold' : 'text-slate-400'}">${g.status === 'Concluído' ? '✓ Visto / Concluído' : 'Pendente'}</span>
                     </div>
                     <div>
                         <h4 class="text-xs font-bold text-white">${g.subjectName}</h4>
                         <p class="text-xs text-slate-300 mt-0.5">${g.subtopicName}</p>
+                        ${g.studyMinutes > 0 || g.questionsTotal > 0 ? `
+                            <div class="flex flex-wrap items-center gap-2 mt-1.5">
+                                ${g.studyMinutes > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-[10px] font-mono theme-accent-text">⏱️ ${formatMinutesToHours(g.studyMinutes)}</span>` : ''}
+                                ${g.questionsTotal > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-[10px] font-mono text-white">🎯 ${g.questionsCorrect}/${g.questionsTotal} acertos</span>` : ''}
+                            </div>
+                        ` : ''}
+                        ${g.notes ? `<p class="text-[11px] text-slate-400 mt-1 italic">"${g.notes}"</p>` : ''}
                     </div>
                     <div class="pt-2 border-t border-tactical-subtle flex items-center justify-between">
                         <button onclick="startTimerFromTask('${g.subjectName.replace(/'/g, "\\'")}', '${g.subtopicName.replace(/'/g, "\\'")}', '${g.type}', '${g.id}')" class="px-2.5 py-1 rounded-lg bg-tactical-accent text-white keep-white text-[11px] font-semibold flex items-center gap-1">
-                            <i data-lucide="play" class="w-3 h-3"></i> Estudar
+                            <i data-lucide="play" class="w-3 h-3"></i> Cronometrar
                         </button>
                         <div class="flex items-center gap-1">
-                            ${g.status !== 'Concluído' ? `<button onclick="updateAgendaStatus('${g.id}', 'Concluído')" class="p-1.5 rounded-lg bg-tactical-card hover:bg-tactical-surface text-slate-300"><i data-lucide="check" class="w-3.5 h-3.5"></i></button>` : ''}
-                            <button onclick="deleteAgendaGoal('${g.id}')" class="p-1 text-slate-400 hover:theme-accent-text"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                            ${g.status !== 'Concluído' ? `<button onclick="updateAgendaStatus('${g.id}', 'Concluído')" title="Marcar como visto/concluído" class="p-1.5 rounded-lg bg-tactical-card hover:bg-tactical-surface text-slate-300"><i data-lucide="check" class="w-3.5 h-3.5"></i></button>` : ''}
+                            <button onclick="deleteAgendaGoal('${g.id}')" title="Excluir" class="p-1 text-slate-400 hover:theme-accent-text"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                         </div>
                     </div>
                 </div>
             `;
 
             document.getElementById('colAgendaPendente').innerHTML = pendentes.map(renderCard).join('') || '<div class="text-xs text-slate-400 text-center py-10 font-mono">Nenhuma meta pendente</div>';
-            document.getElementById('colAgendaConcluido').innerHTML = concluidos.map(renderCard).join('') || '<div class="text-xs text-slate-400 text-center py-10 font-mono">Nenhuma meta concluída</div>';
+            document.getElementById('colAgendaConcluido').innerHTML = concluidos.map(renderCard).join('') || '<div class="text-xs text-slate-400 text-center py-10 font-mono">Nenhum estudo registrado neste dia</div>';
 
+            renderAgendaPreviousDaysHistory();
             lucide.createIcons();
+        }
+
+        function renderAgendaPreviousDaysHistory() {
+            const container = document.getElementById('agendaPreviousDaysHistory');
+            if (!container) return;
+
+            const datesMap = {};
+            const ensureDate = (d) => {
+                if (!datesMap[d]) {
+                    datesMap[d] = { goals: [], sessions: [], questions: [] };
+                }
+            };
+
+            appState.agenda.filter(g => g.status === 'Concluído').forEach(g => {
+                ensureDate(g.date);
+                datesMap[g.date].goals.push(g);
+            });
+
+            appState.timeSessions.forEach(s => {
+                ensureDate(s.date);
+                datesMap[s.date].sessions.push(s);
+            });
+
+            appState.questionLogs.forEach(q => {
+                ensureDate(q.date);
+                datesMap[q.date].questions.push(q);
+            });
+
+            const sortedDates = Object.keys(datesMap).sort((a, b) => b.localeCompare(a));
+
+            if (sortedDates.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-xs text-slate-400 font-mono">Nenhum histórico registrado ainda.</div>`;
+                return;
+            }
+
+            container.innerHTML = sortedDates.map(dateStr => {
+                const dayData = datesMap[dateStr];
+                const totalMins = dayData.sessions.reduce((acc, s) => acc + (s.minutes || 0), 0);
+                const totalCorrect = dayData.questions.reduce((acc, q) => acc + (q.correct || 0), 0);
+                const totalWrong = dayData.questions.reduce((acc, q) => acc + (q.wrong || 0), 0);
+                const totalQ = totalCorrect + totalWrong;
+                const pctQ = totalQ > 0 ? ((totalCorrect / totalQ) * 100).toFixed(0) : 0;
+
+                const itemsHTML = [];
+                dayData.goals.forEach(g => {
+                    itemsHTML.push(`
+                        <div class="flex items-center justify-between text-xs py-1 border-b border-tactical-subtle last:border-0">
+                            <div>
+                                <span class="font-semibold text-white">${g.subjectName}</span>
+                                <span class="text-slate-300"> • ${g.subtopicName}</span>
+                                ${g.notes ? `<span class="text-slate-400 italic"> (${g.notes})</span>` : ''}
+                            </div>
+                            <span class="text-[10px] font-mono theme-accent-text shrink-0 ml-2">${g.type}</span>
+                        </div>
+                    `);
+                });
+
+                dayData.questions.forEach(q => {
+                    const tot = q.correct + q.wrong;
+                    itemsHTML.push(`
+                        <div class="flex items-center justify-between text-xs py-1 border-b border-tactical-subtle last:border-0">
+                            <div>
+                                <span class="font-semibold theme-accent-text">[Questões ${q.banca}]</span>
+                                <span class="text-white"> ${q.subjectName}</span>
+                                <span class="text-slate-300"> • ${q.subtopicName}</span>
+                            </div>
+                            <span class="text-[11px] font-mono font-bold text-white shrink-0 ml-2">${q.correct}/${tot} acertos</span>
+                        </div>
+                    `);
+                });
+
+                return `
+                    <div class="p-3.5 rounded-xl bg-tactical-bg border border-tactical-border space-y-2">
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-tactical-border pb-2">
+                            <button type="button" onclick="document.getElementById('agendaFilterDate').value='${dateStr}'; renderAgendaModule();" class="text-xs font-mono font-bold theme-accent-text hover:underline flex items-center gap-1.5">
+                                <i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${formatDateBR(dateStr)} ${dateStr === getTodayISO() ? '(Hoje)' : ''}
+                            </button>
+                            <div class="flex items-center gap-2 text-[11px] font-mono">
+                                ${totalMins > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-white">⏱️ ${formatMinutesToHours(totalMins)}</span>` : ''}
+                                ${totalQ > 0 ? `<span class="px-2 py-0.5 rounded theme-accent-soft-bg font-bold">🎯 ${totalQ} questões (${pctQ}%)</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            ${itemsHTML.join('') || '<div class="text-xs text-slate-400 font-mono">Sessão de tempo registrada.</div>'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         function handleAddAgendaGoal(e) {
@@ -2394,13 +3033,68 @@
             const subtopicId = subSelect.value;
             const subtopicName = subSelect.options[subSelect.selectedIndex]?.text || 'Assunto Geral';
             const type = document.getElementById('agendaInputType').value;
-            const targetMinutes = parseInt(document.getElementById('agendaInputMinutes').value, 10) || 60;
+            const banca = document.getElementById('agendaInputBanca')?.value || 'Geral';
             const notes = document.getElementById('agendaInputNotes').value.trim();
+            const submitStatus = document.getElementById('agendaSubmitMode')?.value || 'Pendente';
 
-            appState.agenda.push({ id: 'ag-' + Date.now(), date, subjectName, subtopicId, subtopicName, type, targetMinutes, status: 'Pendente', notes });
+            const studyHoursFloat = parseFloat(document.getElementById('agendaInputStudyHours')?.value) || 0;
+            const studyMinutes = Math.round(studyHoursFloat * 60);
+            const qCorrect = parseInt(document.getElementById('agendaInputQCorrect')?.value, 10) || 0;
+            const qWrong = parseInt(document.getElementById('agendaInputQWrong')?.value, 10) || 0;
+            const qTotal = qCorrect + qWrong;
+
+            appState.agenda.push({
+                id: 'ag-' + Date.now(),
+                date,
+                subjectName,
+                subtopicId,
+                subtopicName,
+                type,
+                status: submitStatus,
+                notes,
+                studyMinutes,
+                questionsCorrect: qCorrect,
+                questionsWrong: qWrong,
+                questionsTotal: qTotal
+            });
+
+            if (studyMinutes > 0) {
+                appState.timeSessions.unshift({
+                    id: 'ts-ag-' + Date.now(),
+                    date,
+                    subjectName,
+                    subtopicName,
+                    modality: type,
+                    minutes: studyMinutes
+                });
+            }
+
+            if (qTotal > 0) {
+                appState.questionLogs.push({
+                    id: 'q-ag-' + Date.now(),
+                    date,
+                    subjectName,
+                    subtopicId,
+                    subtopicName,
+                    banca,
+                    correct: qCorrect,
+                    wrong: qWrong
+                });
+            }
+
+            document.getElementById('agendaInputNotes').value = '';
+            if (document.getElementById('agendaInputStudyHours')) document.getElementById('agendaInputStudyHours').value = '';
+            if (document.getElementById('agendaInputQCorrect')) document.getElementById('agendaInputQCorrect').value = '';
+            if (document.getElementById('agendaInputQWrong')) document.getElementById('agendaInputQWrong').value = '';
+
+            document.getElementById('agendaFilterDate').value = date;
             saveAppState();
             renderAgendaModule();
-            showToast('Meta adicionada!', 'success');
+            if (submitStatus === 'Concluído') {
+                showToast('Estudo, horas e questões registrados com sucesso!', 'success');
+            } else {
+                showToast('Meta agendada!', 'success');
+            }
         }
 
         function updateAgendaStatus(goalId, newStatus) {
@@ -2418,7 +3112,7 @@
         }
 
         // ==========================================
-        // MÓDULO 3: REVISÕES ESPAÇADAS (TELA LIMPA)
+        // MÓDULO 3: REVISÕES ESPAÇADAS
         // ==========================================
         function setReviewTab(tab) {
             currentReviewFilter = tab;
@@ -2651,24 +3345,30 @@
             renderErrorNotebookModule();
         }
 
-        function renderErrorNotebookModule() {
+        function getFilteredErrorCards(forMode) {
             const kw = (document.getElementById('errorSearchKeyword')?.value || '').toLowerCase();
             const fSubj = document.getElementById('errorFilterSubject')?.value || 'ALL';
             const fBanca = document.getElementById('errorFilterBanca')?.value || 'ALL';
 
-            const filtered = appState.errorCards.filter(c => {
+            return appState.errorCards.filter(c => {
+                if (forMode === 'LIST' && c.showInList === false) return false;
+                if (forMode === 'FLASHCARD' && c.showInFlashcard === false) return false;
                 const matchKw = !kw || c.question.toLowerCase().includes(kw) || c.answer.toLowerCase().includes(kw) || (c.bizu || '').toLowerCase().includes(kw);
                 const matchSubj = fSubj === 'ALL' || c.subjectName === fSubj;
                 const matchBanca = fBanca === 'ALL' || c.banca === fBanca;
                 return matchKw && matchSubj && matchBanca;
             });
+        }
+
+        function renderErrorNotebookModule() {
+            const filtered = getFilteredErrorCards(currentErrorMode);
 
             if (currentErrorMode === 'LIST') {
                 const container = document.getElementById('errorListViewContainer');
                 container.innerHTML = '';
 
                 if (filtered.length === 0) {
-                    container.innerHTML = `<div class="col-span-full bg-tactical-surface border border-tactical-border rounded-2xl p-8 text-center text-xs text-slate-400 font-mono">Nenhum cartão cadastrado.</div>`;
+                    container.innerHTML = `<div class="col-span-full bg-tactical-surface border border-tactical-border rounded-2xl p-8 text-center text-xs text-slate-400 font-mono">Nenhum cartão na lista.</div>`;
                     return;
                 }
 
@@ -2680,9 +3380,14 @@
                                     <span class="text-[11px] font-mono theme-accent-text font-bold">${c.subjectName}</span>
                                     <div class="text-xs font-semibold text-white">${c.subtopicName}</div>
                                 </div>
-                                <div class="flex items-center gap-2">
+                                <div class="flex items-center gap-1.5">
                                     <span class="px-2 py-0.5 rounded bg-tactical-bg text-xs font-mono text-slate-300">${c.banca}</span>
-                                    <button onclick="deleteErrorCard('${c.id}')" class="p-1 text-slate-400 hover:theme-accent-text"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                    <button onclick="openEditErrorCardModal('${c.id}')" title="Editar Card" class="p-1.5 rounded-lg hover:bg-tactical-card text-slate-400 hover:theme-accent-text transition">
+                                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                                    </button>
+                                    <button onclick="deleteErrorCardFromList('${c.id}')" title="Excluir da Lista (mantém nos Flashcards)" class="p-1.5 rounded-lg hover:bg-tactical-card text-slate-400 hover:theme-accent-text transition">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    </button>
                                 </div>
                             </div>
                             <div class="p-3 rounded-xl bg-tactical-bg border border-tactical-border">
@@ -2705,7 +3410,10 @@
             } else {
                 if (filtered.length === 0) {
                     document.getElementById('flashcardCounterText').textContent = 'CARD 0 DE 0';
-                    document.getElementById('fcFrontQuestion').innerHTML = 'Nenhum flashcard.';
+                    document.getElementById('fcFrontSubject').textContent = '--';
+                    document.getElementById('fcFrontSubtopic').textContent = '--';
+                    document.getElementById('fcFrontBanca').textContent = '--';
+                    document.getElementById('fcFrontQuestion').innerHTML = 'Nenhum flashcard disponível.';
                     document.getElementById('fcBackAnswer').innerHTML = '--';
                     document.getElementById('fcBackBizu').innerHTML = '--';
                     return;
@@ -2731,10 +3439,66 @@
             lucide.createIcons();
         }
 
-        function deleteErrorCard(id) {
-            appState.errorCards = appState.errorCards.filter(c => c.id !== id);
+        function openEditErrorCardModal(cardId) {
+            const card = appState.errorCards.find(c => c.id === cardId);
+            if (!card) return;
+
+            openModal('modalAddErrorCard');
+            document.getElementById('modalErrorCardTitle').textContent = 'Editar Card / Flashcard';
+            document.getElementById('errEditCardId').value = card.id;
+
+            const subjSel = document.getElementById('errInputSubject');
+            if (subjSel) {
+                subjSel.value = card.subjectName;
+                populateSubtopicSelect('errInputSubject', 'errInputSubtopic');
+            }
+            const subSel = document.getElementById('errInputSubtopic');
+            if (subSel && card.subtopicId) {
+                subSel.value = card.subtopicId;
+            }
+            const bancaSel = document.getElementById('errInputBanca');
+            if (bancaSel) bancaSel.value = card.banca;
+
+            document.getElementById('errInputQuestion').innerHTML = card.question || '';
+            document.getElementById('errInputAnswer').innerHTML = card.answer || '';
+            document.getElementById('errInputBizu').innerHTML = card.bizu || '';
+        }
+
+        function editCurrentFlashcard() {
+            const filtered = getFilteredErrorCards('FLASHCARD');
+            if (filtered.length === 0) return;
+            const card = filtered[currentFlashcardIndex];
+            if (card) openEditErrorCardModal(card.id);
+        }
+
+        function deleteErrorCardFromList(id) {
+            const card = appState.errorCards.find(c => c.id === id);
+            if (!card) return;
+            card.showInList = false;
+            if (card.showInList === false && card.showInFlashcard === false) {
+                appState.errorCards = appState.errorCards.filter(c => c.id !== id);
+            }
             saveAppState();
             renderErrorNotebookModule();
+            showToast('Removido da Lista (mantido nos Flashcards)!', 'info');
+        }
+
+        function deleteCurrentFlashcardOnly() {
+            const filtered = getFilteredErrorCards('FLASHCARD');
+            if (filtered.length === 0) return;
+            const card = filtered[currentFlashcardIndex];
+            if (!card) return;
+
+            card.showInFlashcard = false;
+            if (card.showInList === false && card.showInFlashcard === false) {
+                appState.errorCards = appState.errorCards.filter(c => c.id !== card.id);
+            }
+            isFlashcardFlipped = false;
+            document.getElementById('flashcardInner3D').classList.remove('rotate-y-180');
+            if (currentFlashcardIndex > 0) currentFlashcardIndex--;
+            saveAppState();
+            renderErrorNotebookModule();
+            showToast('Flashcard removido (mantido na Lista)!', 'info');
         }
 
         function flipCurrentFlashcard() {
@@ -2745,30 +3509,34 @@
         }
 
         function nextFlashcard() {
-            if (appState.errorCards.length === 0) return;
+            const filtered = getFilteredErrorCards('FLASHCARD');
+            if (filtered.length === 0) return;
             isFlashcardFlipped = false;
             document.getElementById('flashcardInner3D').classList.remove('rotate-y-180');
-            currentFlashcardIndex = (currentFlashcardIndex + 1) % appState.errorCards.length;
+            currentFlashcardIndex = (currentFlashcardIndex + 1) % filtered.length;
             renderErrorNotebookModule();
         }
 
         function prevFlashcard() {
-            if (appState.errorCards.length === 0) return;
+            const filtered = getFilteredErrorCards('FLASHCARD');
+            if (filtered.length === 0) return;
             isFlashcardFlipped = false;
             document.getElementById('flashcardInner3D').classList.remove('rotate-y-180');
-            currentFlashcardIndex = (currentFlashcardIndex - 1 + appState.errorCards.length) % appState.errorCards.length;
+            currentFlashcardIndex = (currentFlashcardIndex - 1 + filtered.length) % filtered.length;
             renderErrorNotebookModule();
         }
 
         function markFlashcardMastery(level) {
-            if (appState.errorCards.length === 0) return;
-            appState.errorCards[currentFlashcardIndex].mastery = level;
+            const filtered = getFilteredErrorCards('FLASHCARD');
+            if (filtered.length === 0) return;
+            filtered[currentFlashcardIndex].mastery = level;
             saveAppState();
             nextFlashcard();
         }
 
         function handleAddErrorCard(e) {
             e.preventDefault();
+            const editId = document.getElementById('errEditCardId').value;
             const subjectName = document.getElementById('errInputSubject').value || 'Geral';
             const banca = document.getElementById('errInputBanca').value || 'Geral';
             const subSel = document.getElementById('errInputSubtopic');
@@ -2788,18 +3556,36 @@
                 return;
             }
 
-            appState.errorCards.unshift({
-                id: 'err-' + Date.now(),
-                subjectName,
-                subtopicId,
-                subtopicName,
-                banca,
-                question,
-                answer,
-                bizu,
-                mastery: 'Revisão'
-            });
+            if (editId) {
+                const existing = appState.errorCards.find(c => c.id === editId);
+                if (existing) {
+                    existing.subjectName = subjectName;
+                    existing.subtopicId = subtopicId;
+                    existing.subtopicName = subtopicName;
+                    existing.banca = banca;
+                    existing.question = question;
+                    existing.answer = answer;
+                    existing.bizu = bizu;
+                }
+                showToast('Card atualizado com sucesso!', 'success');
+            } else {
+                appState.errorCards.unshift({
+                    id: 'err-' + Date.now(),
+                    subjectName,
+                    subtopicId,
+                    subtopicName,
+                    banca,
+                    question,
+                    answer,
+                    bizu,
+                    mastery: 'Revisão',
+                    showInList: true,
+                    showInFlashcard: true
+                });
+                showToast('Card salvo!', 'success');
+            }
 
+            document.getElementById('errEditCardId').value = '';
             qEl.innerHTML = '';
             aEl.innerHTML = '';
             bEl.innerHTML = '';
@@ -2807,24 +3593,26 @@
             saveAppState();
             closeModal('modalAddErrorCard');
             renderErrorNotebookModule();
-            showToast('Card salvo!', 'success');
         }
 
         // ==========================================
-        // MÓDULO 6: CRONÔMETRO (TEORIA & QUESTÕES)
+        // MÓDULO 6: CRONÔMETRO (TEORIA/QUESTÕES & SIMULADO)
         // ==========================================
         function selectTimerModality(mod) {
-            timerModality = (mod === 'Questões') ? 'Questões' : 'Teoria';
+            timerModality = (mod === 'Simulado') ? 'Simulado' : 'Teoria/Questões';
 
-            const btnTeoria = document.getElementById('modBtn-Teoria');
-            const btnQuestoes = document.getElementById('modBtn-Questões');
+            const btnTeoria = document.getElementById('modBtn-TeoriaQuestoes');
+            const btnSimulado = document.getElementById('modBtn-Simulado');
+            const subjBox = document.getElementById('timerSubjectTopicBox');
 
-            if (timerModality === 'Teoria') {
-                btnTeoria.className = 'modality-btn px-3 py-2.5 rounded-xl border border-tactical-accent bg-tactical-accent text-white keep-white text-xs font-semibold flex items-center justify-center gap-2 transition';
-                btnQuestoes.className = 'modality-btn px-3 py-2.5 rounded-xl border border-tactical-border text-xs font-semibold flex items-center justify-center gap-2 transition text-slate-300';
+            if (timerModality === 'Teoria/Questões') {
+                if (btnTeoria) btnTeoria.className = 'modality-btn px-3 py-2.5 rounded-xl border border-tactical-accent bg-tactical-accent text-white keep-white text-xs font-semibold flex items-center justify-center gap-2 transition';
+                if (btnSimulado) btnSimulado.className = 'modality-btn px-3 py-2.5 rounded-xl border border-tactical-border text-xs font-semibold flex items-center justify-center gap-2 transition text-slate-300';
+                if (subjBox) subjBox.classList.remove('hidden');
             } else {
-                btnQuestoes.className = 'modality-btn px-3 py-2.5 rounded-xl border border-tactical-accent bg-tactical-accent text-white keep-white text-xs font-semibold flex items-center justify-center gap-2 transition';
-                btnTeoria.className = 'modality-btn px-3 py-2.5 rounded-xl border border-tactical-border text-xs font-semibold flex items-center justify-center gap-2 transition text-slate-300';
+                if (btnSimulado) btnSimulado.className = 'modality-btn px-3 py-2.5 rounded-xl border border-tactical-accent bg-tactical-accent text-white keep-white text-xs font-semibold flex items-center justify-center gap-2 transition';
+                if (btnTeoria) btnTeoria.className = 'modality-btn px-3 py-2.5 rounded-xl border border-tactical-border text-xs font-semibold flex items-center justify-center gap-2 transition text-slate-300';
+                if (subjBox) subjBox.classList.add('hidden');
             }
 
             syncTimerContext();
@@ -2832,7 +3620,7 @@
         }
 
         function syncTimerContext() {
-            const subj = document.getElementById('timerSubjectSelect')?.value || 'Cronômetro';
+            const subj = timerModality === 'Simulado' ? 'Simulado Geral' : (document.getElementById('timerSubjectSelect')?.value || 'Cronômetro');
             document.getElementById('miniTimerLabel').textContent = subj;
             document.getElementById('miniTimerModality').textContent = timerModality;
             updatePipCanvas();
@@ -2845,7 +3633,7 @@
                 subjSel.value = subjectName;
                 populateSubtopicSelect('timerSubjectSelect', 'timerSubtopicSelect');
             }
-            selectTimerModality(modality === 'Questões' ? 'Questões' : 'Teoria');
+            selectTimerModality(modality === 'Simulado' ? 'Simulado' : 'Teoria/Questões');
             if (!timerRunning) toggleGlobalTimer();
         }
 
@@ -2898,44 +3686,171 @@
             lucide.createIcons();
         }
 
+        function updatePostTimerTheoryTotal() {
+            const c = parseInt(document.getElementById('postTimerCorrect')?.value, 10) || 0;
+            const w = parseInt(document.getElementById('postTimerWrong')?.value, 10) || 0;
+            const totalEl = document.getElementById('postTimerTotalPreview');
+            if (totalEl) totalEl.textContent = `${c + w} questões`;
+        }
+
         function saveCurrentTimerSession() {
             if (timerSeconds < 1) {
                 showToast('Inicie o cronômetro antes de finalizar.', 'warning');
                 return;
             }
             const minutes = Math.max(1, Math.round(timerSeconds / 60));
+            const today = getTodayISO();
+
+            resetGlobalTimer();
+
+            if (timerModality === 'Simulado') {
+                pendingSimuladoMinutes = minutes;
+                openSimuladoPostModal(minutes);
+                return;
+            }
+
             const subjectName = document.getElementById('timerSubjectSelect')?.value || 'Geral';
             const subSel = document.getElementById('timerSubtopicSelect');
             const subtopicId = subSel?.value || 'geral';
             const subtopicName = subSel?.options[subSel.selectedIndex]?.text || 'Geral';
 
-            resetGlobalTimer();
+            appState.timeSessions.unshift({
+                id: 'ts-' + Date.now(),
+                date: today,
+                subjectName,
+                subtopicName,
+                modality: 'Teoria/Questões',
+                minutes
+            });
 
-            // Salva na lista de sessões
-            appState.timeSessions.unshift({ id: 'ts-' + Date.now(), date: getTodayISO(), subjectName, subtopicName, modality: timerModality, minutes });
-
-            // Atualiza na agenda
-            const today = getTodayISO();
             const existing = appState.agenda.find(g => g.date === today && g.subjectName === subjectName && g.status !== 'Concluído');
             if (existing) {
                 existing.status = 'Concluído';
-                existing.targetMinutes = minutes;
             }
 
             saveAppState();
             renderActiveModule();
 
-            if (timerModality === 'Questões') {
-                pendingSessionForQuestions = { date: today, subjectName, subtopicId, subtopicName };
-                document.getElementById('postTimerSubjLabel').textContent = subjectName;
-                document.getElementById('postTimerTopicLabel').textContent = subtopicName;
-                document.getElementById('postTimerMinsLabel').textContent = minutes;
-                document.getElementById('postTimerCorrect').value = 0;
-                document.getElementById('postTimerWrong').value = 0;
-                openModal('modalPostTimerQuestions');
+            pendingSessionForQuestions = { date: today, subjectName, subtopicId, subtopicName };
+            document.getElementById('postTimerSubjLabel').textContent = subjectName;
+            document.getElementById('postTimerTopicLabel').textContent = subtopicName;
+            document.getElementById('postTimerMinsLabel').textContent = minutes;
+            document.getElementById('postTimerCorrect').value = 0;
+            document.getElementById('postTimerWrong').value = 0;
+            updatePostTimerTheoryTotal();
+            openModal('modalPostTimerQuestions');
+        }
+
+        function openSimuladoPostModal(minutes) {
+            document.getElementById('simuladoMinsLabel').textContent = minutes;
+            const container = document.getElementById('simuladoSubjectsRowsContainer');
+            container.innerHTML = '';
+
+            const subjectsList = appState.edital.length > 0
+                ? appState.edital.map(s => s.name)
+                : ['Direito Constitucional', 'Direito Administrativo', 'Português', 'Raciocínio Lógico'];
+
+            subjectsList.forEach(subjName => {
+                appendSimuladoRowHTML(subjName);
+            });
+
+            updateSimuladoLiveSummary();
+            openModal('modalPostTimerSimulado');
+        }
+
+        function appendSimuladoRowHTML(defaultSubject = '') {
+            const container = document.getElementById('simuladoSubjectsRowsContainer');
+            const row = document.createElement('div');
+            row.className = 'simulado-subj-row p-3 rounded-xl bg-tactical-bg border border-tactical-border grid grid-cols-1 sm:grid-cols-12 gap-2 items-center';
+            row.innerHTML = `
+                <div class="sm:col-span-6">
+                    <label class="block text-[10px] font-mono uppercase text-slate-400 mb-0.5">Matéria</label>
+                    <input type="text" list="existingSubjectsDatalist" value="${defaultSubject}" placeholder="Nome da matéria..." class="sim-subj-name w-full px-2.5 py-1.5 rounded-lg text-xs font-semibold">
+                </div>
+                <div class="sm:col-span-3">
+                    <label class="block text-[10px] font-mono uppercase text-slate-300 mb-0.5">Certas</label>
+                    <input type="number" min="0" value="0" oninput="updateSimuladoLiveSummary()" class="sim-subj-correct w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
+                </div>
+                <div class="sm:col-span-3">
+                    <label class="block text-[10px] font-mono uppercase text-slate-300 mb-0.5">Erradas</label>
+                    <input type="number" min="0" value="0" oninput="updateSimuladoLiveSummary()" class="sim-subj-wrong w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
+                </div>
+            `;
+            container.appendChild(row);
+        }
+
+        function addSimuladoSubjectRow() {
+            appendSimuladoRowHTML('');
+        }
+
+        function updateSimuladoLiveSummary() {
+            let totalC = 0, totalW = 0;
+            document.querySelectorAll('.simulado-subj-row').forEach(row => {
+                const c = parseInt(row.querySelector('.sim-subj-correct')?.value, 10) || 0;
+                const w = parseInt(row.querySelector('.sim-subj-wrong')?.value, 10) || 0;
+                totalC += c;
+                totalW += w;
+            });
+            const tot = totalC + totalW;
+            const pct = tot > 0 ? ((totalC / tot) * 100).toFixed(1) : '0.0';
+            const el = document.getElementById('simuladoLiveSummary');
+            if (el) el.textContent = `${tot} feitas • ${totalC} certas • ${totalW} erradas (${pct}%)`;
+        }
+
+        function confirmPostTimerSimulado(e) {
+            e.preventDefault();
+            const today = getTodayISO();
+            const banca = document.getElementById('simuladoBancaSelect')?.value || 'Geral';
+            const rows = document.querySelectorAll('.simulado-subj-row');
+
+            const validEntries = [];
+            rows.forEach(row => {
+                const subjName = (row.querySelector('.sim-subj-name')?.value || '').trim();
+                const correct = parseInt(row.querySelector('.sim-subj-correct')?.value, 10) || 0;
+                const wrong = parseInt(row.querySelector('.sim-subj-wrong')?.value, 10) || 0;
+                if (subjName && (correct + wrong > 0)) {
+                    validEntries.push({ subjName, correct, wrong });
+                }
+            });
+
+            if (validEntries.length > 0) {
+                const minsPerSubject = Math.max(1, Math.round(pendingSimuladoMinutes / validEntries.length));
+                validEntries.forEach((entry, idx) => {
+                    appState.questionLogs.push({
+                        id: 'q-sim-' + Date.now() + '-' + idx,
+                        date: today,
+                        subjectName: entry.subjName,
+                        subtopicId: 'simulado',
+                        subtopicName: 'Simulado',
+                        banca,
+                        correct: entry.correct,
+                        wrong: entry.wrong
+                    });
+                    appState.timeSessions.unshift({
+                        id: 'ts-sim-' + Date.now() + '-' + idx,
+                        date: today,
+                        subjectName: entry.subjName,
+                        subtopicName: 'Simulado',
+                        modality: 'Simulado',
+                        minutes: minsPerSubject
+                    });
+                });
             } else {
-                showToast('Tempo de estudo salvo!', 'success');
+                appState.timeSessions.unshift({
+                    id: 'ts-sim-' + Date.now(),
+                    date: today,
+                    subjectName: 'Simulado Geral',
+                    subtopicName: 'Simulado',
+                    modality: 'Simulado',
+                    minutes: pendingSimuladoMinutes
+                });
             }
+
+            pendingSimuladoMinutes = 0;
+            saveAppState();
+            closeModal('modalPostTimerSimulado');
+            renderActiveModule();
+            showToast('Simulado, Horas Líquidas e Questões contabilizados no Dashboard e Métricas!', 'success');
         }
 
         function confirmPostTimerQuestions(e) {
@@ -2960,7 +3875,9 @@
                     wrong
                 });
                 saveAppState();
-                showToast('Questões contabilizadas!', 'success');
+                showToast('Tempo e questões contabilizados no Dashboard e em Métricas!', 'success');
+            } else {
+                showToast('Tempo líquido contabilizado!', 'info');
             }
 
             pendingSessionForQuestions = null;
@@ -2971,7 +3888,7 @@
         function skipPostTimerQuestions() {
             pendingSessionForQuestions = null;
             closeModal('modalPostTimerQuestions');
-            showToast('Tempo contabilizado!', 'info');
+            showToast('Tempo líquido contabilizado!', 'info');
         }
 
         function renderTimerModule() {
@@ -3235,19 +4152,23 @@
             const metricsContainer = document.getElementById('dashboardSubjectMetricsList');
             metricsContainer.innerHTML = '';
 
-            if (appState.edital.length === 0) {
-                metricsContainer.innerHTML = `<div class="text-center py-6 text-xs text-slate-400 font-mono">Nenhuma matéria no edital.</div>`;
+            const allSubjectNames = new Set(appState.edital.map(s => s.name));
+            Object.keys(qStats.bySubjectMap).forEach(k => allSubjectNames.add(k));
+            Object.keys(timeStats.bySubject).forEach(k => allSubjectNames.add(k));
+
+            if (allSubjectNames.size === 0) {
+                metricsContainer.innerHTML = `<div class="text-center py-6 text-xs text-slate-400 font-mono">Nenhuma matéria registrada.</div>`;
             } else {
-                appState.edital.forEach(subj => {
-                    const sQ = qStats.bySubjectMap[subj.name] || { correct: 0, wrong: 0 };
+                Array.from(allSubjectNames).forEach(subjName => {
+                    const sQ = qStats.bySubjectMap[subjName] || { correct: 0, wrong: 0 };
                     const sTotalQ = sQ.correct + sQ.wrong;
                     const accPct = sTotalQ > 0 ? Math.round((sQ.correct / sTotalQ) * 100) : 0;
-                    const sMins = timeStats.bySubject[subj.name] || 0;
+                    const sMins = timeStats.bySubject[subjName] || 0;
 
                     metricsContainer.innerHTML += `
                         <div class="p-3.5 rounded-xl bg-tactical-bg border border-tactical-subtle space-y-2">
                             <div class="flex flex-wrap items-center justify-between gap-2">
-                                <span class="text-xs sm:text-sm font-semibold text-white">${subj.name}</span>
+                                <span class="text-xs sm:text-sm font-semibold text-white">${subjName}</span>
                                 <div class="flex items-center gap-3 text-xs font-mono">
                                     <span class="theme-accent-text">${formatMinutesToHours(sMins)}</span>
                                     <span class="text-white font-bold">${accPct}% (${sQ.correct}/${sTotalQ})</span>
@@ -3329,7 +4250,7 @@
         }
 
         function populateAllBancaSelects() {
-            const ids = ['qInputBanca', 'errInputBanca', 'postTimerBanca'];
+            const ids = ['qInputBanca', 'errInputBanca', 'postTimerBanca', 'simuladoBancaSelect', 'agendaInputBanca'];
             ids.forEach(id => {
                 const el = document.getElementById(id);
                 if (!el) return;
@@ -3352,6 +4273,13 @@
                 m.classList.add('flex');
                 populateAllSubjectSelects();
                 populateAllBancaSelects();
+                if (id === 'modalAddErrorCard' && !document.getElementById('errEditCardId').value) {
+                    document.getElementById('modalErrorCardTitle').textContent = 'Novo Card de Erro';
+                }
+                if (id === 'modalEditTargetExam') {
+                    document.getElementById('targetExamInputName').value = appState.targetExamName || '';
+                    renderProfilesModalList();
+                }
                 if (id === 'modalGDriveConfig') {
                     const creds = getDriveCredentials();
                     const cInput = document.getElementById('gdriveClientIdInput');
@@ -3367,6 +4295,9 @@
             if (m) {
                 m.classList.add('hidden');
                 m.classList.remove('flex');
+            }
+            if (id === 'modalAddErrorCard') {
+                document.getElementById('errEditCardId').value = '';
             }
         }
 
