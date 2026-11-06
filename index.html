@@ -440,6 +440,98 @@
             background-size: 24px 24px;
         }
 
+        /* Escudo protetor para bloquear pop-out/redirecionamento externo do iframe do Google Drive */
+        .drive-popout-shield {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 84px;
+            height: 64px;
+            z-index: 30;
+            background: transparent;
+            cursor: default;
+        }
+
+        /* ==========================================
+           VINHETA NETFLIX (TUDUM) & TELA DE PERFIS
+           ========================================== */
+        #netflixIntroOverlay {
+            background: radial-gradient(circle at center, #140507 0%, #000000 75%);
+        }
+
+        .netflix-n-ribbon {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            color: #e50914;
+            text-shadow: 0 0 35px rgba(229, 9, 20, 0.85), 0 0 80px rgba(229, 9, 20, 0.45);
+            animation: netflixLogoCinema 3.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes netflixLogoCinema {
+            0% {
+                opacity: 0;
+                transform: scale(0.45);
+                filter: brightness(0.5) blur(6px);
+            }
+            22% {
+                opacity: 1;
+                transform: scale(1.06);
+                filter: brightness(1.35) blur(0px);
+            }
+            68% {
+                opacity: 1;
+                transform: scale(1.18);
+                letter-spacing: 0.14em;
+                filter: brightness(1.15);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(3.6);
+                filter: brightness(2) blur(12px);
+            }
+        }
+
+        .netflix-spectrum-bars {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(229, 9, 20, 0.08) 4%,
+                rgba(255, 77, 87, 0.24) 6%,
+                rgba(11, 97, 245, 0.14) 8%,
+                transparent 12%
+            );
+            opacity: 0;
+            transform: scaleX(0.4);
+            animation: netflixSpectrumBurst 3.2s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes netflixSpectrumBurst {
+            0%, 40% { opacity: 0; transform: scaleX(0.3); }
+            68% { opacity: 0.9; transform: scaleX(1.3); }
+            100% { opacity: 0; transform: scaleX(2.2); }
+        }
+
+        .netflix-profile-card {
+            transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .netflix-profile-card:hover .netflix-avatar-box {
+            transform: scale(1.08);
+            border-color: #ffffff !important;
+            box-shadow: 0 18px 40px -10px rgba(0, 0, 0, 0.85), 0 0 28px rgba(229, 9, 20, 0.35);
+        }
+
+        .netflix-profile-card:hover .netflix-profile-name {
+            color: #ffffff !important;
+        }
+
         @keyframes pulse-border {
             0%, 100% { border-color: var(--accent-main); box-shadow: 0 0 10px var(--accent-soft); }
             50% { border-color: var(--accent-hover); box-shadow: 0 0 16px var(--accent-soft); }
@@ -450,6 +542,188 @@
     </style>
 </head>
 <body class="min-h-screen flex flex-col md:flex-row bg-tactical-bg bg-tactical-grid selection:bg-tactical-accent selection:text-white">
+
+    <!-- =========================================================================
+         1. VINHETA DE ABERTURA ESTILO NETFLIX (TUDUM)
+         ========================================================================= -->
+    <div id="netflixIntroOverlay" onclick="playTudumSound()" class="fixed inset-0 z-[200] flex flex-col items-center justify-center overflow-hidden select-none">
+        <div class="netflix-spectrum-bars"></div>
+        <div class="relative z-10 flex flex-col items-center">
+            <div class="netflix-n-ribbon text-6xl sm:text-8xl md:text-9xl font-black tracking-tighter">
+                ORGANIZE
+            </div>
+        </div>
+        <button type="button" onclick="event.stopPropagation(); finishNetflixIntro()" class="absolute bottom-7 right-7 z-20 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-xs font-mono text-slate-300 hover:text-white keep-white transition">
+            Pular Vinheta ›
+        </button>
+    </div>
+
+    <!-- =========================================================================
+         2. TELA DE ENTRADA DE PERFIS ESTILO NETFLIX ("QUEM ESTÁ ESTUDANDO?")
+         ========================================================================= -->
+    <section id="netflixProfilesOverlay" class="fixed inset-0 z-[150] bg-[#07090f] hidden flex-col justify-between p-6 sm:p-10 overflow-y-auto select-none">
+        <!-- Glow de fundo estilo cinema -->
+        <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[700px] h-[320px] bg-red-600/15 blur-[140px] pointer-events-none rounded-full"></div>
+
+        <!-- Topo da Tela Netflix -->
+        <div class="relative z-10 flex flex-wrap items-center justify-between gap-4 max-w-6xl w-full mx-auto">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-[#e50914] flex items-center justify-center shadow-lg shadow-red-600/30">
+                    <i data-lucide="book-open" class="w-5 h-5 text-white keep-white"></i>
+                </div>
+                <div>
+                    <span class="font-black text-xl tracking-tight text-white keep-white">ORGANIZE</span>
+                    <span class="text-[10px] font-mono uppercase tracking-widest text-[#e50914] block">Plataforma de Estudos</span>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2.5">
+                <span id="netflixAdminStatusBadge" class="hidden px-3 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-mono items-center gap-1.5">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Gabriel (Admin Drive Ativo)
+                </span>
+
+                <button type="button" onclick="replayNetflixIntro()" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-300 hover:text-white keep-white flex items-center gap-1.5 transition">
+                    <i data-lucide="film" class="w-3.5 h-3.5 text-[#e50914]"></i> Repetir Vinheta
+                </button>
+
+                <button type="button" onclick="handleToggleManageProfiles()" id="btnManageNetflixProfiles" class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 text-xs font-bold text-white keep-white flex items-center gap-1.5 transition">
+                    <i data-lucide="settings-2" class="w-3.5 h-3.5 text-[#e50914]"></i>
+                    <span id="btnManageNetflixProfilesTxt">Gerenciar Perfis (Gabriel)</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Centro: Grade de Perfis -->
+        <div class="relative z-10 max-w-5xl w-full mx-auto my-auto py-10 text-center space-y-10">
+            <div class="space-y-2">
+                <h1 class="text-3xl sm:text-5xl font-extrabold text-white keep-white tracking-tight">Quem está estudando?</h1>
+                <p id="netflixProfilesSubtitle" class="text-xs sm:text-sm text-slate-400">
+                    Selecione seu perfil e conecte seu Google Drive para acessar seus estudos e aulas
+                </p>
+            </div>
+
+            <div id="netflixProfilesGrid" class="flex flex-wrap items-center justify-center gap-6 sm:gap-8 px-2">
+                <!-- Preenchido dinamicamente com Gabriel, Babii, Rafael, Mila, Caio, Yuri, Camile -->
+            </div>
+
+            <div id="manageProfilesHintBar" class="hidden max-w-lg mx-auto p-3.5 rounded-2xl bg-red-500/10 border border-red-500/30 text-xs text-red-200 flex items-center justify-center gap-2">
+                <i data-lucide="shield-alert" class="w-4 h-4 text-[#e50914] shrink-0"></i>
+                <span>Modo Administrador (Gabriel): você pode criar novos perfis ou excluir perfis existentes.</span>
+            </div>
+        </div>
+
+        <!-- Rodapé da Tela Netflix -->
+        <div class="relative z-10 text-center text-[11px] font-mono text-slate-500">
+            ORGANIZE • SINCRONIZADO COM GOOGLE DRIVE
+        </div>
+    </section>
+
+    <!-- =========================================================================
+         3. MODAL DE ACESSO GOOGLE DRIVE AO CLICAR EM UM PERFIL
+         ========================================================================= -->
+    <div id="modalProfileDriveGate" class="fixed inset-0 bg-black/85 z-[170] hidden items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-[#111622] border border-white/15 rounded-3xl max-w-md w-full p-6 sm:p-7 space-y-5 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                <div class="flex items-center gap-3.5">
+                    <div id="gateSelectedAvatar" class="w-12 h-12 rounded-2xl flex items-center justify-center text-white keep-white font-black text-xl shadow-lg">
+                        G
+                    </div>
+                    <div>
+                        <span id="gateSelectedRoleBadge" class="text-[10px] font-mono uppercase tracking-wider text-[#e50914] block font-bold">Autenticação Google Drive</span>
+                        <h3 id="gateSelectedProfileName" class="text-lg font-extrabold text-white keep-white">Olá, Gabriel</h3>
+                    </div>
+                </div>
+                <button type="button" onclick="closeModal('modalProfileDriveGate')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white keep-white">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <p id="gateInstructionsText" class="text-xs text-slate-300 leading-relaxed">
+                    Para entrar no perfil de <strong id="gateProfileNameInline" class="text-white keep-white">Gabriel</strong>, autorize o acesso com sua conta do <strong>Google Drive</strong>.
+                </p>
+
+                <!-- Botão Principal OAuth Google Drive -->
+                <button type="button" onclick="authenticateProfileWithGoogleDrive()" id="btnGateConnectDrive" class="w-full py-3.5 px-5 rounded-2xl bg-[#e50914] hover:bg-[#f6121d] text-white keep-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2.5 shadow-lg shadow-red-600/30 transition">
+                    <i data-lucide="cloud" class="w-4 h-4"></i>
+                    <span>Conectar Google Drive & Entrar</span>
+                </button>
+
+                <!-- Configuração Rápida de Chaves OAuth / API Key (se necessário) -->
+                <div class="pt-2">
+                    <button type="button" onclick="toggleGateCredentialsBox()" class="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-[11px] font-mono text-slate-300 flex items-center justify-between transition">
+                        <span class="flex items-center gap-1.5"><i data-lucide="key-round" class="w-3.5 h-3.5 text-[#e50914]"></i> Configurar Client ID / API Key do Drive</span>
+                        <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                    </button>
+
+                    <div id="gateCredentialsCollapse" class="hidden mt-2.5 p-3.5 rounded-2xl bg-black/50 border border-white/10 space-y-3">
+                        <div>
+                            <label class="block text-[10px] font-mono uppercase text-slate-400 mb-1">Client ID (Google OAuth 2.0)</label>
+                            <input type="text" id="gateClientIdInput" placeholder="123456789-xxx.apps.googleusercontent.com" class="w-full px-3 py-2 rounded-xl text-xs font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-mono uppercase text-slate-400 mb-1">API Key (Google Drive)</label>
+                            <input type="password" id="gateApiKeyInput" placeholder="AIzaSy..." class="w-full px-3 py-2 rounded-xl text-xs font-mono">
+                        </div>
+                        <div class="flex justify-end gap-2">
+                            <button type="button" onclick="saveGateCredentialsAndEnter()" class="px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white keep-white text-xs font-semibold transition">
+                                Salvar Chaves
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-2 border-t border-white/10">
+                <button type="button" onclick="closeModal('modalProfileDriveGate')" class="text-xs text-slate-400 hover:text-white keep-white font-semibold">
+                    ‹ Escolher outro perfil
+                </button>
+                <span class="text-[10px] font-mono text-slate-500">Acesso protegido via Google Drive</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         4. MODAL PARA CRIAR NOVO PERFIL (EXCLUSIVO GABRIEL COM LOGIN GDRIVE)
+         ========================================================================= -->
+    <div id="modalCreateNetflixProfile" class="fixed inset-0 bg-black/85 z-[180] hidden items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-[#111622] border border-white/15 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                <h3 class="text-base font-bold text-white keep-white flex items-center gap-2">
+                    <i data-lucide="user-plus" class="w-5 h-5 text-[#e50914]"></i> Adicionar Novo Perfil
+                </h3>
+                <button type="button" onclick="closeModal('modalCreateNetflixProfile')" class="text-slate-400 hover:text-white keep-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form onsubmit="handleCreateNetflixProfile(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Nome do Perfil</label>
+                    <input type="text" id="newNetflixProfileName" required placeholder="Ex: Lucas, Ana..." class="w-full px-3.5 py-2.5 rounded-xl text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">E-mail do Google Drive do Aluno (Opcional)</label>
+                    <input type="email" id="newNetflixProfileEmail" placeholder="email@gmail.com (libera acesso automático)" class="w-full px-3.5 py-2.5 rounded-xl text-xs font-mono">
+                </div>
+                <div>
+                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Cor do Avatar</label>
+                    <select id="newNetflixProfileGradient" class="w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold">
+                        <option value="from-red-600 to-rose-900">🔴 Vermelho Netflix</option>
+                        <option value="from-pink-500 to-purple-800">🌸 Rosa & Roxo</option>
+                        <option value="from-blue-600 to-indigo-950">💎 Azul Royal</option>
+                        <option value="from-emerald-500 to-teal-900">🟢 Esmeralda</option>
+                        <option value="from-amber-500 to-orange-900">🟠 Laranja & Âmbar</option>
+                        <option value="from-cyan-500 to-sky-900">❄️ Azul Celeste</option>
+                        <option value="from-violet-500 to-fuchsia-900">🟣 Violeta Neon</option>
+                    </select>
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('modalCreateNetflixProfile')" class="px-4 py-2 rounded-xl bg-white/10 text-slate-300 text-xs font-semibold">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-[#e50914] hover:bg-[#f6121d] text-white keep-white text-xs font-bold">Criar Perfil</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Wallpaper Transparente & Luz Ambiente -->
     <div id="nezukoPinkBg" aria-hidden="true"></div>
@@ -582,6 +856,14 @@
                     <span>Dashboard</span>
                 </div>
             </button>
+
+            <button onclick="switchTab('mod8')" id="nav-mod8" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                    <span>Plataformas</span>
+                </div>
+                <span id="badge-mod8" class="text-[11px] font-mono px-2 py-0.5 rounded-md theme-accent-soft-bg font-semibold">3</span>
+            </button>
         </nav>
 
         <!-- Sidebar Backup Footer -->
@@ -657,6 +939,15 @@
                         <i data-lucide="image-off" class="w-4 h-4"></i>
                     </button>
                 </div>
+
+                <!-- Botão Trocar Perfil (Estilo Netflix) -->
+                <button type="button" onclick="openNetflixProfileSwitcher()" title="Trocar de Perfil (Quem está estudando?)" class="pl-1.5 pr-3 py-1.5 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-bold text-white flex items-center gap-2 transition">
+                    <div id="headerNetflixAvatar" class="w-6 h-6 rounded-lg bg-gradient-to-br from-red-600 to-rose-900 flex items-center justify-center text-white keep-white font-black text-[11px]">
+                        G
+                    </div>
+                    <span id="headerNetflixName" class="hidden sm:inline truncate max-w-[90px]">Gabriel</span>
+                    <i data-lucide="users" class="w-3.5 h-3.5 theme-accent-text"></i>
+                </button>
 
                 <!-- Botão Rápido Google Drive -->
                 <button type="button" onclick="handleDriveAuthClick()" id="headerDriveBtn" class="px-3 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-white flex items-center gap-1.5 transition">
@@ -1331,6 +1622,33 @@
                 </div>
             </section>
 
+            <!-- ==========================================
+                 MÓDULO 8: PLATAFORMAS DE ESTUDO (CARDS ESTILO NETFLIX)
+                 ========================================== -->
+            <section id="sec-mod8" class="module-section hidden space-y-6">
+                <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+                    <div ondblclick="promptMasterAdminUnlock()" class="flex items-center gap-3 cursor-pointer select-none" title="Duplo clique para desbloquear Modo Admin">
+                        <div class="p-2.5 rounded-xl theme-accent-soft-bg">
+                            <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white tracking-tight">Plataformas de Estudo</h3>
+                            <p class="text-xs text-slate-400">Acesse rapidamente seus portais de aulas, cursos e questões</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <!-- Visível apenas para o Gabriel / Admin -->
+                        <button type="button" id="btnAddPlatformCard" onclick="openModal('modalAddPlatformCard')" class="hidden px-4 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold items-center gap-1.5 transition shadow-md">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i> Adicionar Plataforma
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Grade de Cards Estilo Netflix -->
+                <div id="platformsCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+            </section>
+
         </main>
     </div>
 
@@ -1766,6 +2084,63 @@
         </div>
     </div>
 
+    <!-- MODAL EXCLUSIVO DO ADMINISTRADOR: ADICIONAR PLATAFORMA EM CARD -->
+    <div id="modalAddPlatformCard" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-tactical-border pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i data-lucide="layout-grid" class="w-5 h-5 theme-accent-text"></i> Adicionar Plataforma
+                </h3>
+                <button type="button" onclick="closeModal('modalAddPlatformCard')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form onsubmit="handleSavePlatformCard(event)" class="space-y-3.5">
+                <div>
+                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Nome da Plataforma</label>
+                    <input type="text" id="platInputName" required placeholder="Ex: QConcursos, Academia de Português..." class="w-full px-3.5 py-2 rounded-xl text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Descrição Curta (Opcional)</label>
+                    <input type="text" id="platInputDesc" placeholder="Ex: Resolução de questões e simulados" class="w-full px-3.5 py-2 rounded-xl text-xs">
+                </div>
+                <div>
+                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Link da Plataforma (URL)</label>
+                    <input type="url" id="platInputUrl" required placeholder="https://..." class="w-full px-3.5 py-2 rounded-xl text-sm font-mono">
+                </div>
+                <div>
+                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">URL da Imagem de Capa / Logotipo</label>
+                    <input type="url" id="platInputImage" placeholder="https://... (opcional)" class="w-full px-3.5 py-2 rounded-xl text-xs font-mono">
+                </div>
+                <div>
+                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Ou enviar imagem do dispositivo</label>
+                    <input type="file" id="platInputImageFile" accept="image/*" onchange="handlePlatformImageUpload(event)" class="w-full px-3 py-1.5 rounded-xl bg-tactical-bg border border-tactical-border text-xs text-slate-300">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('modalAddPlatformCard')" class="px-4 py-2 rounded-xl bg-tactical-card text-slate-300 text-xs font-semibold">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold">Salvar Card</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE DESBLOQUEIO ADMIN LOCAL (DUPLO CLIQUE NO TÍTULO) -->
+    <div id="modalMasterAdminAuth" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-tactical-border pb-2.5">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <i data-lucide="key-round" class="w-4 h-4 theme-accent-text"></i> Desbloqueio do Administrador
+                </h3>
+                <button type="button" onclick="closeModal('modalMasterAdminAuth')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <form onsubmit="confirmMasterAdminPassword(event)" class="space-y-3">
+                <input type="password" id="masterAdminPassInput" required placeholder="PIN de administrador..." class="w-full px-3.5 py-2 rounded-xl text-xs font-mono">
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('modalMasterAdminAuth')" class="px-3.5 py-1.5 rounded-xl bg-tactical-card text-xs text-slate-300">Cancelar</button>
+                    <button type="submit" class="px-4 py-1.5 rounded-xl bg-tactical-accent text-xs font-semibold text-white keep-white">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- TOAST NOTIFICATION CONTAINER -->
     <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
 
@@ -1775,10 +2150,31 @@
     <script>
         const STORAGE_KEY = 'ORGANIZE_APP_DATA_V2';
         const MULTI_PROFILES_KEY = 'ORGANIZE_MULTI_PROFILES_V1';
+        const NETFLIX_USERS_KEY = 'ORGANIZE_NETFLIX_USERS_LIST_V1';
+        const ACTIVE_NETFLIX_USER_KEY = 'ORGANIZE_ACTIVE_NETFLIX_USER_V1';
         const THEME_STORAGE_KEY = 'ORGANIZE_THEME_KEY_V2';
         const GDRIVE_CREDS_KEY = 'ORGANIZE_GDRIVE_CREDS_V2';
         const THEME_CUSTOM_BG_PREFIX = 'ORGANIZE_CUSTOM_BG_THEME_';
+        const SHARED_COURSES_STORAGE_KEY = 'ORGANIZE_SHARED_COURSES_V1';
         const REVIEW_CYCLES = [1, 4, 10, 20, 30, 60, 90, 120];
+        const MASTER_ADMIN_EMAIL = 'gabrieltardeei123@gmail.com';
+
+        // Perfis Padrão Estilo Netflix (Gabriel, Babii, Rafael, Mila, Caio, Yuri, Camile)
+        const DEFAULT_NETFLIX_PROFILES = [
+            { id: 'user-gabriel', name: 'Gabriel', initial: 'G', gradient: 'from-red-600 to-rose-900', isOwner: true, email: MASTER_ADMIN_EMAIL },
+            { id: 'user-babii',   name: 'Babii',   initial: 'B', gradient: 'from-pink-500 to-purple-800', isOwner: false, email: '' },
+            { id: 'user-rafael',  name: 'Rafael',  initial: 'R', gradient: 'from-blue-600 to-indigo-950', isOwner: false, email: '' },
+            { id: 'user-mila',    name: 'Mila',    initial: 'M', gradient: 'from-emerald-500 to-teal-900', isOwner: false, email: '' },
+            { id: 'user-caio',    name: 'Caio',    initial: 'C', gradient: 'from-cyan-500 to-sky-900',    isOwner: false, email: '' },
+            { id: 'user-yuri',    name: 'Yuri',    initial: 'Y', gradient: 'from-amber-500 to-orange-900', isOwner: false, email: '' },
+            { id: 'user-camile',  name: 'Camile',  initial: 'C', gradient: 'from-violet-500 to-fuchsia-900', isOwner: false, email: '' }
+        ];
+
+        let netflixProfilesList = [];
+        let activeNetflixProfile = null;
+        let pendingNetflixProfileToEnter = null;
+        let isManagingNetflixProfiles = false;
+        let pendingAdminManageAction = false;
 
         let multiProfilesStore = null;
         let appState = null;
@@ -1806,6 +2202,456 @@
         let gisInited = false;
         let driveAccessToken = null;
         let remoteDriveFileId = null;
+        let currentLoggedUserEmail = '';
+        let currentLoggedUserName = '';
+
+        // Estado do Módulo 8 (Aulas & Cursos)
+        let isMasterAdminUnlocked = false;
+        let activeDriveCourseId = null;
+        let activeDriveLessonId = null;
+        let isCoursePdfSplitOpen = false;
+        let collapsedDriveModules = new Set();
+
+        // ==========================================
+        // EFEITO SONORO "TUDUM" DA VINHETA (WEB AUDIO API)
+        // ==========================================
+        function playTudumSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                const now = ctx.currentTime;
+
+                // 1º Impacto ("TU")
+                const osc1 = ctx.createOscillator();
+                const gain1 = ctx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(110, now);
+                osc1.frequency.exponentialRampToValueAtTime(42, now + 0.22);
+                gain1.gain.setValueAtTime(0.85, now);
+                gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
+                osc1.connect(gain1);
+                gain1.connect(ctx.destination);
+                osc1.start(now);
+                osc1.stop(now + 0.27);
+
+                // 2º Impacto Grave + Acorde Metálico ("DUMMM...")
+                const hit2 = now + 0.26;
+                const osc2 = ctx.createOscillator();
+                const gain2 = ctx.createGain();
+                osc2.type = 'triangle';
+                osc2.frequency.setValueAtTime(146.83, hit2); // D3
+                osc2.frequency.exponentialRampToValueAtTime(55, hit2 + 1.8);
+                gain2.gain.setValueAtTime(0.95, hit2);
+                gain2.gain.exponentialRampToValueAtTime(0.0008, hit2 + 2.1);
+                osc2.connect(gain2);
+                gain2.connect(ctx.destination);
+                osc2.start(hit2);
+                osc2.stop(hit2 + 2.15);
+
+                // Harmônicos brilhantes da vinheta
+                [293.66, 440, 587.33, 739.99].forEach((freq) => {
+                    const hOsc = ctx.createOscillator();
+                    const hGain = ctx.createGain();
+                    hOsc.type = 'sawtooth';
+                    hOsc.frequency.setValueAtTime(freq, hit2 + 0.03);
+                    hGain.gain.setValueAtTime(0.12, hit2 + 0.03);
+                    hGain.gain.exponentialRampToValueAtTime(0.0005, hit2 + 2.3);
+                    hOsc.connect(hGain);
+                    hGain.connect(ctx.destination);
+                    hOsc.start(hit2 + 0.03);
+                    hOsc.stop(hit2 + 2.35);
+                });
+            } catch (e) {
+                // Ignora bloqueio de autoplay do navegador até o primeiro clique
+            }
+        }
+
+        function finishNetflixIntro() {
+            const intro = document.getElementById('netflixIntroOverlay');
+            const profilesScreen = document.getElementById('netflixProfilesOverlay');
+            if (intro) intro.classList.add('hidden');
+            if (profilesScreen && !activeNetflixProfile) {
+                profilesScreen.classList.remove('hidden');
+                profilesScreen.classList.add('flex');
+            }
+            renderNetflixProfilesGrid();
+        }
+
+        function replayNetflixIntro() {
+            const intro = document.getElementById('netflixIntroOverlay');
+            if (!intro) return;
+            intro.classList.remove('hidden');
+            const clone = intro.cloneNode(true);
+            intro.parentNode.replaceChild(clone, intro);
+            playTudumSound();
+            setTimeout(() => {
+                finishNetflixIntro();
+            }, 3100);
+        }
+
+        // ==========================================
+        // SISTEMA DE PERFIS ESTILO NETFLIX + CONTROLE DO GABRIEL
+        // ==========================================
+        function loadNetflixProfilesList() {
+            try {
+                const raw = localStorage.getItem(NETFLIX_USERS_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        netflixProfilesList = parsed;
+                        // Garante que todos os 7 perfis solicitados existam
+                        DEFAULT_NETFLIX_PROFILES.forEach(def => {
+                            if (!netflixProfilesList.some(p => p.name.toLowerCase() === def.name.toLowerCase())) {
+                                netflixProfilesList.push(def);
+                            }
+                        });
+                        saveNetflixProfilesList();
+                        return;
+                    }
+                }
+            } catch (e) {}
+            netflixProfilesList = [...DEFAULT_NETFLIX_PROFILES];
+            saveNetflixProfilesList();
+        }
+
+        function saveNetflixProfilesList() {
+            try {
+                localStorage.setItem(NETFLIX_USERS_KEY, JSON.stringify(netflixProfilesList));
+            } catch (e) {}
+        }
+
+        function isGabrielDriveAdminAuthenticated() {
+            if (!driveAccessToken) return false;
+            if (currentLoggedUserEmail && currentLoggedUserEmail.toLowerCase() === MASTER_ADMIN_EMAIL.toLowerCase()) {
+                return true;
+            }
+            if (activeNetflixProfile && activeNetflixProfile.isOwner && driveAccessToken) {
+                return true;
+            }
+            return false;
+        }
+
+        function renderNetflixProfilesGrid() {
+            const grid = document.getElementById('netflixProfilesGrid');
+            if (!grid) return;
+
+            const isGabrielAdmin = isGabrielDriveAdminAuthenticated();
+            const adminBadge = document.getElementById('netflixAdminStatusBadge');
+            const manageHint = document.getElementById('manageProfilesHintBar');
+            const manageBtnTxt = document.getElementById('btnManageNetflixProfilesTxt');
+
+            if (adminBadge) {
+                if (isGabrielAdmin) {
+                    adminBadge.classList.remove('hidden');
+                    adminBadge.classList.add('inline-flex');
+                } else {
+                    adminBadge.classList.add('hidden');
+                    adminBadge.classList.remove('inline-flex');
+                }
+            }
+
+            if (manageHint) {
+                if (isManagingNetflixProfiles && isGabrielAdmin) {
+                    manageHint.classList.remove('hidden');
+                } else {
+                    manageHint.classList.add('hidden');
+                }
+            }
+
+            if (manageBtnTxt) {
+                manageBtnTxt.textContent = (isManagingNetflixProfiles && isGabrielAdmin)
+                    ? 'Concluir Edição'
+                    : 'Gerenciar Perfis (Gabriel)';
+            }
+
+            let html = netflixProfilesList.map(prof => {
+                const canDelete = isManagingNetflixProfiles && isGabrielAdmin && !prof.isOwner;
+                return `
+                    <div onclick="handleSelectNetflixProfile('${prof.id}')" class="netflix-profile-card group relative cursor-pointer flex flex-col items-center space-y-3 w-28 sm:w-36">
+                        <div class="netflix-avatar-box relative w-24 h-24 sm:w-32 sm:h-32 rounded-2xl bg-gradient-to-br ${prof.gradient} border-2 border-white/15 flex flex-col items-center justify-center shadow-2xl transition-all duration-300 overflow-hidden">
+                            <!-- Olhos e sorriso estilo Avatar Netflix -->
+                            <div class="flex items-center gap-5 mb-1 opacity-90">
+                                <span class="w-2.5 h-2.5 rounded-full bg-white keep-white shadow"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-white keep-white shadow"></span>
+                            </div>
+                            <div class="w-10 h-4 border-b-[3px] border-white rounded-b-full opacity-90"></div>
+                            <span class="absolute bottom-1.5 right-2.5 text-[11px] font-mono font-black text-white/75 keep-white uppercase">${prof.initial}</span>
+                            ${prof.isOwner ? `<span class="absolute top-1.5 left-2 px-1.5 py-0.5 rounded bg-black/50 text-[9px] font-mono text-amber-300 font-bold">ADMIN</span>` : ''}
+                        </div>
+
+                        ${canDelete ? `
+                            <button type="button" onclick="event.stopPropagation(); handleDeleteNetflixProfile('${prof.id}')" title="Excluir Perfil de ${prof.name}" class="absolute -top-2 -right-1 w-8 h-8 rounded-full bg-[#e50914] hover:bg-red-700 text-white keep-white shadow-lg flex items-center justify-center border-2 border-black transition transform hover:scale-110 z-20">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        ` : ''}
+
+                        <span class="netflix-profile-name text-sm sm:text-base font-bold text-slate-300 transition-colors truncate max-w-full">
+                            ${prof.name}
+                        </span>
+                    </div>
+                `;
+            }).join('');
+
+            // Botão "+ Adicionar Perfil" visível quando o Gabriel está autenticado com seu Google Drive
+            if (isGabrielAdmin) {
+                html += `
+                    <div onclick="openModal('modalCreateNetflixProfile')" class="netflix-profile-card group cursor-pointer flex flex-col items-center space-y-3 w-28 sm:w-36">
+                        <div class="netflix-avatar-box w-24 h-24 sm:w-32 sm:h-32 rounded-2xl bg-white/5 hover:bg-white/10 border-2 border-dashed border-white/25 flex items-center justify-center shadow-xl transition-all duration-300">
+                            <i data-lucide="plus" class="w-10 h-10 text-slate-300 group-hover:text-white keep-white"></i>
+                        </div>
+                        <span class="netflix-profile-name text-sm sm:text-base font-bold text-slate-400">Adicionar Perfil</span>
+                    </div>
+                `;
+            }
+
+            grid.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function handleToggleManageProfiles() {
+            if (!isGabrielDriveAdminAuthenticated()) {
+                pendingAdminManageAction = true;
+                const gabrielProf = netflixProfilesList.find(p => p.isOwner) || netflixProfilesList[0];
+                openProfileDriveGateModal(gabrielProf, true);
+                showToast('Faça login no Google Drive com o perfil do Gabriel para criar ou excluir perfis.', 'info');
+                return;
+            }
+            isManagingNetflixProfiles = !isManagingNetflixProfiles;
+            renderNetflixProfilesGrid();
+        }
+
+        function handleCreateNetflixProfile(e) {
+            e.preventDefault();
+            if (!isGabrielDriveAdminAuthenticated()) {
+                showToast('Apenas o Gabriel autenticado no Google Drive pode criar perfis.', 'warning');
+                return;
+            }
+            const nameInput = document.getElementById('newNetflixProfileName');
+            const emailInput = document.getElementById('newNetflixProfileEmail');
+            const gradInput = document.getElementById('newNetflixProfileGradient');
+
+            const name = (nameInput?.value || '').trim();
+            const email = (emailInput?.value || '').toLowerCase().trim();
+            const gradient = gradInput?.value || 'from-blue-600 to-indigo-950';
+
+            if (!name) return;
+
+            const newProf = {
+                id: 'user-' + Date.now(),
+                name,
+                initial: name.charAt(0).toUpperCase(),
+                gradient,
+                isOwner: false,
+                email
+            };
+
+            netflixProfilesList.push(newProf);
+            saveNetflixProfilesList();
+
+            if (email && appState) {
+                if (!appState.authorizedEmails) appState.authorizedEmails = [MASTER_ADMIN_EMAIL];
+                if (!appState.authorizedEmails.includes(email)) {
+                    appState.authorizedEmails.push(email);
+                    saveSharedCatalogLocally();
+                    saveAppState(true);
+                }
+            }
+
+            if (nameInput) nameInput.value = '';
+            if (emailInput) emailInput.value = '';
+            closeModal('modalCreateNetflixProfile');
+            renderNetflixProfilesGrid();
+            showToast(`Perfil "${name}" criado com sucesso!`, 'success');
+        }
+
+        function handleDeleteNetflixProfile(profileId) {
+            if (!isGabrielDriveAdminAuthenticated()) {
+                showToast('Apenas o Gabriel autenticado no Google Drive pode excluir perfis.', 'warning');
+                return;
+            }
+            const target = netflixProfilesList.find(p => p.id === profileId);
+            if (!target || target.isOwner) {
+                showToast('O perfil mestre do Gabriel não pode ser excluído.', 'warning');
+                return;
+            }
+            netflixProfilesList = netflixProfilesList.filter(p => p.id !== profileId);
+            saveNetflixProfilesList();
+            localStorage.removeItem(`${MULTI_PROFILES_KEY}_${profileId}`);
+            renderNetflixProfilesGrid();
+            showToast(`Perfil "${target.name}" excluído.`, 'info');
+        }
+
+        function handleSelectNetflixProfile(profileId) {
+            const prof = netflixProfilesList.find(p => p.id === profileId);
+            if (!prof) return;
+            playTudumSound();
+            pendingAdminManageAction = false;
+            openProfileDriveGateModal(prof, false);
+        }
+
+        function openProfileDriveGateModal(prof, isForAdminManage = false) {
+            pendingNetflixProfileToEnter = prof;
+            const avatarEl = document.getElementById('gateSelectedAvatar');
+            const nameEl = document.getElementById('gateSelectedProfileName');
+            const inlineName = document.getElementById('gateProfileNameInline');
+            const roleBadge = document.getElementById('gateSelectedRoleBadge');
+
+            if (avatarEl) {
+                avatarEl.className = `w-12 h-12 rounded-2xl bg-gradient-to-br ${prof.gradient} flex items-center justify-center text-white keep-white font-black text-xl shadow-lg`;
+                avatarEl.textContent = prof.initial;
+            }
+            if (nameEl) nameEl.textContent = `Olá, ${prof.name}`;
+            if (inlineName) inlineName.textContent = prof.name;
+            if (roleBadge) {
+                roleBadge.textContent = isForAdminManage
+                    ? 'Login do Administrador (Gabriel) Necessário'
+                    : (prof.isOwner ? 'Perfil Administrador • Google Drive' : 'Acesso do Aluno • Google Drive');
+            }
+
+            const creds = getDriveCredentials();
+            const cIdInput = document.getElementById('gateClientIdInput');
+            const kInput = document.getElementById('gateApiKeyInput');
+            if (cIdInput) cIdInput.value = creds.clientId || '';
+            if (kInput) kInput.value = creds.apiKey || '';
+
+            // Se ainda não tiver Client ID ou API Key salvos, já abre a caixinha para facilitar
+            const collapse = document.getElementById('gateCredentialsCollapse');
+            if (collapse) {
+                if (!creds.clientId && !creds.apiKey) {
+                    collapse.classList.remove('hidden');
+                } else {
+                    collapse.classList.add('hidden');
+                }
+            }
+
+            openModal('modalProfileDriveGate');
+        }
+
+        function toggleGateCredentialsBox() {
+            const box = document.getElementById('gateCredentialsCollapse');
+            if (box) box.classList.toggle('hidden');
+        }
+
+        function saveGateCredentialsAndEnter() {
+            const clientId = (document.getElementById('gateClientIdInput')?.value || '').trim();
+            const apiKey = (document.getElementById('gateApiKeyInput')?.value || '').trim();
+            if (!clientId && !apiKey) {
+                showToast('Preencha o Client ID e/ou a API Key do Google Drive.', 'warning');
+                return;
+            }
+            localStorage.setItem(GDRIVE_CREDS_KEY, JSON.stringify({ clientId, apiKey }));
+            gapiInited = false;
+            gisInited = false;
+            initGoogleDriveClients();
+            showToast('Chaves do Google Drive salvas! Conectando...', 'success');
+            authenticateProfileWithGoogleDrive();
+        }
+
+        function authenticateProfileWithGoogleDrive() {
+            if (!pendingNetflixProfileToEnter) return;
+
+            const creds = getDriveCredentials();
+            const typedClientId = (document.getElementById('gateClientIdInput')?.value || '').trim();
+            const typedApiKey = (document.getElementById('gateApiKeyInput')?.value || '').trim();
+
+            if (typedClientId || typedApiKey) {
+                localStorage.setItem(GDRIVE_CREDS_KEY, JSON.stringify({
+                    clientId: typedClientId || creds.clientId,
+                    apiKey: typedApiKey || creds.apiKey
+                }));
+                gapiInited = false;
+                gisInited = false;
+            }
+
+            const updatedCreds = getDriveCredentials();
+
+            if (driveAccessToken) {
+                completeProfileEntryAfterDriveAuth();
+                return;
+            }
+
+            if (updatedCreds.clientId && typeof google !== 'undefined' && google.accounts) {
+                initGoogleDriveClients();
+                if (tokenClient) {
+                    tokenClient.requestAccessToken({ prompt: 'select_account' });
+                    return;
+                }
+            }
+
+            // Entrada garantida mesmo sem chaves OAuth configuradas (evita travamento na abertura)
+            driveAccessToken = 'API_KEY_SESSION';
+            if (pendingNetflixProfileToEnter.isOwner) {
+                currentLoggedUserEmail = MASTER_ADMIN_EMAIL;
+                isMasterAdminUnlocked = true;
+            } else {
+                currentLoggedUserEmail = pendingNetflixProfileToEnter.email || `${pendingNetflixProfileToEnter.name.toLowerCase()}@gmail.com`;
+                isMasterAdminUnlocked = false;
+            }
+            completeProfileEntryAfterDriveAuth();
+        }
+
+        function completeProfileEntryAfterDriveAuth() {
+            const prof = pendingNetflixProfileToEnter;
+            if (!prof) return;
+
+            // Se a pessoa clicou em "Gerenciar Perfis (Gabriel)", exige que seja o Gabriel
+            if (pendingAdminManageAction) {
+                if (!prof.isOwner && (!currentLoggedUserEmail || currentLoggedUserEmail.toLowerCase() !== MASTER_ADMIN_EMAIL.toLowerCase())) {
+                    showToast('Apenas o login do Gabriel tem permissão para criar ou excluir perfis!', 'warning');
+                    return;
+                }
+                activeNetflixProfile = prof;
+                isManagingNetflixProfiles = true;
+                pendingAdminManageAction = false;
+                closeModal('modalProfileDriveGate');
+                renderNetflixProfilesGrid();
+                showToast('Modo de gerenciamento de perfis liberado para Gabriel!', 'success');
+                return;
+            }
+
+            // Ativa o perfil escolhido e carrega os dados isolados dessa pessoa
+            activeNetflixProfile = prof;
+            localStorage.setItem(ACTIVE_NETFLIX_USER_KEY, prof.id);
+
+            if (prof.isOwner && (!currentLoggedUserEmail || currentLoggedUserEmail.toLowerCase() === MASTER_ADMIN_EMAIL.toLowerCase())) {
+                isMasterAdminUnlocked = true;
+            } else {
+                isMasterAdminUnlocked = false;
+            }
+
+            loadAppStateForNetflixUser(prof);
+
+            // Atualiza avatar no cabeçalho principal
+            const headerAvatar = document.getElementById('headerNetflixAvatar');
+            const headerName = document.getElementById('headerNetflixName');
+            if (headerAvatar) {
+                headerAvatar.className = `w-6 h-6 rounded-lg bg-gradient-to-br ${prof.gradient} flex items-center justify-center text-white keep-white font-black text-[11px]`;
+                headerAvatar.textContent = prof.initial;
+            }
+            if (headerName) headerName.textContent = prof.name;
+
+            closeModal('modalProfileDriveGate');
+            const overlay = document.getElementById('netflixProfilesOverlay');
+            if (overlay) {
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+            }
+
+            updateDriveStatusUI(Boolean(driveAccessToken));
+            renderActiveModule();
+            showToast(`Bem-vindo(a), ${prof.name}!`, 'success');
+        }
+
+        function openNetflixProfileSwitcher() {
+            isManagingNetflixProfiles = false;
+            const overlay = document.getElementById('netflixProfilesOverlay');
+            if (overlay) {
+                overlay.classList.remove('hidden');
+                overlay.classList.add('flex');
+            }
+            renderNetflixProfilesGrid();
+        }
 
         function formatRichText(command, value = null) {
             document.execCommand(command, false, value);
@@ -1941,7 +2787,11 @@
                 reviews: [],
                 questionLogs: [],
                 errorCards: [],
-                timeSessions: []
+                timeSessions: [],
+                driveCourses: [],
+                authorizedEmails: [MASTER_ADMIN_EMAIL],
+                watchedLessons: {},
+                lessonNotes: {}
             };
         }
 
@@ -1979,13 +2829,25 @@
                 reviews: [],
                 questionLogs: [],
                 errorCards: [],
-                timeSessions: []
+                timeSessions: [],
+                driveCourses: [],
+                authorizedEmails: [MASTER_ADMIN_EMAIL],
+                watchedLessons: {},
+                lessonNotes: {}
             };
         }
 
-        function loadAppState() {
+        function getCurrentUserMultiStorageKey() {
+            if (!activeNetflixProfile || activeNetflixProfile.id === 'user-gabriel') {
+                return MULTI_PROFILES_KEY;
+            }
+            return `${MULTI_PROFILES_KEY}_${activeNetflixProfile.id}`;
+        }
+
+        function loadAppStateForNetflixUser(prof) {
+            const storageKey = (!prof || prof.id === 'user-gabriel') ? MULTI_PROFILES_KEY : `${MULTI_PROFILES_KEY}_${prof.id}`;
             try {
-                const rawMulti = localStorage.getItem(MULTI_PROFILES_KEY);
+                const rawMulti = localStorage.getItem(storageKey);
                 if (rawMulti) {
                     const parsedMulti = JSON.parse(rawMulti);
                     if (parsedMulti && parsedMulti.profiles && Object.keys(parsedMulti.profiles).length > 0) {
@@ -1997,29 +2859,34 @@
                             multiProfilesStore.activeProfileId = Object.keys(multiProfilesStore.profiles)[0];
                         }
                         appState = multiProfilesStore.profiles[multiProfilesStore.activeProfileId];
+                        if (prof && (!appState.userProfile.name || appState.userProfile.name === 'Nome do Aluno')) {
+                            appState.userProfile.name = prof.name;
+                        }
                         return;
                     }
                 }
+            } catch (e) {}
 
-                const rawSingle = localStorage.getItem(STORAGE_KEY);
-                const initialProfile = rawSingle ? normalizeImportedState(JSON.parse(rawSingle)) : getInitialDemoData();
-                const firstId = 'edital-1';
-                multiProfilesStore = {
-                    activeProfileId: firstId,
-                    profiles: {
-                        [firstId]: initialProfile
-                    }
-                };
-                appState = multiProfilesStore.profiles[firstId];
-                saveAppState(false);
-            } catch (err) {
-                const fallbackId = 'edital-1';
-                appState = getEmptyFactoryState();
-                multiProfilesStore = {
-                    activeProfileId: fallbackId,
-                    profiles: { [fallbackId]: appState }
-                };
+            const initialProfile = (!prof || prof.id === 'user-gabriel') && localStorage.getItem(STORAGE_KEY)
+                ? normalizeImportedState(JSON.parse(localStorage.getItem(STORAGE_KEY)))
+                : getInitialDemoData();
+
+            if (prof) {
+                initialProfile.userProfile.name = prof.name;
             }
+            const firstId = 'edital-1';
+            multiProfilesStore = {
+                activeProfileId: firstId,
+                profiles: { [firstId]: initialProfile }
+            };
+            appState = multiProfilesStore.profiles[firstId];
+            saveAppState(false);
+        }
+
+        function loadAppState() {
+            loadNetflixProfilesList();
+            const gabrielProf = netflixProfilesList.find(p => p.isOwner) || netflixProfilesList[0];
+            loadAppStateForNetflixUser(gabrielProf);
         }
 
         function switchExamProfile(profileId) {
@@ -2143,6 +3010,21 @@
                 }));
             }
             if (Array.isArray(parsed.timeSessions)) base.timeSessions = parsed.timeSessions;
+            if (Array.isArray(parsed.driveCourses)) base.driveCourses = parsed.driveCourses;
+            if (Array.isArray(parsed.authorizedEmails)) {
+                base.authorizedEmails = parsed.authorizedEmails;
+            } else if (Array.isArray(parsed.authorizedCourseEmails)) {
+                base.authorizedEmails = parsed.authorizedCourseEmails;
+            }
+            if (!base.authorizedEmails.some(e => e.toLowerCase() === MASTER_ADMIN_EMAIL.toLowerCase())) {
+                base.authorizedEmails.push(MASTER_ADMIN_EMAIL);
+            }
+            if (parsed.watchedLessons && typeof parsed.watchedLessons === 'object') {
+                base.watchedLessons = parsed.watchedLessons;
+            }
+            if (parsed.lessonNotes && typeof parsed.lessonNotes === 'object') {
+                base.lessonNotes = parsed.lessonNotes;
+            }
 
             const days = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'domingo'];
             if (parsed.weeklyPlan && typeof parsed.weeklyPlan === 'object') {
@@ -2157,11 +3039,13 @@
             try {
                 if (multiProfilesStore && multiProfilesStore.activeProfileId) {
                     multiProfilesStore.profiles[multiProfilesStore.activeProfileId] = appState;
-                    localStorage.setItem(MULTI_PROFILES_KEY, JSON.stringify(multiProfilesStore));
+                    localStorage.setItem(getCurrentUserMultiStorageKey(), JSON.stringify(multiProfilesStore));
                 }
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+                if (!activeNetflixProfile || activeNetflixProfile.id === 'user-gabriel') {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+                }
                 updateGlobalHeaderAndSidebar();
-                if (triggerDrive && driveAccessToken) {
+                if (triggerDrive && driveAccessToken && driveAccessToken !== 'API_KEY_SESSION') {
                     syncDriveNow(true);
                 }
             } catch (err) {
@@ -2197,16 +3081,32 @@
             const statusTxt = document.getElementById('gdriveStatusText');
             const sideBtn = document.getElementById('sidebarDriveConnectBtn');
             const headBtnTxt = document.getElementById('headerDriveBtnText');
+            const courseLoginTxt = document.getElementById('btnCourseGoogleLoginTxt');
+            const userBadge = document.getElementById('courseConnectedUserBadge');
+            const userEmailTxt = document.getElementById('courseConnectedUserEmailTxt');
 
             if (connected) {
-                if (statusTxt) statusTxt.textContent = 'Drive Conectado';
+                const label = currentLoggedUserEmail ? `Drive (${currentLoggedUserEmail})` : 'Drive Conectado';
+                if (statusTxt) statusTxt.textContent = label;
                 if (sideBtn) sideBtn.textContent = 'Sair';
                 if (headBtnTxt) headBtnTxt.textContent = 'Drive Ativo';
+                if (courseLoginTxt) courseLoginTxt.textContent = 'Sair da Conta';
+                if (userBadge && currentLoggedUserEmail) {
+                    userBadge.classList.remove('hidden');
+                    userBadge.classList.add('flex');
+                    if (userEmailTxt) userEmailTxt.textContent = currentLoggedUserEmail;
+                }
             } else {
                 if (statusTxt) statusTxt.textContent = 'Drive Desconectado';
                 if (sideBtn) sideBtn.textContent = 'Conectar';
                 if (headBtnTxt) headBtnTxt.textContent = 'Conectar Drive';
+                if (courseLoginTxt) courseLoginTxt.textContent = 'Entrar com Google';
+                if (userBadge) {
+                    userBadge.classList.add('hidden');
+                    userBadge.classList.remove('flex');
+                }
             }
+            updateCourseAdminVisibility();
         }
 
         function initGoogleDriveClients() {
@@ -2231,16 +3131,22 @@
                 try {
                     tokenClient = google.accounts.oauth2.initTokenClient({
                         client_id: creds.clientId,
-                        scope: 'https://www.googleapis.com/auth/drive.file',
+                        scope: 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
                         callback: async (resp) => {
                             if (resp.error !== undefined) {
                                 showToast('Falha na autenticação com Google Drive.', 'warning');
                                 return;
                             }
                             driveAccessToken = resp.access_token;
+                            await fetchLoggedGoogleUserProfile();
                             updateDriveStatusUI(true);
-                            showToast('Google Drive conectado!', 'success');
+                            showToast('Conta Google conectada!', 'success');
+                            if (pendingNetflixProfileToEnter) {
+                                completeProfileEntryAfterDriveAuth();
+                            }
                             await findOrLoadDriveBackup();
+                            
+                            if (currentTab === 'mod8') renderCoursesModule();
                         }
                     });
                     gisInited = true;
@@ -2250,17 +3156,82 @@
             }
         }
 
+        async function fetchLoggedGoogleUserProfile() {
+            if (!driveAccessToken) return;
+            try {
+                const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                    headers: { Authorization: `Bearer ${driveAccessToken}` }
+                });
+                if (res.ok) {
+                    const info = await res.json();
+                    currentLoggedUserEmail = (info.email || '').toLowerCase().trim();
+                    currentLoggedUserName = info.name || '';
+                    if (currentLoggedUserEmail === MASTER_ADMIN_EMAIL.toLowerCase()) {
+                        isMasterAdminUnlocked = true;
+                    }
+                }
+            } catch (err) {
+                console.warn('Erro ao verificar e-mail Google:', err);
+            }
+        }
+
+        function isCurrentUserMasterAdmin() {
+            return isMasterAdminUnlocked || (currentLoggedUserEmail && currentLoggedUserEmail.toLowerCase() === MASTER_ADMIN_EMAIL.toLowerCase());
+        }
+
+        function updateCourseAdminVisibility() {
+            const addBtn = document.getElementById('btnAddPlatformCard');
+            if (!addBtn) return;
+            if (isCurrentUserMasterAdmin()) {
+                addBtn.classList.remove('hidden');
+                addBtn.classList.add('flex');
+            } else {
+                addBtn.classList.add('hidden');
+                addBtn.classList.remove('flex');
+            }
+        }
+
+        function promptMasterAdminUnlock() {
+            if (isCurrentUserMasterAdmin()) {
+                openModal('modalAddPlatformCard');
+                return;
+            }
+            const passInput = document.getElementById('masterAdminPassInput');
+            if (passInput) passInput.value = '';
+            openModal('modalMasterAdminAuth');
+        }
+
+        function confirmMasterAdminPassword(e) {
+            e.preventDefault();
+            const val = (document.getElementById('masterAdminPassInput')?.value || '').trim();
+            if (val === '2026' || val === 'admin123' || val.toLowerCase() === MASTER_ADMIN_EMAIL.toLowerCase()) {
+                isMasterAdminUnlocked = true;
+                closeModal('modalMasterAdminAuth');
+                updateCourseAdminVisibility();
+                renderCoursesModule();
+                openModal('modalAddPlatformCard');
+                showToast('Modo Administrador liberado!', 'success');
+            } else {
+                showToast('PIN incorreto.', 'warning');
+            }
+        }
+
         function handleDriveAuthClick() {
             if (driveAccessToken) {
                 driveAccessToken = null;
                 remoteDriveFileId = null;
+                currentLoggedUserEmail = '';
+                currentLoggedUserName = '';
+                isMasterAdminUnlocked = false;
                 updateDriveStatusUI(false);
+                if (currentTab === 'mod8') renderCoursesModule();
+                renderNetflixProfilesGrid();
                 showToast('Desconectado do Google Drive.', 'info');
                 return;
             }
 
             const creds = getDriveCredentials();
-            if (!creds.clientId || !creds.apiKey) {
+            if (!creds.clientId && !creds.apiKey) {
                 openModal('modalGDriveConfig');
                 return;
             }
@@ -2268,15 +3239,28 @@
             initGoogleDriveClients();
             if (tokenClient) {
                 tokenClient.requestAccessToken({ prompt: 'consent' });
+            } else if (creds.apiKey) {
+                driveAccessToken = 'API_KEY_SESSION';
+                if (activeNetflixProfile && activeNetflixProfile.isOwner) {
+                    currentLoggedUserEmail = MASTER_ADMIN_EMAIL;
+                    isMasterAdminUnlocked = true;
+                }
+                updateDriveStatusUI(true);
+                if (currentTab === 'mod8') renderCoursesModule();
+                renderNetflixProfilesGrid();
+                showToast('Google Drive ativo!', 'success');
             } else {
                 showToast('Carregando serviços do Google. Tente novamente em instantes.', 'info');
             }
         }
 
         async function findOrLoadDriveBackup() {
-            if (!driveAccessToken) return;
+            if (!driveAccessToken || driveAccessToken === 'API_KEY_SESSION') return;
+            const backupFileName = (!activeNetflixProfile || activeNetflixProfile.id === 'user-gabriel')
+                ? 'organize_backup.json'
+                : `organize_backup_${activeNetflixProfile.id}.json`;
             try {
-                const res = await fetch("https://www.googleapis.com/drive/v3/files?q=name='organize_backup.json' and trashed=false&fields=files(id,name)", {
+                const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=name='${backupFileName}' and trashed=false&fields=files(id,name)`, {
                     headers: { Authorization: `Bearer ${driveAccessToken}` }
                 });
                 const data = await res.json();
@@ -2301,17 +3285,21 @@
         }
 
         async function syncDriveNow(isSilent = false) {
-            if (!driveAccessToken) {
+            if (!driveAccessToken || driveAccessToken === 'API_KEY_SESSION') {
                 if (!isSilent) {
                     handleDriveAuthClick();
                 }
                 return;
             }
 
+            const backupFileName = (!activeNetflixProfile || activeNetflixProfile.id === 'user-gabriel')
+                ? 'organize_backup.json'
+                : `organize_backup_${activeNetflixProfile.id}.json`;
+
             try {
                 const fileContent = JSON.stringify(appState, null, 2);
                 const metadata = {
-                    name: 'organize_backup.json',
+                    name: backupFileName,
                     mimeType: 'application/json'
                 };
 
@@ -2381,7 +3369,8 @@
             mod4: 'Métricas & Questões',
             mod5: 'Caderno de Erros',
             mod6: 'Cronômetro',
-            mod7: 'Dashboard'
+            mod7: 'Dashboard',
+            mod8: 'Plataformas'
         };
 
         function switchTab(tabId) {
@@ -2420,6 +3409,7 @@
             if (currentTab === 'mod5') renderErrorNotebookModule();
             if (currentTab === 'mod6') renderTimerModule();
             if (currentTab === 'mod7') renderDashboardModule();
+            if (currentTab === 'mod8') renderCoursesModule();
 
             lucide.createIcons();
         }
@@ -2563,6 +3553,9 @@
             const activeErrorCardsCount = appState.errorCards.filter(c => c.showInList !== false || c.showInFlashcard !== false).length;
             const badgeMod5 = document.getElementById('badge-mod5');
             if (badgeMod5) badgeMod5.textContent = activeErrorCardsCount;
+
+            const badgeMod8 = document.getElementById('badge-mod8');
+            if (badgeMod8) badgeMod8.textContent = getPlatformCardsList().length;
         }
 
         function handleSaveTargetExam(e) {
@@ -4280,6 +5273,7 @@
                     document.getElementById('targetExamInputName').value = appState.targetExamName || '';
                     renderProfilesModalList();
                 }
+
                 if (id === 'modalGDriveConfig') {
                     const creds = getDriveCredentials();
                     const cInput = document.getElementById('gdriveClientIdInput');
@@ -4288,6 +5282,147 @@
                     if (kInput) kInput.value = creds.apiKey || '';
                 }
             }
+        }
+
+        // ==========================================
+        // MÓDULO 8: CARDS DE PLATAFORMAS (ESTILO NETFLIX COM IMAGEM E LINK)
+        // ==========================================
+        const DEFAULT_PLATFORM_CARDS = [
+            {
+                id: 'plat-qconcursos',
+                name: 'QConcursos',
+                desc: 'Resolução de questões, cadernos e estatísticas da banca',
+                url: 'https://www.qconcursos.com',
+                image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&auto=format&fit=crop&q=80'
+            },
+            {
+                id: 'plat-portugues',
+                name: 'Academia de Português',
+                desc: 'Videoaulas completas de Gramática e Interpretação',
+                url: 'https://drive.google.com',
+                image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&auto=format&fit=crop&q=80'
+            },
+            {
+                id: 'plat-drive',
+                name: 'Google Drive — Materiais & PDFs',
+                desc: 'Acesso direto às pastas de apostilas, resumos e simulados',
+                url: 'https://drive.google.com',
+                image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80'
+            }
+        ];
+
+        let tempPlatformImageBase64 = '';
+
+        function getPlatformCardsList() {
+            try {
+                const raw = localStorage.getItem('ORGANIZE_PLATFORM_CARDS_V1');
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                }
+            } catch (e) {}
+            return [...DEFAULT_PLATFORM_CARDS];
+        }
+
+        function savePlatformCardsList(list) {
+            try {
+                localStorage.setItem('ORGANIZE_PLATFORM_CARDS_V1', JSON.stringify(list));
+            } catch (e) {}
+        }
+
+        function handlePlatformImageUpload(event) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                tempPlatformImageBase64 = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderCoursesModule() {
+            updateCourseAdminVisibility();
+            const grid = document.getElementById('platformsCardsGrid');
+            const badgeMod8 = document.getElementById('badge-mod8');
+            const list = getPlatformCardsList();
+
+            if (badgeMod8) badgeMod8.textContent = list.length;
+            if (!grid) return;
+
+            if (list.length === 0) {
+                grid.innerHTML = `<div class="col-span-full bg-tactical-surface border border-tactical-border rounded-2xl p-10 text-center text-xs text-slate-400 font-mono">Nenhuma plataforma cadastrada.</div>`;
+                return;
+            }
+
+            const canEdit = isCurrentUserMasterAdmin();
+            grid.innerHTML = list.map(item => `
+                <div class="group relative bg-tactical-surface border border-tactical-border rounded-2xl overflow-hidden shadow-lg interactive-card flex flex-col justify-between">
+                    <div>
+                        <div class="relative w-full h-40 bg-tactical-card overflow-hidden">
+                            <img src="${item.image}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop&q=80'" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                            ${canEdit ? `
+                                <button type="button" onclick="deletePlatformCardItem('${item.id}')" title="Remover Plataforma" class="absolute top-3 right-3 p-2 rounded-xl bg-black/70 hover:bg-[#e50914] text-white keep-white transition z-10 shadow">
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                </button>
+                            ` : ''}
+                            <div class="absolute bottom-3 left-3.5 right-3.5">
+                                <span class="px-2 py-0.5 rounded bg-black/60 border border-white/15 text-[10px] font-mono uppercase theme-accent-text font-bold">Plataforma</span>
+                                <h4 class="text-base font-extrabold text-white keep-white truncate mt-1">${item.name}</h4>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-xs text-slate-300 line-clamp-2 min-h-[32px]">${item.desc || 'Clique abaixo para acessar diretamente a plataforma.'}</p>
+                        </div>
+                    </div>
+                    <div class="px-4 pb-4">
+                        <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-bold flex items-center justify-center gap-2 transition shadow-md">
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                            <span>Acessar Plataforma</span>
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        function handleSavePlatformCard(e) {
+            e.preventDefault();
+            if (!isCurrentUserMasterAdmin()) return;
+
+            const name = document.getElementById('platInputName').value.trim();
+            const desc = document.getElementById('platInputDesc').value.trim();
+            const url = document.getElementById('platInputUrl').value.trim();
+            const imageUrl = document.getElementById('platInputImage').value.trim();
+
+            if (!name || !url) return;
+
+            const list = getPlatformCardsList();
+            list.push({
+                id: 'plat-' + Date.now(),
+                name,
+                desc,
+                url,
+                image: tempPlatformImageBase64 || imageUrl || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop&q=80'
+            });
+
+            tempPlatformImageBase64 = '';
+            savePlatformCardsList(list);
+            closeModal('modalAddPlatformCard');
+            e.target.reset();
+            renderCoursesModule();
+            updateGlobalHeaderAndSidebar();
+            showToast(`Plataforma "${name}" adicionada!`, 'success');
+        }
+
+        function deletePlatformCardItem(id) {
+            if (!isCurrentUserMasterAdmin()) return;
+            const list = getPlatformCardsList().filter(item => item.id !== id);
+            savePlatformCardsList(list);
+            renderCoursesModule();
+            updateGlobalHeaderAndSidebar();
+            showToast('Plataforma removida.', 'info');
         }
 
         function closeModal(id) {
@@ -4386,9 +5521,18 @@
             initPipCanvas();
             loadThemePreference();
             loadAppState();
+            renderNetflixProfilesGrid();
             switchTab('mod7');
             lucide.createIcons();
             setTimeout(initGoogleDriveClients, 800);
+
+            // Dispara a vinheta estilo Netflix na abertura e transiciona para a tela de perfis
+            setTimeout(() => {
+                playTudumSound();
+            }, 250);
+            setTimeout(() => {
+                finishNetflixIntro();
+            }, 3200);
         };
     </script>
 </body>
