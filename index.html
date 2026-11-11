@@ -5074,7 +5074,533 @@ closeModal('modalResetData');
 renderActiveModule();
 showToast('Dados limpos!', 'info');
 }
-window.onload = function() {
+window.onload = function() {// ==========================================
+        // MÓDULO 9: MOTOR ANKI (.APKG) COM BANNERS NETFLIX & SYNC GLOBAL
+        // ==========================================
+        const ANKI_COURSES_KEY = 'ORGANIZE_ANKI_COURSES_V1';
+        let activeAnkiCourseId = null;
+        let activeAnkiStudyQueue = [];
+        let activeAnkiCardIndex = 0;
+        let tempApkgBannerBase64 = '';
+        let sharedAnkiDriveFileId = null;
+
+        // Registra o Módulo 9 no roteador de abas existente
+        MODULE_NAMES.mod9 = 'Anki Flashcards';
+        const _origRenderActiveModule = renderActiveModule;
+        renderActiveModule = function() {
+            _origRenderActiveModule();
+            const b9 = document.getElementById('badge-mod9');
+            if (b9) b9.textContent = getAnkiCoursesList().length;
+            if (currentTab === 'mod9') renderAnkiModule();
+            lucide.createIcons();
+        };
+
+        function getAnkiCoursesList() {
+            try {
+                const raw = localStorage.getItem(ANKI_COURSES_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed)) return parsed;
+                }
+            } catch (e) {}
+            return [];
+        }
+
+        function saveAnkiCoursesList(list, syncToCloud = true) {
+            try {
+                localStorage.setItem(ANKI_COURSES_KEY, JSON.stringify(list));
+                const b9 = document.getElementById('badge-mod9');
+                if (b9) b9.textContent = list.length;
+                if (syncToCloud && isGabrielDriveAdminAuthenticated()) {
+                    syncSharedAnkiCoursesToDrive();
+                }
+            } catch (e) {
+                showToast('Deck muito grande para memória local; mantendo na sessão.', 'warning');
+            }
+        }
+
+        function getAnkiUserProgressMap() {
+            const profId = activeNetflixProfile ? activeNetflixProfile.id : 'user-gabriel';
+            try {
+                const raw = localStorage.getItem('ORGANIZE_ANKI_PROG_' + profId);
+                return raw ? JSON.parse(raw) : {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function saveAnkiUserProgressMap(map) {
+            const profId = activeNetflixProfile ? activeNetflixProfile.id : 'user-gabriel';
+            try {
+                localStorage.setItem('ORGANIZE_ANKI_PROG_' + profId, JSON.stringify(map));
+                if (appState) {
+                    appState.ankiProgress = map;
+                    saveAppState(true);
+                }
+            } catch (e) {}
+        }
+
+        function handleApkgBannerUpload(event) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            compressImageFileToBase64(file, 700, 0.8, function(dataUrl) {
+                tempApkgBannerBase64 = dataUrl;
+            });
+        }
+
+        // Lê o arquivo .apkg (ZIP + SQLite collection.anki2 / anki21) direto no navegador
+        async function handleImportApkgDeck(e) {
+            e.preventDefault();
+            if (!isCurrentUserMasterAdmin()) {
+                showToast('Apenas o Administrador (Gabriel) pode importar arquivos .apkg.', 'warning');
+                return;
+            }
+            const fileInput = document.getElementById('apkgFileInput');
+            const file = fileInput?.files?.[0];
+            if (!file) return;
+
+            const courseTitle = document.getElementById('apkgCourseTitleInput').value.trim();
+            const bannerUrl = document.getElementById('apkgCourseBannerUrl').value.trim();
+            const statusBox = document.getElementById('apkgImportStatusBox');
+            const submitBtn = document.getElementById('btnSubmitApkgImport');
+
+            statusBox.classList.remove('hidden');
+            submitBtn.disabled = true;
+
+            try {
+                const zip = await JSZip.loadAsync(file);
+                const dbFile = zip.file('collection.anki21') || zip.file('collection.anki2');
+                if (!dbFile) {
+                    throw new Error('Banco de dados do Anki não encontrado dentro deste .apkg.');
+                }
+
+                const dbUint8 = await dbFile.async('uint8array');
+                const SQL = await initSqlJs({
+                    locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}`
+                });
+                const db = new SQL.Database(dbUint8);
+
+                // 1. Extrai os nomes dos Decks (Matérias :: Assuntos)
+                const decksMap = {};
+                try {
+                    const colRes = db.exec("SELECT decks FROM col LIMIT 1");
+                    if (colRes.length > 0 && colRes[0].values[0][0]) {
+                        const decksJson = JSON.parse(colRes[0].values[0][0]);
+                        Object.values(decksJson).forEach(d => {
+                            decksMap[String(d.id)] = d.name;
+                        });
+                    }
+                } catch (_) {}
+
+                if (Object.keys(decksMap).length === 0) {
+                    try {
+                        const dRes = db.exec("SELECT id, name FROM decks");
+                        if (dRes.length > 0) {
+                            dRes[0].values.forEach(r => {
+                                decksMap[String(r[0])] = String(r[1]).replace(/\x1f/g, '::');
+                            });
+                        }
+                    } catch (_) {}
+                }
+
+                // 2. Extrai os Cards e Notas (Frente e Verso)
+                const notesRes = db.exec("SELECT c.id, c.did, n.flds FROM cards c JOIN notes n ON c.nid = n.id");
+                const subjectsTree = {};
+                let totalCards = 0;
+
+                if (notesRes.length > 0) {
+                    notesRes[0].values.forEach(row => {
+                        const cardId = String(row[0]);
+                        const did = String(row[1]);
+                        const rawFlds = String(row[2] || '');
+                        const parts = rawFlds.split('\x1f');
+                        const front = (parts[0] || '').replace(/\[sound:[^\]]+\]/g, '').trim();
+                        const back = (parts.slice(1).join('<hr class="my-2 border-white/10">') || '').replace(/\[sound:[^\]]+\]/g, '').trim();
+                        if (!front && !back) return;
+
+                        const fullDeckName = decksMap[did] || 'Geral::Assunto Geral';
+                        const segments = fullDeckName.split('::').map(s => s.trim()).filter(Boolean);
+
+                        let subjectName = 'Matéria Geral';
+                        let topicName = 'Assunto Geral';
+
+                        if (segments.length === 1) {
+                            subjectName = segments[0];
+                        } else if (segments.length === 2) {
+                            subjectName = segments[0];
+                            topicName = segments[1];
+                        } else if (segments.length >= 3) {
+                            subjectName = segments[1];
+                            topicName = segments.slice(2).join(' › ');
+                        }
+
+                        if (!subjectsTree[subjectName]) subjectsTree[subjectName] = {};
+                        if (!subjectsTree[subjectName][topicName]) subjectsTree[subjectName][topicName] = [];
+
+                        subjectsTree[subjectName][topicName].push({
+                            id: 'ak-' + cardId,
+                            front,
+                            back
+                        });
+                        totalCards++;
+                    });
+                }
+
+                db.close();
+
+                if (totalCards === 0) {
+                    throw new Error('Nenhum flashcard válido encontrado neste arquivo .apkg.');
+                }
+
+                const newCourse = {
+                    id: 'anki-course-' + Date.now(),
+                    title: courseTitle,
+                    banner: tempApkgBannerBase64 || bannerUrl || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900&auto=format&fit=crop&q=80',
+                    totalCards,
+                    subjects: subjectsTree
+                };
+
+                tempApkgBannerBase64 = '';
+                const list = getAnkiCoursesList();
+                list.unshift(newCourse);
+                saveAnkiCoursesList(list, true);
+
+                closeModal('modalUploadApkg');
+                e.target.reset();
+                renderAnkiModule();
+                showToast(`Curso "${courseTitle}" importado com ${totalCards} flashcards!`, 'success');
+            } catch (err) {
+                console.error(err);
+                showToast(err.message || 'Erro ao ler o arquivo .apkg.', 'warning');
+            } finally {
+                statusBox.classList.add('hidden');
+                submitBtn.disabled = false;
+            }
+        }
+
+        function renderAnkiModule() {
+            const adminBtn = document.getElementById('btnAdminUploadApkg');
+            if (adminBtn) {
+                if (isCurrentUserMasterAdmin()) {
+                    adminBtn.classList.remove('hidden');
+                    adminBtn.classList.add('flex');
+                } else {
+                    adminBtn.classList.add('hidden');
+                    adminBtn.classList.remove('flex');
+                }
+            }
+
+            if (!activeAnkiCourseId) {
+                backToAnkiCoursesVitrine();
+            } else {
+                renderAnkiSubjectsTree();
+            }
+        }
+
+        function backToAnkiCoursesVitrine() {
+            activeAnkiCourseId = null;
+            document.getElementById('ankiCoursesBannerView').classList.remove('hidden');
+            document.getElementById('ankiSubjectsView').classList.add('hidden');
+            document.getElementById('ankiStudyPlayerView').classList.add('hidden');
+            document.getElementById('btnBackToAnkiCourses').classList.add('hidden');
+            document.getElementById('btnBackToAnkiCourses').classList.remove('flex');
+
+            const container = document.getElementById('ankiCoursesBannerView');
+            const courses = getAnkiCoursesList();
+            const isAdmin = isCurrentUserMasterAdmin();
+
+            if (courses.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full bg-tactical-surface border border-tactical-border rounded-2xl p-10 text-center space-y-2">
+                        <p class="text-sm font-bold text-white">Nenhum pacote de Flashcards (.apkg) carregado ainda</p>
+                        <p class="text-xs text-slate-400">${isAdmin ? 'Clique em "Importar Deck (.apkg)" acima para enviar seu arquivo.' : 'Aguarde o administrador publicar os decks de flashcards.'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = courses.map(course => {
+                const subjCount = Object.keys(course.subjects || {}).length;
+                return `
+                    <div onclick="openAnkiCourse('${course.id}')" class="group relative rounded-3xl overflow-hidden border border-tactical-border bg-tactical-surface shadow-xl cursor-pointer interactive-card h-60 flex flex-col justify-end">
+                        <img src="${course.banner}" alt="${course.title}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/55 to-transparent"></div>
+                        ${isAdmin ? `
+                            <button type="button" onclick="event.stopPropagation(); deleteAnkiCourse('${course.id}')" title="Excluir Deck" class="absolute top-3.5 right-3.5 p-2 rounded-xl bg-black/70 hover:bg-[#e50914] text-white keep-white z-20 transition">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        ` : ''}
+                        <div class="relative z-10 p-5 space-y-2">
+                            <span class="px-2.5 py-0.5 rounded-md bg-[#e50914] text-white keep-white text-[10px] font-mono uppercase font-extrabold tracking-wider">ANKI DECK</span>
+                            <h4 class="text-xl font-black text-white keep-white tracking-tight truncate">${course.title}</h4>
+                            <div class="flex items-center justify-between text-xs font-mono text-slate-300 pt-1">
+                                <span>${subjCount} Matéria(s) • ${course.totalCards || 0} Cards</span>
+                                <span class="theme-accent-text font-bold flex items-center gap-1">Acessar <i data-lucide="play" class="w-3.5 h-3.5"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        // Alias para evitar espaço no nome caso chamado pelo botão
+        window['backToAnkiCourses Vitrine'] = backToAnkiCoursesVitrine;
+
+        function deleteAnkiCourse(courseId) {
+            if (!isCurrentUserMasterAdmin()) return;
+            const list = getAnkiCoursesList().filter(c => c.id !== courseId);
+            saveAnkiCoursesList(list, true);
+            backToAnkiCoursesVitrine();
+            showToast('Deck Anki removido.', 'info');
+        }
+
+        function openAnkiCourse(courseId) {
+            activeAnkiCourseId = courseId;
+            document.getElementById('ankiCoursesBannerView').classList.add('hidden');
+            document.getElementById('ankiStudyPlayerView').classList.add('hidden');
+            document.getElementById('ankiSubjectsView').classList.remove('hidden');
+            const backBtn = document.getElementById('btnBackToAnkiCourses');
+            backBtn.classList.remove('hidden');
+            backBtn.classList.add('flex');
+            renderAnkiSubjectsTree();
+        }
+
+        function renderAnkiSubjectsTree() {
+            const course = getAnkiCoursesList().find(c => c.id === activeAnkiCourseId);
+            if (!course) {
+                backToAnkiCoursesVitrine();
+                return;
+            }
+
+            const header = document.getElementById('ankiActiveCourseHeader');
+            header.innerHTML = `
+                <img src="${course.banner}" class="absolute inset-0 w-full h-full object-cover opacity-40">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+                <div class="relative z-10 flex flex-wrap items-end justify-between gap-4 w-full">
+                    <div>
+                        <span class="px-2.5 py-0.5 rounded bg-[#e50914] text-white keep-white text-[10px] font-mono uppercase font-bold">Curso de Flashcards</span>
+                        <h3 class="text-2xl sm:text-3xl font-black text-white keep-white mt-1">${course.title}</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-300">${course.totalCards || 0} Flashcards disponíveis</span>
+                </div>
+            `;
+
+            const search = (document.getElementById('ankiSearchTopicInput')?.value || '').toLowerCase().trim();
+            const progMap = getAnkiUserProgressMap();
+            const treeContainer = document.getElementById('ankiSubjectsTreeContainer');
+            treeContainer.innerHTML = '';
+
+            Object.entries(course.subjects || {}).forEach(([subjectName, topicsObj]) => {
+                let topicsHTML = '';
+                Object.entries(topicsObj).forEach(([topicName, cardsArr]) => {
+                    if (search && !subjectName.toLowerCase().includes(search) && !topicName.toLowerCase().includes(search)) {
+                        return;
+                    }
+
+                    let countNew = 0, countLearn = 0, countRev = 0;
+                    cardsArr.forEach(c => {
+                        const st = progMap[c.id]?.state || 'NEW';
+                        if (st === 'NEW') countNew++;
+                        else if (st === 'LEARN') countLearn++;
+                        else countRev++;
+                    });
+
+                    const safeSubj = subjectName.replace(/'/g, "\\'");
+                    const safeTop = topicName.replace(/'/g, "\\'");
+
+                    topicsHTML += `
+                        <div onclick="startAnkiStudySession('${safeSubj}', '${safeTop}')" class="p-3.5 rounded-xl bg-tactical-bg hover:bg-tactical-card border border-tactical-subtle hover:border-tactical-accent flex flex-wrap items-center justify-between gap-3 cursor-pointer transition">
+                            <div class="flex items-center gap-2.5">
+                                <i data-lucide="book-open-check" class="w-4 h-4 theme-accent-text"></i>
+                                <span class="text-xs sm:text-sm font-semibold text-white">${topicName}</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-xs font-mono">
+                                <span class="text-blue-400 font-bold" title="Novos">${countNew}</span>
+                                <span class="text-amber-400 font-bold" title="Aprendendo">${countLearn}</span>
+                                <span class="text-emerald-400 font-bold" title="Revisar">${countRev}</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-tactical-accent text-white keep-white text-[11px] font-bold">Estudar</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                if (!topicsHTML) return;
+
+                treeContainer.innerHTML += `
+                    <div class="bg-tactical-surface border border-tactical-border rounded-2xl overflow-hidden shadow-sm">
+                        <div class="px-4 py-3 bg-tactical-card/60 border-b border-tactical-border flex items-center justify-between">
+                            <h4 class="text-sm font-extrabold text-white uppercase tracking-wide flex items-center gap-2">
+                                <i data-lucide="folder-kanban" class="w-4 h-4 theme-accent-text"></i> ${subjectName}
+                            </h4>
+                        </div>
+                        <div class="p-3 space-y-2">${topicsHTML}</div>
+                    </div>
+                `;
+            });
+
+            lucide.createIcons();
+        }
+
+        function startAnkiStudySession(subjectName, topicName) {
+            const course = getAnkiCoursesList().find(c => c.id === activeAnkiCourseId);
+            const cards = course?.subjects?.[subjectName]?.[topicName] || [];
+            if (cards.length === 0) return;
+
+            activeAnkiStudyQueue = [...cards];
+            activeAnkiCardIndex = 0;
+
+            document.getElementById('ankiSubjectsView').classList.add('hidden');
+            document.getElementById('ankiStudyPlayerView').classList.remove('hidden');
+            document.getElementById('ankiStudyBreadcrumb').textContent = `${course.title} › ${subjectName}`;
+            document.getElementById('ankiStudyTopicTitle').textContent = topicName;
+
+            renderCurrentAnkiStudyCard();
+        }
+
+        function renderCurrentAnkiStudyCard() {
+            const progMap = getAnkiUserProgressMap();
+            let cNew = 0, cLearn = 0, cRev = 0;
+            activeAnkiStudyQueue.forEach(c => {
+                const st = progMap[c.id]?.state || 'NEW';
+                if (st === 'NEW') cNew++;
+                else if (st === 'LEARN') cLearn++;
+                else cRev++;
+            });
+
+            document.getElementById('ankiCountNew').textContent = cNew;
+            document.getElementById('ankiCountLearn').textContent = cLearn;
+            document.getElementById('ankiCountRev').textContent = cRev;
+
+            if (activeAnkiCardIndex >= activeAnkiStudyQueue.length) {
+                showToast('Parabéns! Você concluiu todos os flashcards deste assunto!', 'success');
+                closeAnkiStudyPlayer();
+                return;
+            }
+
+            const card = activeAnkiStudyQueue[activeAnkiCardIndex];
+            document.getElementById('ankiCardFrontContent').innerHTML = card.front;
+            document.getElementById('ankiCardBackContent').innerHTML = card.back;
+            document.getElementById('ankiCardBackWrapper').classList.add('hidden');
+            document.getElementById('btnAnkiShowAnswer').classList.remove('hidden');
+
+            const rateBtns = document.getElementById('ankiAnswerRatingBtns');
+            rateBtns.classList.add('hidden');
+            rateBtns.classList.remove('grid');
+        }
+
+        function revealAnkiCardAnswer() {
+            document.getElementById('ankiCardBackWrapper').classList.remove('hidden');
+            document.getElementById('btnAnkiShowAnswer').classList.add('hidden');
+            const rateBtns = document.getElementById('ankiAnswerRatingBtns');
+            rateBtns.classList.remove('hidden');
+            rateBtns.classList.add('grid');
+        }
+
+        function rateAnkiCard(rating) {
+            const card = activeAnkiStudyQueue[activeAnkiCardIndex];
+            if (!card) return;
+
+            const progMap = getAnkiUserProgressMap();
+            if (rating === 'AGAIN') {
+                progMap[card.id] = { state: 'LEARN', updatedAt: Date.now() };
+                // Reinsere a carta no final da fila da sessão para fixação, igual ao Anki
+                activeAnkiStudyQueue.push(card);
+            } else if (rating === 'HARD') {
+                progMap[card.id] = { state: 'LEARN', updatedAt: Date.now() };
+            } else {
+                progMap[card.id] = { state: 'REVIEW', updatedAt: Date.now() };
+            }
+
+            saveAnkiUserProgressMap(progMap);
+            activeAnkiCardIndex++;
+            renderCurrentAnkiStudyCard();
+        }
+
+        function closeAnkiStudyPlayer() {
+            document.getElementById('ankiStudyPlayerView').classList.add('hidden');
+            document.getElementById('ankiSubjectsView').classList.remove('hidden');
+            renderAnkiSubjectsTree();
+        }
+
+        // Sincroniza os decks .apkg importados pelo Gabriel no Google Drive para todos os alunos
+        async function syncSharedAnkiCoursesToDrive() {
+            if (!isRealOAuthToken() || !isGabrielDriveAdminAuthenticated()) return;
+            try {
+                if (!sharedAnkiDriveFileId) {
+                    const q = encodeURIComponent("name='organize_shared_anki.json' and trashed=false");
+                    const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime desc&fields=files(id,name)`, {
+                        headers: { Authorization: `Bearer ${driveAccessToken}` }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.files && data.files.length > 0) sharedAnkiDriveFileId = data.files[0].id;
+                    }
+                }
+
+                const payload = { updatedAt: Date.now(), ankiCourses: getAnkiCoursesList() };
+                const metadata = { name: 'organize_shared_anki.json', mimeType: 'application/json' };
+                const form = new FormData();
+                form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+                form.append('file', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
+
+                const url = sharedAnkiDriveFileId
+                    ? `https://www.googleapis.com/upload/drive/v3/files/${sharedAnkiDriveFileId}?uploadType=multipart`
+                    : 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
+                const method = sharedAnkiDriveFileId ? 'PATCH' : 'POST';
+
+                const saveRes = await fetch(url, {
+                    method,
+                    headers: { Authorization: `Bearer ${driveAccessToken}` },
+                    body: form
+                });
+
+                if (saveRes.ok) {
+                    const saved = await saveRes.json();
+                    if (saved && saved.id) {
+                        sharedAnkiDriveFileId = saved.id;
+                        await fetch(`https://www.googleapis.com/drive/v3/files/${sharedAnkiDriveFileId}/permissions`, {
+                            method: 'POST',
+                            headers: { Authorization: `Bearer ${driveAccessToken}`, 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ role: 'reader', type: 'anyone' })
+                        }).catch(() => {});
+                    }
+                }
+            } catch (err) {
+                console.warn('Erro ao sincronizar Anki no Drive:', err);
+            }
+        }
+
+        async function loadSharedAnkiCoursesFromDrive() {
+            if (!isRealOAuthToken()) return;
+            try {
+                const q = encodeURIComponent("name='organize_shared_anki.json' and trashed=false");
+                const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime desc&includeItemsFromAllDrives=true&supportsAllDrives=true&fields=files(id,name)`, {
+                    headers: { Authorization: `Bearer ${driveAccessToken}` }
+                });
+                if (!res.ok) return;
+                const data = await res.json();
+                if (data.files && data.files.length > 0) {
+                    const fileRes = await fetch(`https://www.googleapis.com/drive/v3/files/${data.files[0].id}?alt=media`, {
+                        headers: { Authorization: `Bearer ${driveAccessToken}` }
+                    });
+                    if (fileRes.ok) {
+                        const parsed = await fileRes.json();
+                        if (Array.isArray(parsed.ankiCourses) && parsed.ankiCourses.length > 0) {
+                            saveAnkiCoursesList(parsed.ankiCourses, false);
+                            if (currentTab === 'mod9') renderAnkiModule();
+                        }
+                    }
+                }
+            } catch (e) {}
+        }
+
+        // Conecta o carregamento automático de decks Anki ao login do Google Drive
+        const _origLoadSharedPlatforms = loadSharedPlatformsFromDrive;
+        loadSharedPlatformsFromDrive = async function() {
+            await _origLoadSharedPlatforms();
+            await loadSharedAnkiCoursesFromDrive();
+        };
 initPipCanvas();
 loadThemePreference();
 loadAppState();
