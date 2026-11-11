@@ -5073,8 +5073,9 @@ saveAppState();
 closeModal('modalResetData');
 renderActiveModule();
 showToast('Dados limpos!', 'info');
-}// ==========================================
-        // MÓDULO 9: MOTOR ANKI (.APKG) COM BANNERS NETFLIX & SYNC GLOBAL
+}
+        // ==========================================
+        // MÓDULO 9: MOTOR ANKI (.APKG) AUTO-INSTALÁVEL (HTML + JS + SYNC)
         // ==========================================
         const ANKI_COURSES_KEY = 'ORGANIZE_ANKI_COURSES_V1';
         let activeAnkiCourseId = null;
@@ -5083,15 +5084,202 @@ showToast('Dados limpos!', 'info');
         let tempApkgBannerBase64 = '';
         let sharedAnkiDriveFileId = null;
 
-        // Registra o Módulo 9 no roteador de abas existente
+        function injectAnkiModuleDOMAndScripts() {
+            // 1. Injeta bibliotecas JSZip e SQL.js no <head> automaticamente
+            if (!document.querySelector('script[src*="jszip"]')) {
+                const s1 = document.createElement('script');
+                s1.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+                document.head.appendChild(s1);
+            }
+            if (!document.querySelector('script[src*="sql-wasm"]')) {
+                const s2 = document.createElement('script');
+                s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js';
+                document.head.appendChild(s2);
+            }
+
+            // 2. Injeta o botão "Anki (.apkg)" na barra lateral abaixo de Plataformas (mod8)
+            const navMod8 = document.getElementById('nav-mod8');
+            if (navMod8 && !document.getElementById('nav-mod9')) {
+                const btn9 = document.createElement('button');
+                btn9.id = 'nav-mod9';
+                btn9.setAttribute('onclick', "switchTab('mod9')");
+                btn9.className = 'nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-tactical-card/60';
+                btn9.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="layers" class="w-4 h-4"></i>
+                        <span>Anki (.apkg)</span>
+                    </div>
+                    <span id="badge-mod9" class="text-[11px] font-mono px-2 py-0.5 rounded-md theme-accent-soft-bg font-semibold">0</span>
+                `;
+                navMod8.parentNode.insertBefore(btn9, navMod8.nextSibling);
+            }
+
+            // 3. Injeta a Tela do Módulo 9 (sec-mod9) e o Modal de Upload (.apkg) no <main>
+            const mainEl = document.querySelector('main');
+            if (mainEl && !document.getElementById('sec-mod9')) {
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = `
+                    <section id="sec-mod9" class="module-section hidden space-y-6">
+                        <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+                            <div ondblclick="promptMasterAdminUnlock()" class="flex items-center gap-3 cursor-pointer select-none" title="Duplo clique para desbloquear Modo Admin">
+                                <div class="p-2.5 rounded-xl theme-accent-soft-bg">
+                                    <i data-lucide="layers" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-white tracking-tight">Anki Flashcards (.apkg)</h3>
+                                    <p class="text-xs text-slate-400">Escolha o curso abaixo, filtre por matéria/assunto e resolva seus flashcards</p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button type="button" id="btnBackToAnkiCourses" onclick="backToAnkiCoursesVitrine()" class="hidden px-3.5 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-white items-center gap-1.5 transition">
+                                    <i data-lucide="arrow-left" class="w-4 h-4 theme-accent-text"></i> Voltar aos Cursos
+                                </button>
+                                <button type="button" id="btnUnlockAnkiAdmin" onclick="promptMasterAdminUnlock()" class="px-3 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-slate-300 flex items-center gap-1.5 transition" title="Liberar importação de arquivos .apkg (Exclusivo Gabriel)">
+                                    <i data-lucide="lock" class="w-3.5 h-3.5 theme-accent-text"></i> Modo Admin
+                                </button>
+                                <button type="button" id="btnAdminUploadApkg" onclick="openModal('modalUploadApkg')" class="hidden px-4 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold items-center gap-1.5 transition shadow-md">
+                                    <i data-lucide="upload-cloud" class="w-4 h-4"></i> Importar Deck (.apkg)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- ETAPA 1: VITRINE DE CURSOS (BANNERS ESTILO NETFLIX) -->
+                        <div id="ankiCoursesBannerView" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
+
+                        <!-- ETAPA 2: DENTRO DO CURSO (MATÉRIAS E ASSUNTOS) -->
+                        <div id="ankiSubjectsView" class="hidden space-y-5">
+                            <div id="ankiActiveCourseHeader" class="relative rounded-3xl overflow-hidden border border-tactical-border h-44 flex items-end p-6 bg-tactical-card shadow-xl"></div>
+                            <div class="relative">
+                                <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                                <input type="text" id="ankiSearchTopicInput" oninput="renderAnkiSubjectsTree()" placeholder="Buscar matéria ou assunto dentro do deck..." class="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm">
+                            </div>
+                            <div id="ankiSubjectsTreeContainer" class="space-y-4"></div>
+                        </div>
+
+                        <!-- ETAPA 3: PLAYER DE RESOLUÇÃO ESTILO ANKI -->
+                        <div id="ankiStudyPlayerView" class="hidden max-w-3xl mx-auto space-y-5 py-2">
+                            <div class="flex flex-wrap items-center justify-between gap-2 bg-tactical-surface border border-tactical-border rounded-2xl px-4 py-3">
+                                <div>
+                                    <span id="ankiStudyBreadcrumb" class="text-[11px] font-mono uppercase theme-accent-text font-bold block">--</span>
+                                    <h4 id="ankiStudyTopicTitle" class="text-sm font-bold text-white">--</h4>
+                                </div>
+                                <div class="flex items-center gap-3 text-xs font-mono">
+                                    <span class="px-2.5 py-1 rounded-lg bg-blue-500/15 text-blue-400 font-bold">Novos: <b id="ankiCountNew">0</b></span>
+                                    <span class="px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-400 font-bold">Aprender: <b id="ankiCountLearn">0</b></span>
+                                    <span class="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-400 font-bold">Revisar: <b id="ankiCountRev">0</b></span>
+                                    <button type="button" onclick="closeAnkiStudyPlayer()" class="px-3 py-1 rounded-lg bg-tactical-card hover:bg-tactical-bg text-slate-300 border border-tactical-border">Sair</button>
+                                </div>
+                            </div>
+
+                            <div class="bg-tactical-surface border-2 border-tactical-border rounded-3xl p-6 sm:p-10 min-h-[360px] flex flex-col justify-between shadow-2xl">
+                                <div class="space-y-4 my-auto">
+                                    <div class="text-[10px] font-mono uppercase tracking-wider text-slate-400">Frente (Pergunta)</div>
+                                    <div id="ankiCardFrontContent" class="text-base sm:text-xl font-semibold text-white leading-relaxed break-words"></div>
+
+                                    <div id="ankiCardBackWrapper" class="hidden pt-6 mt-6 border-t border-tactical-border space-y-3">
+                                        <div class="text-[10px] font-mono uppercase tracking-wider theme-accent-text font-bold">Verso (Resposta)</div>
+                                        <div id="ankiCardBackContent" class="text-sm sm:text-lg text-slate-200 leading-relaxed break-words"></div>
+                                    </div>
+                                </div>
+
+                                <div class="pt-6 mt-6 border-t border-tactical-border">
+                                    <button type="button" id="btnAnkiShowAnswer" onclick="revealAnkiCardAnswer()" class="w-full py-3.5 rounded-2xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white font-bold text-sm transition shadow-lg">
+                                        Mostrar Resposta
+                                    </button>
+
+                                    <div id="ankiAnswerRatingBtns" class="hidden grid-cols-2 sm:grid-cols-4 gap-2.5">
+                                        <button type="button" onclick="rateAnkiCard('AGAIN')" class="py-3 px-3 rounded-2xl bg-red-500/15 hover:bg-red-500/25 border border-red-500/30 text-red-300 font-bold text-xs flex flex-col items-center">
+                                            <span>Errei</span>
+                                            <span class="text-[10px] font-mono opacity-80">&lt; 1 min</span>
+                                        </button>
+                                        <button type="button" onclick="rateAnkiCard('HARD')" class="py-3 px-3 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 font-bold text-xs flex flex-col items-center">
+                                            <span>Difícil</span>
+                                            <span class="text-[10px] font-mono opacity-80">1 dia</span>
+                                        </button>
+                                        <button type="button" onclick="rateAnkiCard('GOOD')" class="py-3 px-3 rounded-2xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 font-bold text-xs flex flex-col items-center">
+                                            <span>Bom</span>
+                                            <span class="text-[10px] font-mono opacity-80">4 dias</span>
+                                        </button>
+                                        <button type="button" onclick="rateAnkiCard('EASY')" class="py-3 px-3 rounded-2xl bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/30 text-sky-300 font-bold text-xs flex flex-col items-center">
+                                            <span>Fácil</span>
+                                            <span class="text-[10px] font-mono opacity-80">10 dias</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div id="modalUploadApkg" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
+                        <div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+                            <div class="flex items-center justify-between border-b border-tactical-border pb-3">
+                                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                                    <i data-lucide="layers" class="w-5 h-5 theme-accent-text"></i> Carregar Curso Anki (.apkg)
+                                </h3>
+                                <button type="button" onclick="closeModal('modalUploadApkg')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+                            </div>
+                            <form onsubmit="handleImportApkgDeck(event)" class="space-y-3.5">
+                                <div>
+                                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Nome do Curso (Banner)</label>
+                                    <input type="text" id="apkgCourseTitleInput" required placeholder="Ex: PMPE — Flashcards Táticos" class="w-full px-3.5 py-2 rounded-xl text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">URL da Capa Estilo Netflix (Opcional)</label>
+                                    <input type="url" id="apkgCourseBannerUrl" placeholder="https://..." class="w-full px-3.5 py-2 rounded-xl text-xs font-mono">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Ou Enviar Imagem de Capa</label>
+                                    <input type="file" id="apkgCourseBannerFile" accept="image/*" onchange="handleApkgBannerUpload(event)" class="w-full px-3 py-1.5 rounded-xl bg-tactical-bg border border-tactical-border text-xs text-slate-300">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-mono uppercase theme-accent-text font-bold mb-1">Arquivo do Anki (.apkg)</label>
+                                    <input type="file" id="apkgFileInput" accept=".apkg,application/zip" required class="w-full px-3 py-2 rounded-xl bg-tactical-bg border border-tactical-border text-xs text-white">
+                                </div>
+                                <div id="apkgImportStatusBox" class="hidden p-3 rounded-xl theme-accent-soft-bg text-xs font-mono">
+                                    Extraindo banco de dados e cartões do arquivo .apkg...
+                                </div>
+                                <div class="flex justify-end gap-2 pt-2">
+                                    <button type="button" onclick="closeModal('modalUploadApkg')" class="px-4 py-2 rounded-xl bg-tactical-card text-slate-300 text-xs font-semibold">Cancelar</button>
+                                    <button type="submit" id="btnSubmitApkgImport" class="px-5 py-2 rounded-xl bg-tactical-accent text-white keep-white text-xs font-bold">Importar & Publicar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                `;
+                while (wrapper.firstElementChild) {
+                    mainEl.appendChild(wrapper.firstElementChild);
+                }
+            }
+        }
+
         MODULE_NAMES.mod9 = 'Anki Flashcards';
         const _origRenderActiveModule = renderActiveModule;
         renderActiveModule = function() {
+            injectAnkiModuleDOMAndScripts();
             _origRenderActiveModule();
             const b9 = document.getElementById('badge-mod9');
             if (b9) b9.textContent = getAnkiCoursesList().length;
             if (currentTab === 'mod9') renderAnkiModule();
             lucide.createIcons();
+        };
+
+        const _origUpdateAdminVis = updateCourseAdminVisibility;
+        updateCourseAdminVisibility = function() {
+            _origUpdateAdminVis();
+            const adminBtn = document.getElementById('btnAdminUploadApkg');
+            const unlockBtn = document.getElementById('btnUnlockAnkiAdmin');
+            if (adminBtn) {
+                if (isCurrentUserMasterAdmin()) {
+                    adminBtn.classList.remove('hidden');
+                    adminBtn.classList.add('flex');
+                    if (unlockBtn) unlockBtn.classList.add('hidden');
+                } else {
+                    adminBtn.classList.add('hidden');
+                    adminBtn.classList.remove('flex');
+                    if (unlockBtn) unlockBtn.classList.remove('hidden');
+                }
+            }
         };
 
         function getAnkiCoursesList() {
@@ -5147,7 +5335,6 @@ showToast('Dados limpos!', 'info');
             });
         }
 
-        // Lê o arquivo .apkg (ZIP + SQLite collection.anki2 / anki21) direto no navegador
         async function handleImportApkgDeck(e) {
             e.preventDefault();
             if (!isCurrentUserMasterAdmin()) {
@@ -5179,7 +5366,6 @@ showToast('Dados limpos!', 'info');
                 });
                 const db = new SQL.Database(dbUint8);
 
-                // 1. Extrai os nomes dos Decks (Matérias :: Assuntos)
                 const decksMap = {};
                 try {
                     const colRes = db.exec("SELECT decks FROM col LIMIT 1");
@@ -5202,7 +5388,6 @@ showToast('Dados limpos!', 'info');
                     } catch (_) {}
                 }
 
-                // 2. Extrai os Cards e Notas (Frente e Verso)
                 const notesRes = db.exec("SELECT c.id, c.did, n.flds FROM cards c JOIN notes n ON c.nid = n.id");
                 const subjectsTree = {};
                 let totalCards = 0;
@@ -5278,17 +5463,7 @@ showToast('Dados limpos!', 'info');
         }
 
         function renderAnkiModule() {
-            const adminBtn = document.getElementById('btnAdminUploadApkg');
-            if (adminBtn) {
-                if (isCurrentUserMasterAdmin()) {
-                    adminBtn.classList.remove('hidden');
-                    adminBtn.classList.add('flex');
-                } else {
-                    adminBtn.classList.add('hidden');
-                    adminBtn.classList.remove('flex');
-                }
-            }
-
+            updateCourseAdminVisibility();
             if (!activeAnkiCourseId) {
                 backToAnkiCoursesVitrine();
             } else {
@@ -5312,7 +5487,7 @@ showToast('Dados limpos!', 'info');
                 container.innerHTML = `
                     <div class="col-span-full bg-tactical-surface border border-tactical-border rounded-2xl p-10 text-center space-y-2">
                         <p class="text-sm font-bold text-white">Nenhum pacote de Flashcards (.apkg) carregado ainda</p>
-                        <p class="text-xs text-slate-400">${isAdmin ? 'Clique em "Importar Deck (.apkg)" acima para enviar seu arquivo.' : 'Aguarde o administrador publicar os decks de flashcards.'}</p>
+                        <p class="text-xs text-slate-400">${isAdmin ? 'Clique em "Importar Deck (.apkg)" acima para enviar seu arquivo.' : 'Clique em "Modo Admin" (exclusivo Gabriel) para importar um arquivo .apkg.'}</p>
                     </div>
                 `;
                 return;
@@ -5342,9 +5517,6 @@ showToast('Dados limpos!', 'info');
             }).join('');
             lucide.createIcons();
         }
-
-        // Alias para evitar espaço no nome caso chamado pelo botão
-        window['backToAnkiCourses Vitrine'] = backToAnkiCoursesVitrine;
 
         function deleteAnkiCourse(courseId) {
             if (!isCurrentUserMasterAdmin()) return;
@@ -5503,7 +5675,6 @@ showToast('Dados limpos!', 'info');
             const progMap = getAnkiUserProgressMap();
             if (rating === 'AGAIN') {
                 progMap[card.id] = { state: 'LEARN', updatedAt: Date.now() };
-                // Reinsere a carta no final da fila da sessão para fixação, igual ao Anki
                 activeAnkiStudyQueue.push(card);
             } else if (rating === 'HARD') {
                 progMap[card.id] = { state: 'LEARN', updatedAt: Date.now() };
@@ -5522,7 +5693,6 @@ showToast('Dados limpos!', 'info');
             renderAnkiSubjectsTree();
         }
 
-        // Sincroniza os decks .apkg importados pelo Gabriel no Google Drive para todos os alunos
         async function syncSharedAnkiCoursesToDrive() {
             if (!isRealOAuthToken() || !isGabrielDriveAdminAuthenticated()) return;
             try {
@@ -5594,7 +5764,6 @@ showToast('Dados limpos!', 'info');
             } catch (e) {}
         }
 
-// Conecta o carregamento automático de decks Anki ao login do Google Drive
         const _origLoadSharedPlatforms = loadSharedPlatformsFromDrive;
         loadSharedPlatformsFromDrive = async function() {
             await _origLoadSharedPlatforms();
@@ -5602,6 +5771,7 @@ showToast('Dados limpos!', 'info');
         };
 
         window.onload = function() {
+            injectAnkiModuleDOMAndScripts();
             initPipCanvas();
             loadThemePreference();
             loadAppState();
@@ -5610,7 +5780,6 @@ showToast('Dados limpos!', 'info');
             lucide.createIcons();
             setTimeout(initGoogleDriveClients, 800);
 
-            // Dispara a vinheta estilo Netflix na abertura e transiciona para a tela de perfis
             setTimeout(() => {
                 playTudumSound();
             }, 250);
