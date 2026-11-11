@@ -5073,8 +5073,7 @@ saveAppState();
 closeModal('modalResetData');
 renderActiveModule();
 showToast('Dados limpos!', 'info');
-}
-window.onload = function() {// ==========================================
+}// ==========================================
         // MÓDULO 9: MOTOR ANKI (.APKG) COM BANNERS NETFLIX & SYNC GLOBAL
         // ==========================================
         const ANKI_COURSES_KEY = 'ORGANIZE_ANKI_COURSES_V1';
@@ -5595,27 +5594,30 @@ window.onload = function() {// ==========================================
             } catch (e) {}
         }
 
-        // Conecta o carregamento automático de decks Anki ao login do Google Drive
+// Conecta o carregamento automático de decks Anki ao login do Google Drive
         const _origLoadSharedPlatforms = loadSharedPlatformsFromDrive;
         loadSharedPlatformsFromDrive = async function() {
             await _origLoadSharedPlatforms();
             await loadSharedAnkiCoursesFromDrive();
         };
-initPipCanvas();
-loadThemePreference();
-loadAppState();
-renderNetflixProfilesGrid();
-switchTab('mod7');
-lucide.createIcons();
-setTimeout(initGoogleDriveClients, 800);
-// Dispara a vinheta estilo Netflix na abertura e transiciona para a tela de perfis
-setTimeout(() => {
-playTudumSound();
-}, 250);
-setTimeout(() => {
-finishNetflixIntro();
-}, 3200);
-};
-</script>
+
+        window.onload = function() {
+            initPipCanvas();
+            loadThemePreference();
+            loadAppState();
+            renderNetflixProfilesGrid();
+            switchTab('mod7');
+            lucide.createIcons();
+            setTimeout(initGoogleDriveClients, 800);
+
+            // Dispara a vinheta estilo Netflix na abertura e transiciona para a tela de perfis
+            setTimeout(() => {
+                playTudumSound();
+            }, 250);
+            setTimeout(() => {
+                finishNetflixIntro();
+            }, 3200);
+        };
+    </script>
 </body>
 </html>
