@@ -907,11 +907,14 @@ Grade Semanal (Segunda a Domingo)
 </div>
 <div>
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Disciplina</label>
-<select id="agendaInputSubject" onchange="populateSubtopicSelect('agendaInputSubject', 'agendaInputSubtopic')" required class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
+<select id="agendaInputSubject" onchange="renderAgendaSubtopicChecklist(true)" required class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
 </div>
 <div>
-<label class="block text-xs font-mono uppercase text-slate-400 mb-1">Assunto</label>
-<select id="agendaInputSubtopic" required class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
+<div class="flex items-center justify-between mb-1">
+<label class="block text-xs font-mono uppercase text-slate-400">Assuntos (marque um ou vários)</label>
+<span id="agendaSubtopicCount" class="text-[10px] font-mono theme-accent-text">nenhum selecionado</span>
+</div>
+<div id="agendaInputSubtopicList" class="max-h-44 overflow-y-auto p-2.5 rounded-xl bg-tactical-bg border border-tactical-border space-y-0.5"></div>
 </div>
 <div class="grid grid-cols-2 gap-2.5">
 <div>
@@ -926,16 +929,29 @@ Grade Semanal (Segunda a Domingo)
 <select id="agendaInputBanca" class="w-full px-3 py-2 rounded-xl text-xs sm:text-sm"></select>
 </div>
 </div>
-<!-- Bloco de Horas Estudadas e Questões Respondidas -->
+<!-- Bloco de Tempo Estudado e Questões Respondidas -->
 <div class="p-3 rounded-xl bg-tactical-bg border border-tactical-border space-y-2.5">
 <div class="text-[10px] font-mono uppercase theme-accent-text font-bold flex items-center gap-1">
 <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i> Registro de Horas & Questões (Opcional)
 </div>
-<div class="grid grid-cols-3 gap-2">
 <div>
-<label class="block text-[10px] font-mono uppercase text-slate-400 mb-1">Horas (ex: 1.5)</label>
-<input type="number" id="agendaInputStudyHours" step="0.1" min="0" max="24" placeholder="0" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
+<label class="block text-[10px] font-mono uppercase text-slate-400 mb-1">Tempo estudado</label>
+<div class="grid grid-cols-3 gap-2">
+<div class="relative">
+<input type="number" id="agendaInputStudyH" min="0" placeholder="0" class="w-full pl-2.5 pr-7 py-1.5 rounded-lg text-xs font-mono font-bold">
+<span class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400">h</span>
 </div>
+<div class="relative">
+<input type="number" id="agendaInputStudyM" min="0" placeholder="0" class="w-full pl-2.5 pr-7 py-1.5 rounded-lg text-xs font-mono font-bold">
+<span class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400">min</span>
+</div>
+<div class="relative">
+<input type="number" id="agendaInputStudyS" min="0" placeholder="0" class="w-full pl-2.5 pr-7 py-1.5 rounded-lg text-xs font-mono font-bold">
+<span class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400">seg</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2">
 <div>
 <label class="block text-[10px] font-mono uppercase text-slate-400 mb-1">Q. Certas</label>
 <input type="number" id="agendaInputQCorrect" min="0" placeholder="0" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
@@ -945,6 +961,13 @@ Grade Semanal (Segunda a Domingo)
 <input type="number" id="agendaInputQWrong" min="0" placeholder="0" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
 </div>
 </div>
+<div id="agendaQSubWrap" class="hidden">
+<label class="block text-[10px] font-mono uppercase text-slate-400 mb-1">Questões referentes a</label>
+<select id="agendaInputQSubtopic" class="w-full px-2.5 py-1.5 rounded-lg text-xs"></select>
+</div>
+<label class="flex items-center gap-2 text-[11px] text-slate-300 cursor-pointer">
+<input type="checkbox" id="agendaMarkSeen" checked class="w-4 h-4 rounded"> Marcar assuntos como vistos no Edital (ao registrar como concluído)
+</label>
 </div>
 <div>
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Observação / O que estudou (Opcional)</label>
@@ -995,7 +1018,7 @@ Grade Semanal (Segunda a Domingo)
 <h4 class="text-sm font-bold text-white flex items-center gap-2">
 <i data-lucide="history" class="w-4 h-4 theme-accent-text"></i> Histórico de Estudos & Dias Anteriores
 </h4>
-<p class="text-[11px] text-slate-400">Tudo o que você estudou, assuntos vistos, horas e questões respondidas por data.</p>
+<p class="text-[11px] text-slate-400">Tudo o que você estudou, assuntos vistos, horas e questões por data. Ao excluir um registro, as horas e questões são abatidas em todos os módulos.</p>
 </div>
 </div>
 <div id="agendaPreviousDaysHistory" class="space-y-3 max-h-96 overflow-y-auto pr-1"></div>
@@ -1261,12 +1284,13 @@ Dominado
 <div id="timerSubjectTopicBox" class="space-y-3">
 <div>
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Disciplina</label>
-<select id="timerSubjectSelect" onchange="populateSubtopicSelect('timerSubjectSelect', 'timerSubtopicSelect'); syncTimerContext()" class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
+<select id="timerSubjectSelect" onchange="onTimerSelectionChanged(true)" class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
 </div>
 <div>
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Assunto</label>
-<select id="timerSubtopicSelect" onchange="syncTimerContext()" class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
+<select id="timerSubtopicSelect" onchange="onTimerSelectionChanged(false)" class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
 </div>
+<div id="timerLinkedGoalInfo" class="hidden text-[11px] font-mono theme-accent-text px-1"></div>
 </div>
 <div>
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Modalidade</label>
@@ -1430,6 +1454,18 @@ Cobertura do Edital
 <div id="dashboardEditalCoverageList" class="space-y-3"></div>
 </div>
 </div>
+<!-- Evolução da Redação -->
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 shadow-sm">
+<div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+<h3 class="text-base font-bold text-white flex items-center gap-2">
+<i data-lucide="pen-line" class="w-5 h-5 theme-accent-text"></i>
+Evolução da Redação
+</h3>
+<span id="essayAvgBadge" class="text-xs font-mono theme-accent-text font-semibold"></span>
+</div>
+<div id="essayEvolutionChart"></div>
+<div id="essayEvolutionList" class="space-y-2 mt-4 max-h-56 overflow-y-auto pr-1"></div>
+</div>
 </section>
 <section id="sec-mod8" class="module-section hidden space-y-6">
 <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4 shadow-sm">
@@ -1444,7 +1480,7 @@ Cobertura do Edital
 </div>
 <div class="flex items-center gap-2">
 <!-- Visível apenas para o Gabriel / Admin -->
-<button type="button" id="btnAddPlatformCard" onclick="openModal('modalAddPlatformCard')" class="hidden px-4 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold items-center gap-1.5 transition shadow-md">
+<button type="button" id="btnAddPlatformCard" onclick="openAddPlatformCard()" class="hidden px-4 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold items-center gap-1.5 transition shadow-md">
 <i data-lucide="plus-circle" class="w-4 h-4"></i> Adicionar Plataforma
 </button>
 </div>
@@ -1504,41 +1540,71 @@ Cobertura do Edital
 </div>
 </div>
 <!-- MODAL: CONTABILIZAR QUESTÕES APÓS CRONÔMETRO (TEORIA/QUESTÕES) -->
-<div id="modalPostTimerQuestions" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+<div id="modalStudyRegister" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl my-auto">
 <div class="flex items-center justify-between border-b border-tactical-border pb-3">
 <h3 class="text-base font-bold text-white flex items-center gap-2">
-<i data-lucide="crosshair" class="w-5 h-5 theme-accent-text"></i> Quantas questões você fez?
+<i data-lucide="crosshair" class="w-5 h-5 theme-accent-text"></i> <span id="studyRegTitle">Registrar estudo</span>
 </h3>
-<button onclick="closeModal('modalPostTimerQuestions')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+<button type="button" onclick="cancelStudyRegister()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
 </div>
-<div class="text-xs text-slate-300 space-y-1 bg-tactical-bg p-3 rounded-xl border border-tactical-border">
-<div><strong>Modalidade:</strong> Teoria/Questões</div>
-<div><strong>Matéria:</strong> <span id="postTimerSubjLabel">--</span></div>
-<div><strong>Assunto:</strong> <span id="postTimerTopicLabel">--</span></div>
-<div><strong>Tempo Líquido:</strong> <span id="postTimerMinsLabel">--</span> min</div>
+<div id="studyRegContextLine" class="text-xs text-slate-300 space-y-1 bg-tactical-bg p-3 rounded-xl border border-tactical-border"></div>
+<form onsubmit="confirmStudyRegister(event)" class="space-y-3.5">
+<div>
+<label class="block text-xs font-mono uppercase text-slate-400 mb-1">Disciplina</label>
+<select id="studyRegSubject" onchange="onStudyRegSubjectChange()" class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
 </div>
-<form onsubmit="confirmPostTimerQuestions(event)" class="space-y-3.5">
+<div>
+<div class="flex items-center justify-between mb-1">
+<label class="block text-xs font-mono uppercase text-slate-400">Assuntos vistos</label>
+<span id="studyRegSubtopicCount" class="text-[10px] font-mono theme-accent-text">0 assuntos vistos</span>
+</div>
+<div id="studyRegSubtopicList" class="max-h-40 overflow-y-auto p-2.5 rounded-xl bg-tactical-bg border border-tactical-border space-y-0.5"></div>
+</div>
+<div>
+<label class="block text-xs font-mono uppercase text-slate-400 mb-1">Tempo estudado</label>
+<div class="grid grid-cols-3 gap-2">
+<div class="relative">
+<input type="number" id="studyRegH" min="0" placeholder="0" class="w-full pl-3 pr-8 py-2 rounded-xl text-sm font-mono font-bold">
+<span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400">h</span>
+</div>
+<div class="relative">
+<input type="number" id="studyRegM" min="0" placeholder="0" class="w-full pl-3 pr-9 py-2 rounded-xl text-sm font-mono font-bold">
+<span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400">min</span>
+</div>
+<div class="relative">
+<input type="number" id="studyRegS" min="0" placeholder="0" class="w-full pl-3 pr-9 py-2 rounded-xl text-sm font-mono font-bold">
+<span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400">seg</span>
+</div>
+</div>
+</div>
 <div>
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Banca Utilizada</label>
-<select id="postTimerBanca" class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
+<select id="studyRegBanca" class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
 </div>
 <div class="grid grid-cols-2 gap-3">
 <div>
 <label class="block text-xs font-mono uppercase text-slate-300 mb-1">Questões Certas</label>
-<input type="number" id="postTimerCorrect" oninput="updatePostTimerTheoryTotal()" value="0" min="0" required class="w-full px-3.5 py-2 rounded-xl text-base font-mono font-bold">
+<input type="number" id="studyRegCorrect" oninput="updateStudyRegPreview()" value="0" min="0" class="w-full px-3.5 py-2 rounded-xl text-base font-mono font-bold">
 </div>
 <div>
 <label class="block text-xs font-mono uppercase text-slate-300 mb-1">Questões Erradas</label>
-<input type="number" id="postTimerWrong" oninput="updatePostTimerTheoryTotal()" value="0" min="0" required class="w-full px-3.5 py-2 rounded-xl text-base font-mono font-bold">
+<input type="number" id="studyRegWrong" oninput="updateStudyRegPreview()" value="0" min="0" class="w-full px-3.5 py-2 rounded-xl text-base font-mono font-bold">
 </div>
+</div>
+<div id="studyRegQSubWrap" class="hidden">
+<label class="block text-xs font-mono uppercase text-slate-400 mb-1">Questões referentes a</label>
+<select id="studyRegQSub" class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
 </div>
 <div class="p-2.5 rounded-xl bg-tactical-bg border border-tactical-border flex items-center justify-between text-xs font-mono">
 <span class="text-slate-400">Total de Questões Feitas:</span>
-<span id="postTimerTotalPreview" class="font-bold theme-accent-text">0 questões</span>
+<span id="studyRegTotalPreview" class="font-bold theme-accent-text">0 questões</span>
 </div>
+<label id="studyRegMarkSeenWrap" class="flex items-center gap-2 text-[11px] text-slate-300 cursor-pointer">
+<input type="checkbox" id="studyRegMarkSeen" checked class="w-4 h-4 rounded"> Marcar os assuntos selecionados como vistos no Edital
+</label>
 <div class="flex justify-end gap-2 pt-2">
-<button type="button" onclick="skipPostTimerQuestions()" class="px-4 py-2 rounded-xl bg-tactical-card text-slate-300 text-xs font-semibold">Não fiz questões</button>
+<button type="button" onclick="cancelStudyRegister()" class="px-4 py-2 rounded-xl bg-tactical-card text-slate-300 text-xs font-semibold">Cancelar</button>
 <button type="submit" class="px-5 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold">Salvar & Contabilizar</button>
 </div>
 </form>
@@ -1552,9 +1618,9 @@ Cobertura do Edital
 <h3 class="text-base font-bold text-white flex items-center gap-2">
 <i data-lucide="file-check-2" class="w-5 h-5 theme-accent-text"></i> Resultado do Simulado por Matéria
 </h3>
-<p class="text-xs text-slate-400 mt-0.5">Tempo líquido registrado: <strong id="simuladoMinsLabel" class="theme-accent-text">0</strong> min</p>
+<p class="text-xs text-slate-400 mt-0.5">Tempo líquido registrado: <strong id="simuladoMinsLabel" class="theme-accent-text">0</strong></p>
 </div>
-<button type="button" onclick="closeModal('modalPostTimerSimulado')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+<button type="button" onclick="cancelSimuladoModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
 </div>
 <form onsubmit="confirmPostTimerSimulado(event)" class="space-y-4">
 <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
@@ -1567,12 +1633,34 @@ Cobertura do Edital
 </button>
 </div>
 <div class="space-y-2 max-h-72 overflow-y-auto pr-1" id="simuladoSubjectsRowsContainer"></div>
+<div class="p-3 rounded-xl bg-tactical-bg border border-tactical-border space-y-2.5">
+<label class="flex items-center gap-2 text-xs font-semibold text-white cursor-pointer">
+<input type="checkbox" id="simuladoEssayCheck" onchange="toggleSimuladoEssayFields()" class="w-4 h-4 rounded">
+<i data-lucide="pen-line" class="w-4 h-4 theme-accent-text"></i> Fiz Redação neste simulado
+</label>
+<div id="simuladoEssayFields" class="hidden">
+<div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
+<div class="sm:col-span-6">
+<label class="block text-[10px] font-mono uppercase text-slate-400 mb-0.5">Tema (opcional)</label>
+<input type="text" id="simuladoEssayTheme" placeholder="Ex: Segurança pública" class="w-full px-2.5 py-1.5 rounded-lg text-xs">
+</div>
+<div class="sm:col-span-3">
+<label class="block text-[10px] font-mono uppercase text-slate-300 mb-0.5">Nota</label>
+<input type="number" id="simuladoEssayScore" step="0.01" min="0" placeholder="0" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
+</div>
+<div class="sm:col-span-3">
+<label class="block text-[10px] font-mono uppercase text-slate-300 mb-0.5">Nota máxima</label>
+<input type="number" id="simuladoEssayMax" step="0.01" min="0.01" value="10" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
+</div>
+</div>
+</div>
+</div>
 <div class="p-3 rounded-xl bg-tactical-bg border border-tactical-border flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
 <span class="text-slate-400">Resumo do Simulado:</span>
 <span id="simuladoLiveSummary" class="font-bold theme-accent-text">0 feitas • 0 certas • 0 erradas (0.0%)</span>
 </div>
 <div class="flex justify-end gap-2 pt-2">
-<button type="button" onclick="closeModal('modalPostTimerSimulado')" class="px-4 py-2 rounded-xl bg-tactical-card text-slate-300 text-xs font-semibold">Apenas Salvar Tempo</button>
+<button type="button" onclick="saveSimuladoTimeOnly()" class="px-4 py-2 rounded-xl bg-tactical-card text-slate-300 text-xs font-semibold">Apenas Salvar Tempo</button>
 <button type="submit" class="px-5 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold">Contabilizar Simulado</button>
 </div>
 </form>
@@ -1670,6 +1758,37 @@ Cobertura do Edital
 </div>
 <div class="flex justify-end gap-2 pt-2">
 <button type="button" onclick="closeModal('modalAddEditalItem')" class="px-4 py-2 rounded-xl bg-tactical-card text-slate-300 text-xs font-semibold">Cancelar</button>
+<button type="submit" class="px-5 py-2 rounded-xl bg-tactical-accent text-white keep-white text-xs font-semibold">Salvar</button>
+</div>
+</form>
+</div>
+</div>
+<!-- MODAL: EDITAR NOME / PRIORIDADE DO EDITAL -->
+<div id="modalEditEditalItem" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+<div class="flex items-center justify-between border-b border-tactical-border pb-3">
+<h3 class="text-base font-bold text-white" id="editalEditTitle">Editar</h3>
+<button onclick="closeModal('modalEditEditalItem')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+</div>
+<form onsubmit="handleSaveEditalEdit(event)" class="space-y-3.5">
+<input type="hidden" id="editalEditLevel">
+<input type="hidden" id="editalEditSubjId">
+<input type="hidden" id="editalEditTopId">
+<input type="hidden" id="editalEditSubId">
+<div>
+<label class="block text-xs font-mono uppercase text-slate-400 mb-1">Nome</label>
+<input type="text" id="editalEditName" required class="w-full px-3.5 py-2 rounded-xl text-sm">
+</div>
+<div id="editalEditPriorityWrap" class="hidden">
+<label class="block text-xs font-mono uppercase text-slate-400 mb-1">Prioridade</label>
+<select id="editalEditPriority" class="w-full px-3.5 py-2 rounded-xl text-sm">
+<option value="Alta">Alta</option>
+<option value="Média">Média</option>
+<option value="Baixa">Baixa</option>
+</select>
+</div>
+<div class="flex justify-end gap-2 pt-2">
+<button type="button" onclick="closeModal('modalEditEditalItem')" class="px-4 py-2 rounded-xl bg-tactical-card text-slate-300 text-xs font-semibold">Cancelar</button>
 <button type="submit" class="px-5 py-2 rounded-xl bg-tactical-accent text-white keep-white text-xs font-semibold">Salvar</button>
 </div>
 </form>
@@ -1861,11 +1980,12 @@ Insira o <strong>Client ID</strong> e a <strong>API Key</strong> gerados no Goog
 <div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
 <div class="flex items-center justify-between border-b border-tactical-border pb-3">
 <h3 class="text-base font-bold text-white flex items-center gap-2">
-<i data-lucide="layout-grid" class="w-5 h-5 theme-accent-text"></i> Adicionar Plataforma
+<i data-lucide="layout-grid" class="w-5 h-5 theme-accent-text"></i> <span id="modalPlatformTitle">Adicionar Plataforma</span>
 </h3>
 <button type="button" onclick="closeModal('modalAddPlatformCard')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
 </div>
-<form onsubmit="handleSavePlatformCard(event)" class="space-y-3.5">
+<form id="formPlatformCard" onsubmit="handleSavePlatformCard(event)" class="space-y-3.5">
+<input type="hidden" id="platEditId" value="">
 <div>
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Nome da Plataforma</label>
 <input type="text" id="platInputName" required placeholder="Ex: QConcursos, Academia de Português..." class="w-full px-3.5 py-2 rounded-xl text-sm">
@@ -1879,7 +1999,7 @@ Insira o <strong>Client ID</strong> e a <strong>API Key</strong> gerados no Goog
 <input type="url" id="platInputUrl" required placeholder="https://..." class="w-full px-3.5 py-2 rounded-xl text-sm font-mono">
 </div>
 <div>
-<label class="block text-xs font-mono uppercase text-slate-400 mb-1">URL da Imagem de Capa / Logotipo</label>
+<label class="block text-xs font-mono uppercase text-slate-400 mb-1">URL da Imagem de Capa / Logotipo (deixe vazio para manter a atual)</label>
 <input type="url" id="platInputImage" placeholder="https://... (opcional)" class="w-full px-3.5 py-2 rounded-xl text-xs font-mono">
 </div>
 <div>
@@ -1888,7 +2008,7 @@ Insira o <strong>Client ID</strong> e a <strong>API Key</strong> gerados no Goog
 </div>
 <div class="flex justify-end gap-2 pt-2">
 <button type="button" onclick="closeModal('modalAddPlatformCard')" class="px-4 py-2 rounded-xl bg-tactical-card text-slate-300 text-xs font-semibold">Cancelar</button>
-<button type="submit" class="px-5 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold">Salvar Card</button>
+<button type="submit" id="btnSavePlatformCard" class="px-5 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold">Salvar Card</button>
 </div>
 </form>
 </div>
@@ -2467,15 +2587,848 @@ const t2 = new Date(y2, m2 - 1, d2).getTime();
 return Math.round((t2 - t1) / (1000 * 60 * 60 * 24));
 }
 function formatMinutesToHours(totalMinutes) {
-const h = Math.floor(totalMinutes / 60);
-const m = Math.round(totalMinutes % 60);
-return `${String(h).padStart(2, '0')}h ${String(m).padStart(2, '0')}m`;
+    const tm = Math.round(totalMinutes || 0);
+    const h = Math.floor(tm / 60);
+    const m = tm % 60;
+    return `${String(h).padStart(2, '0')}h ${String(m).padStart(2, '0')}m`;
 }
 function formatSecondsToHHMMSS(sec) {
 const h = Math.floor(sec / 3600);
 const m = Math.floor((sec % 3600) / 60);
 const s = sec % 60;
 return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+function escapeHTML(str) {
+    return String(str === undefined || str === null ? '' : str).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
+function formatDurationSec(totalSec) {
+    totalSec = Math.max(0, Math.round(totalSec || 0));
+    const h = Math.floor(totalSec / 3600);
+    const m = Math.floor((totalSec % 3600) / 60);
+    const s = totalSec % 60;
+    if (h > 0) return `${h}h ${String(m).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
+    if (m > 0) return `${m}m ${String(s).padStart(2, '0')}s`;
+    return `${s}s`;
+}
+function uid(prefix) {
+    return prefix + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+}
+function newLinkId() {
+    return 'lk-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6);
+}
+function sessionSeconds(s) {
+    return (typeof s.seconds === 'number') ? s.seconds : Math.round((s.minutes || 0) * 60);
+}
+function readHMS(hId, mId, sId) {
+    const h = Math.max(0, parseInt(document.getElementById(hId)?.value, 10) || 0);
+    const m = Math.max(0, parseInt(document.getElementById(mId)?.value, 10) || 0);
+    const s = Math.max(0, parseInt(document.getElementById(sId)?.value, 10) || 0);
+    return h * 3600 + m * 60 + s;
+}
+function writeHMS(hId, mId, sId, totalSec) {
+    totalSec = Math.max(0, Math.round(totalSec || 0));
+    const h = document.getElementById(hId), m = document.getElementById(mId), s = document.getElementById(sId);
+    if (h) h.value = totalSec ? Math.floor(totalSec / 3600) : '';
+    if (m) m.value = totalSec ? Math.floor((totalSec % 3600) / 60) : '';
+    if (s) s.value = totalSec ? totalSec % 60 : '';
+}
+function goalSubtopics(g) {
+    if (Array.isArray(g.subtopics) && g.subtopics.length > 0) return g.subtopics;
+    return [{ id: g.subtopicId || 'geral', name: g.subtopicName || 'Assunto Geral' }];
+}
+function migrateLinkIds(st) {
+    if (!st) return st;
+    st.agenda = st.agenda || [];
+    st.timeSessions = st.timeSessions || [];
+    st.questionLogs = st.questionLogs || [];
+    st.essayScores = Array.isArray(st.essayScores) ? st.essayScores : [];
+    if (!st.studyMeta || typeof st.studyMeta !== 'object') st.studyMeta = {};
+    const byNum = {};
+    st.agenda.forEach(g => {
+        if (!g.linkId) g.linkId = 'lk-' + g.id;
+        if (!g.origin) g.origin = ((g.studyMinutes || 0) > 0 || (g.questionsTotal || 0) > 0) ? 'registered' : 'scheduled';
+        const m = /^ag-(\d+)$/.exec(g.id || '');
+        if (m) byNum[m[1]] = g;
+    });
+    const findGoalLink = (rec, num) => {
+        for (const d of [0, -1, 1, -2, 2, -3, 3]) {
+            const g = byNum[String(num + d)];
+            if (g && g.date === rec.date && g.subjectName === rec.subjectName) return g.linkId;
+        }
+        return null;
+    };
+    st.timeSessions.forEach(s => {
+        if (typeof s.seconds !== 'number') s.seconds = Math.round((s.minutes || 0) * 60);
+        if (!s.linkId) {
+            const m = /^ts-ag-(\d+)$/.exec(s.id || '');
+            s.linkId = (m && findGoalLink(s, parseInt(m[1], 10))) || ('lk-' + s.id);
+        }
+    });
+    st.questionLogs.forEach(q => {
+        if (!q.linkId) {
+            const m = /^q-ag-(\d+)$/.exec(q.id || '');
+            q.linkId = (m && findGoalLink(q, parseInt(m[1], 10))) || ('lk-' + q.id);
+        }
+    });
+    st.essayScores.forEach(e => { if (!e.linkId) e.linkId = 'lk-' + e.id; });
+    return st;
+}
+function buildHistoryEntries() {
+    const map = {};
+    const tsOf = (id) => { const m = /(\d{10,})/.exec(id || ''); return m ? parseInt(m[1], 10) : 0; };
+    const get = (linkId, date) => {
+        if (!map[linkId]) map[linkId] = { linkId, date: date || getTodayISO(), goals: [], sessions: [], questions: [], essays: [], ts: 0 };
+        return map[linkId];
+    };
+    appState.agenda.filter(g => g.status === 'Concluído').forEach(g => {
+        const e = get(g.linkId || ('lk-' + g.id), g.date);
+        e.goals.push(g);
+        e.ts = Math.max(e.ts, tsOf(g.id));
+    });
+    appState.timeSessions.forEach(s => {
+        const e = get(s.linkId || ('lk-' + s.id), s.date);
+        e.sessions.push(s);
+        e.ts = Math.max(e.ts, tsOf(s.id));
+    });
+    appState.questionLogs.forEach(q => {
+        const e = get(q.linkId || ('lk-' + q.id), q.date);
+        e.questions.push(q);
+        e.ts = Math.max(e.ts, tsOf(q.id));
+    });
+    (appState.essayScores || []).forEach(es => {
+        const e = get(es.linkId || ('lk-' + es.id), es.date);
+        e.essays.push(es);
+        e.ts = Math.max(e.ts, tsOf(es.id));
+    });
+    return Object.values(map).sort((a, b) => b.date.localeCompare(a.date) || b.ts - a.ts);
+}
+function renderHistoryEntryHTML(e, showDate) {
+    const totalSec = e.sessions.reduce((acc, s) => acc + sessionSeconds(s), 0);
+    const qC = e.questions.reduce((acc, q) => acc + (q.correct || 0), 0);
+    const qW = e.questions.reduce((acc, q) => acc + (q.wrong || 0), 0);
+    const qT = qC + qW;
+    const lines = [];
+    const coveredKeys = new Set();
+
+    e.goals.forEach(g => {
+        const topics = goalSubtopics(g).map(s => s.name).join(' + ');
+        coveredKeys.add(`${g.subjectName}||${topics}`);
+        lines.push(`
+<div class="flex items-center justify-between text-xs py-1 border-b border-tactical-subtle last:border-0">
+<div>
+<span class="font-semibold text-white">${escapeHTML(g.subjectName)}</span>
+<span class="text-slate-300"> • ${escapeHTML(topics)}</span>
+${g.notes ? `<span class="text-slate-400 italic"> (${escapeHTML(g.notes)})</span>` : ''}
+</div>
+<span class="text-[10px] font-mono theme-accent-text shrink-0 ml-2">${escapeHTML(g.type)}</span>
+</div>`);
+    });
+
+    e.sessions.forEach(s => {
+        const key = `${s.subjectName}||${s.subtopicName}`;
+        if (coveredKeys.has(key)) return;
+        coveredKeys.add(key);
+        lines.push(`
+<div class="flex items-center justify-between text-xs py-1 border-b border-tactical-subtle last:border-0">
+<div>
+<span class="font-semibold text-white">${escapeHTML(s.subjectName)}</span>
+<span class="text-slate-300"> • ${escapeHTML(s.subtopicName)}</span>
+</div>
+<span class="text-[10px] font-mono theme-accent-text shrink-0 ml-2">${escapeHTML(s.modality)}</span>
+</div>`);
+    });
+
+    e.questions.forEach(q => {
+        const tot = (q.correct || 0) + (q.wrong || 0);
+        lines.push(`
+<div class="flex items-center justify-between text-xs py-1 border-b border-tactical-subtle last:border-0">
+<div>
+<span class="font-semibold theme-accent-text">[Questões ${escapeHTML(q.banca)}]</span>
+<span class="text-white"> ${escapeHTML(q.subjectName)}</span>
+<span class="text-slate-300"> • ${escapeHTML(q.subtopicName)}</span>
+</div>
+<span class="text-[11px] font-mono font-bold text-white shrink-0 ml-2">${q.correct}/${tot} acertos</span>
+</div>`);
+    });
+
+    e.essays.forEach(es => {
+        const pct = es.max > 0 ? Math.round((es.score / es.max) * 100) : 0;
+        lines.push(`
+<div class="flex items-center justify-between text-xs py-1 border-b border-tactical-subtle last:border-0">
+<div>
+<span class="font-semibold theme-accent-text">[Redação]</span>
+<span class="text-slate-300"> ${escapeHTML(es.theme || 'Simulado')}</span>
+</div>
+<span class="text-[11px] font-mono font-bold text-white shrink-0 ml-2">${es.score}/${es.max} (${pct}%)</span>
+</div>`);
+    });
+
+    return `
+<div class="p-3 rounded-xl bg-tactical-bg border border-tactical-border space-y-1.5">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<div class="flex flex-wrap items-center gap-2 text-[11px] font-mono">
+${showDate ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-slate-200">${formatDateBR(e.date)}</span>` : ''}
+${totalSec > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-white">⏱️ ${formatDurationSec(totalSec)}</span>` : ''}
+${qT > 0 ? `<span class="px-2 py-0.5 rounded theme-accent-soft-bg font-bold">🎯 ${qT} questões (${Math.round((qC / qT) * 100)}%)</span>` : ''}
+</div>
+<button type="button" data-link="${escapeHTML(e.linkId)}" onclick="deleteHistoryEntry(this.dataset.link)" title="Excluir do histórico (abate horas, questões e assuntos vistos)" class="p-1 text-slate-400 hover:theme-accent-text">
+<i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+</button>
+</div>
+<div>${lines.join('') || '<div class="text-xs text-slate-400 font-mono">Registro sem detalhes.</div>'}</div>
+</div>`;
+}
+function findSubtopicById(subId) {
+    for (const subj of appState.edital) {
+        for (const top of subj.topics) {
+            const sub = top.subtopics.find(st => st.id === subId);
+            if (sub) return { subj, top, sub };
+        }
+    }
+    return null;
+}
+function markSubtopicsSeen(subtopics, dateISO) {
+    const completedIds = [];
+    const createdReviewIds = [];
+    subtopics.forEach(st => {
+        const found = findSubtopicById(st.id);
+        if (!found || found.sub.completed) return;
+        found.sub.completed = true;
+        found.sub.completedAt = dateISO;
+        completedIds.push(found.sub.id);
+        if (!appState.reviews.some(r => r.subtopicId === found.sub.id)) {
+            const rid = uid('rev-');
+            appState.reviews.push({
+                id: rid,
+                subtopicId: found.sub.id,
+                subjectName: found.subj.name,
+                subtopicName: found.sub.name,
+                currentCycleIndex: 0,
+                dueDate: addDaysISO(dateISO, REVIEW_CYCLES[0]),
+                completedAll: false,
+                history: []
+            });
+            createdReviewIds.push(rid);
+        }
+    });
+    return { completedIds, createdReviewIds };
+}
+function removeLinkedRecords(linkId, forceDeleteGoals) {
+    // 1) Abate assuntos vistos / revisões criadas por este registro
+    const meta = (appState.studyMeta || {})[linkId];
+    if (meta) {
+        (meta.completedIds || []).forEach(id => {
+            const f = findSubtopicById(id);
+            if (f && f.sub.completed) { f.sub.completed = false; f.sub.completedAt = null; }
+        });
+        (meta.createdReviewIds || []).forEach(rid => {
+            const r = appState.reviews.find(x => x.id === rid);
+            if (r && (!r.history || r.history.length === 0)) {
+                appState.reviews = appState.reviews.filter(x => x.id !== rid);
+            }
+        });
+        delete appState.studyMeta[linkId];
+    }
+    // 2) Desfaz etapas de revisão concluídas neste registro
+    appState.reviews.forEach(r => {
+        const idx = (r.history || []).findIndex(h => h.linkId === linkId);
+        if (idx >= 0) {
+            const h = r.history[idx];
+            r.history.splice(idx, 1);
+            if (typeof h.prevCycleIndex === 'number') {
+                r.currentCycleIndex = h.prevCycleIndex;
+                r.dueDate = h.prevDueDate || r.dueDate;
+                r.completedAll = false;
+            }
+        }
+    });
+    // 3) Metas da agenda: as agendadas voltam a Pendente; as registradas diretamente são removidas
+    appState.agenda = appState.agenda.filter(g => {
+        if ((g.linkId || ('lk-' + g.id)) !== linkId) return true;
+        if (forceDeleteGoals || g.origin !== 'scheduled') return false;
+        g.status = 'Pendente';
+        g.studySeconds = 0;
+        g.studyMinutes = 0;
+        g.questionsCorrect = 0;
+        g.questionsWrong = 0;
+        g.questionsTotal = 0;
+        return true;
+    });
+    // 4) Horas, questões e redações
+    appState.timeSessions = appState.timeSessions.filter(s => (s.linkId || ('lk-' + s.id)) !== linkId);
+    appState.questionLogs = appState.questionLogs.filter(q => (q.linkId || ('lk-' + q.id)) !== linkId);
+    appState.essayScores = (appState.essayScores || []).filter(es => (es.linkId || ('lk-' + es.id)) !== linkId);
+}
+function deleteHistoryEntry(linkId) {
+    if (!linkId) return;
+    if (!confirm('Excluir este registro do histórico?\n\nAs horas, questões, redação e assuntos vistos lançados nele serão abatidos do Dashboard, das Métricas e do Edital.')) return;
+    removeLinkedRecords(linkId, false);
+    saveAppState();
+    renderActiveModule();
+    showToast('Registro excluído e valores abatidos!', 'info');
+}
+function buildSubtopicChecklistHTML(subjectName, checkedIds, onchangeFn, inputClass) {
+    const subj = appState.edital.find(s => s.name === subjectName);
+    const emptyMsg = '<div class="text-[11px] text-slate-400 font-mono px-1 py-1">Sem assuntos cadastrados para esta disciplina (será registrado como "Assunto Geral").</div>';
+    if (!subj) return emptyMsg;
+    let html = '';
+    subj.topics.forEach(t => {
+        if (!t.subtopics.length) return;
+        html += `<div class="text-[10px] font-mono uppercase theme-accent-text font-bold pt-1.5">${escapeHTML(t.name)}</div>`;
+        t.subtopics.forEach(st => {
+            html += `<label class="flex items-center gap-2 text-xs text-slate-200 cursor-pointer py-0.5">
+<input type="checkbox" class="${inputClass} w-3.5 h-3.5 rounded" value="${escapeHTML(st.id)}" data-name="${escapeHTML(st.name)}" ${checkedIds.includes(st.id) ? 'checked' : ''} onchange="${onchangeFn}">
+<span class="${st.completed ? 'line-through text-slate-400' : ''}">${escapeHTML(st.name)}</span>
+</label>`;
+        });
+    });
+    return html || emptyMsg;
+}
+function getCheckedSubtopics(containerId) {
+    const box = document.getElementById(containerId);
+    if (!box) return [];
+    return Array.from(box.querySelectorAll('input[type="checkbox"]:checked')).map(i => ({ id: i.value, name: i.dataset.name || '' }));
+}
+function updateQSubtopicSelect(containerId, wrapId, selectId) {
+    const checked = getCheckedSubtopics(containerId);
+    const wrap = document.getElementById(wrapId);
+    const sel = document.getElementById(selectId);
+    if (!wrap || !sel) return;
+    if (checked.length > 1) {
+        const prev = sel.value;
+        sel.innerHTML = checked.map(c => `<option value="${escapeHTML(c.id)}">${escapeHTML(c.name)}</option>`).join('') +
+            '<option value="__ALL__">Misto (todos os assuntos marcados)</option>';
+        if (prev && Array.from(sel.options).some(o => o.value === prev)) sel.value = prev;
+        wrap.classList.remove('hidden');
+    } else {
+        wrap.classList.add('hidden');
+    }
+}
+function resolveQuestionSubtopic(checked, qSelVal, fallback) {
+    if (checked.length === 0) return fallback;
+    if (checked.length === 1) return checked[0];
+    if (qSelVal && qSelVal !== '__ALL__') {
+        const f = checked.find(c => c.id === qSelVal);
+        if (f) return f;
+    }
+    return { id: 'multi', name: checked.map(c => c.name).join(' + ') };
+}
+function openStudyRegister(ctx) {
+    studyRegCtx = ctx;
+    const titles = { timer: 'Finalizar estudo cronometrado', goal: 'Registrar o que você viu', review: 'Concluir revisão' };
+    document.getElementById('studyRegTitle').textContent = titles[ctx.flow] || 'Registrar estudo';
+    document.getElementById('studyRegContextLine').innerHTML =
+        `<div><strong>Modalidade:</strong> ${escapeHTML(ctx.modality || 'Teoria/Questões')}</div>` +
+        `<div><strong>Data:</strong> ${formatDateBR(ctx.date || getTodayISO())}</div>` +
+        (ctx.contextNote ? `<div class="text-slate-400">${escapeHTML(ctx.contextNote)}</div>` : '');
+    const names = appState.edital.map(s => s.name);
+    if (names.length === 0) names.push('Geral');
+    if (ctx.subjectName && !names.includes(ctx.subjectName)) names.unshift(ctx.subjectName);
+    const subjSel = document.getElementById('studyRegSubject');
+    subjSel.innerHTML = names.map(n => `<option value="${escapeHTML(n)}">${escapeHTML(n)}</option>`).join('');
+    subjSel.value = ctx.subjectName || names[0];
+    document.getElementById('studyRegSubtopicList').innerHTML =
+        buildSubtopicChecklistHTML(subjSel.value, ctx.subtopicIds || [], 'onStudyRegSubtopicToggle()', 'studyreg-sub-chk');
+    writeHMS('studyRegH', 'studyRegM', 'studyRegS', ctx.seconds || 0);
+    document.getElementById('studyRegCorrect').value = 0;
+    document.getElementById('studyRegWrong').value = 0;
+    document.getElementById('studyRegMarkSeen').checked = true;
+    document.getElementById('studyRegMarkSeenWrap').classList.toggle('hidden', !!ctx.noMarkSeen);
+    openModal('modalStudyRegister');
+    updateStudyRegPreview();
+    onStudyRegSubtopicToggle();
+}
+function onStudyRegSubjectChange() {
+    const subjName = document.getElementById('studyRegSubject').value;
+    document.getElementById('studyRegSubtopicList').innerHTML =
+        buildSubtopicChecklistHTML(subjName, [], 'onStudyRegSubtopicToggle()', 'studyreg-sub-chk');
+    onStudyRegSubtopicToggle();
+}
+function onStudyRegSubtopicToggle() {
+    const n = getCheckedSubtopics('studyRegSubtopicList').length;
+    const el = document.getElementById('studyRegSubtopicCount');
+    if (el) el.textContent = `${n} assunto${n === 1 ? '' : 's'} visto${n === 1 ? '' : 's'}`;
+    updateQSubtopicSelect('studyRegSubtopicList', 'studyRegQSubWrap', 'studyRegQSub');
+}
+function updateStudyRegPreview() {
+    const c = parseInt(document.getElementById('studyRegCorrect')?.value, 10) || 0;
+    const w = parseInt(document.getElementById('studyRegWrong')?.value, 10) || 0;
+    const el = document.getElementById('studyRegTotalPreview');
+    if (el) el.textContent = `${c + w} questões`;
+}
+function cancelStudyRegister() {
+    studyRegCtx = null;
+    closeModal('modalStudyRegister');
+}
+function finalizeReviewStage(rev, linkId) {
+    const today = getTodayISO();
+    const finishedCycleDays = REVIEW_CYCLES[rev.currentCycleIndex] || 1;
+    const entry = { cycle: finishedCycleDays, date: today, linkId, prevCycleIndex: rev.currentCycleIndex, prevDueDate: rev.dueDate };
+    rev.history = rev.history || [];
+    rev.history.push(entry);
+    if (rev.currentCycleIndex + 1 < REVIEW_CYCLES.length) {
+        rev.currentCycleIndex++;
+        rev.dueDate = addDaysISO(today, REVIEW_CYCLES[rev.currentCycleIndex]);
+        return 'Revisão concluída! Próxima agendada.';
+    }
+    rev.completedAll = true;
+    return 'Ciclo de revisões finalizado!';
+}
+function confirmStudyRegister(e) {
+    e.preventDefault();
+    const ctx = studyRegCtx;
+    if (!ctx) { closeModal('modalStudyRegister'); return; }
+    const subjectName = document.getElementById('studyRegSubject').value || ctx.subjectName || 'Geral';
+    const checked = getCheckedSubtopics('studyRegSubtopicList');
+    const fallback = { id: ctx.fallbackSubtopicId || 'geral', name: ctx.fallbackSubtopicName || 'Assunto Geral' };
+    const subtopics = checked.length ? checked : [fallback];
+    const subtopicName = subtopics.map(s => s.name).join(' + ');
+    const seconds = readHMS('studyRegH', 'studyRegM', 'studyRegS');
+    const correct = Math.max(0, parseInt(document.getElementById('studyRegCorrect').value, 10) || 0);
+    const wrong = Math.max(0, parseInt(document.getElementById('studyRegWrong').value, 10) || 0);
+    const banca = document.getElementById('studyRegBanca').value || 'Geral';
+    const markSeen = !ctx.noMarkSeen && document.getElementById('studyRegMarkSeen').checked;
+    const date = ctx.date || getTodayISO();
+    const modality = ctx.modality || 'Teoria/Questões';
+    const qSub = resolveQuestionSubtopic(checked, document.getElementById('studyRegQSub')?.value, fallback);
+
+    let goal = null;
+    if (ctx.flow === 'goal' || ctx.flow === 'timer') {
+        if (ctx.goalId) goal = appState.agenda.find(g => g.id === ctx.goalId) || null;
+        if (!goal && ctx.flow === 'timer') {
+            const cands = appState.agenda.filter(g => g.date === date && g.status !== 'Concluído' && g.subjectName === subjectName);
+            goal = cands.find(g => goalSubtopics(g).some(gs => subtopics.some(s => s.id === gs.id))) || (cands.length === 1 ? cands[0] : null);
+        }
+    }
+    const linkId = (goal && goal.linkId) || ctx.linkId || newLinkId();
+
+    if (seconds > 0) {
+        appState.timeSessions.unshift({
+            id: uid('ts-'), linkId, date, subjectName, subtopicName, modality,
+            minutes: seconds / 60, seconds
+        });
+    }
+    if (correct + wrong > 0) {
+        appState.questionLogs.push({
+            id: uid('q-'), linkId, date, subjectName,
+            subtopicId: qSub.id, subtopicName: qSub.name, banca, correct, wrong
+        });
+    }
+    let seen = { completedIds: [], createdReviewIds: [] };
+    if (markSeen) seen = markSubtopicsSeen(subtopics, date);
+    if (seen.completedIds.length || seen.createdReviewIds.length) {
+        appState.studyMeta = appState.studyMeta || {};
+        const prev = appState.studyMeta[linkId] || { completedIds: [], createdReviewIds: [] };
+        appState.studyMeta[linkId] = {
+            completedIds: prev.completedIds.concat(seen.completedIds),
+            createdReviewIds: prev.createdReviewIds.concat(seen.createdReviewIds)
+        };
+    }
+
+    if (goal) {
+        goal.status = 'Concluído';
+        goal.linkId = linkId;
+        goal.subjectName = subjectName;
+        goal.subtopics = subtopics;
+        goal.subtopicId = subtopics[0].id;
+        goal.subtopicName = subtopicName;
+        goal.studySeconds = seconds;
+        goal.studyMinutes = seconds / 60;
+        goal.questionsCorrect = correct;
+        goal.questionsWrong = wrong;
+        goal.questionsTotal = correct + wrong;
+        if (!goal.origin) goal.origin = 'scheduled';
+        if (ctx.flow === 'timer') goal.date = date;
+    }
+
+    let msg = 'Estudo registrado! Horas, questões e assuntos contabilizados.';
+    if (ctx.flow === 'review') {
+        const rev = appState.reviews.find(r => r.id === ctx.reviewId);
+        if (rev && !rev.completedAll) msg = finalizeReviewStage(rev, linkId);
+    }
+    if (ctx.flow === 'timer') resetGlobalTimer();
+
+    studyRegCtx = null;
+    saveAppState();
+    closeModal('modalStudyRegister');
+    renderActiveModule();
+    showToast(msg, 'success');
+}
+function renderAgendaSubtopicChecklist(reset) {
+    const box = document.getElementById('agendaInputSubtopicList');
+    const subjSel = document.getElementById('agendaInputSubject');
+    if (!box || !subjSel) return;
+    const prevChecked = reset ? [] : getCheckedSubtopics('agendaInputSubtopicList').map(c => c.id);
+    box.innerHTML = buildSubtopicChecklistHTML(subjSel.value, prevChecked, 'onAgendaSubtopicToggle()', 'agenda-sub-chk');
+    onAgendaSubtopicToggle();
+}
+function onAgendaSubtopicToggle() {
+    updateQSubtopicSelect('agendaInputSubtopicList', 'agendaQSubWrap', 'agendaInputQSubtopic');
+    const n = getCheckedSubtopics('agendaInputSubtopicList').length;
+    const el = document.getElementById('agendaSubtopicCount');
+    if (el) el.textContent = n > 0 ? `${n} selecionado${n === 1 ? '' : 's'}` : 'nenhum selecionado';
+}
+function openStudyRegisterForGoal(goalId) {
+    const g = appState.agenda.find(item => item.id === goalId);
+    if (!g) return;
+    const subs = goalSubtopics(g);
+    openStudyRegister({
+        flow: 'goal',
+        goalId: g.id,
+        date: g.date,
+        subjectName: g.subjectName,
+        subtopicIds: subs.map(s => s.id),
+        fallbackSubtopicId: subs[0].id,
+        fallbackSubtopicName: subs.map(s => s.name).join(' + '),
+        seconds: 0,
+        modality: g.type || 'Teoria/Questões',
+        contextNote: g.notes || ''
+    });
+}
+function updateTimerLinkedInfo() {
+    const el = document.getElementById('timerLinkedGoalInfo');
+    if (!el) return;
+    const g = timerLinkedGoalId ? appState.agenda.find(x => x.id === timerLinkedGoalId) : null;
+    if (g) {
+        el.textContent = `Meta vinculada: ${g.subjectName} • ${goalSubtopics(g).map(s => s.name).join(' + ')}`;
+        el.classList.remove('hidden');
+    } else {
+        el.classList.add('hidden');
+    }
+}
+function onTimerSelectionChanged(changedSubject) {
+    timerLinkedGoalId = null;
+    if (changedSubject) populateSubtopicSelect('timerSubjectSelect', 'timerSubtopicSelect');
+    syncTimerContext();
+    updateTimerLinkedInfo();
+}
+function startTimerFromGoal(goalId) {
+    const g = appState.agenda.find(item => item.id === goalId);
+    if (!g) return;
+    switchTab('mod6');
+    timerLinkedGoalId = g.id;
+    const subjSel = document.getElementById('timerSubjectSelect');
+    if (subjSel) {
+        subjSel.value = g.subjectName;
+        populateSubtopicSelect('timerSubjectSelect', 'timerSubtopicSelect');
+        const subSel = document.getElementById('timerSubtopicSelect');
+        const firstId = goalSubtopics(g)[0].id;
+        if (subSel && Array.from(subSel.options).some(o => o.value === firstId)) subSel.value = firstId;
+    }
+    selectTimerModality(g.type === 'Simulado' ? 'Simulado' : 'Teoria/Questões');
+    updateTimerLinkedInfo();
+    if (!timerRunning) toggleGlobalTimer();
+}
+function toggleSimuladoEssayFields() {
+    const on = document.getElementById('simuladoEssayCheck')?.checked;
+    document.getElementById('simuladoEssayFields')?.classList.toggle('hidden', !on);
+}
+function finalizeSimulado(timeOnly) {
+    const today = getTodayISO();
+    const banca = document.getElementById('simuladoBancaSelect')?.value || 'Geral';
+    const linkId = newLinkId();
+    const totalSec = Math.max(1, pendingSimuladoSeconds || timerSeconds || 1);
+
+    // Redação (opcional)
+    let essay = null;
+    if (document.getElementById('simuladoEssayCheck')?.checked) {
+        const scoreRaw = document.getElementById('simuladoEssayScore').value;
+        const score = parseFloat(String(scoreRaw).replace(',', '.'));
+        const max = parseFloat(String(document.getElementById('simuladoEssayMax').value).replace(',', '.')) || 10;
+        if (scoreRaw === '' || isNaN(score)) {
+            showToast('Informe a nota da redação ou desmarque a opção.', 'warning');
+            return false;
+        }
+        if (score < 0 || score > max) {
+            showToast('A nota da redação deve estar entre 0 e a nota máxima.', 'warning');
+            return false;
+        }
+        essay = {
+            id: uid('es-'), linkId, date: today, score, max,
+            theme: (document.getElementById('simuladoEssayTheme').value || '').trim(), banca
+        };
+    }
+
+    const validEntries = [];
+    if (!timeOnly) {
+        document.querySelectorAll('.simulado-subj-row').forEach(row => {
+            const subjName = (row.querySelector('.sim-subj-name')?.value || '').trim();
+            const correct = parseInt(row.querySelector('.sim-subj-correct')?.value, 10) || 0;
+            const wrong = parseInt(row.querySelector('.sim-subj-wrong')?.value, 10) || 0;
+            if (subjName && (correct + wrong > 0)) validEntries.push({ subjName, correct, wrong });
+        });
+    }
+
+    if (validEntries.length > 0) {
+        const base = Math.floor(totalSec / validEntries.length);
+        let rest = totalSec - base * validEntries.length;
+        validEntries.forEach((entry, idx) => {
+            const secs = base + (idx === 0 ? rest : 0);
+            appState.questionLogs.push({
+                id: uid('q-sim-'), linkId, date: today, subjectName: entry.subjName,
+                subtopicId: 'simulado', subtopicName: 'Simulado', banca,
+                correct: entry.correct, wrong: entry.wrong
+            });
+            appState.timeSessions.unshift({
+                id: uid('ts-sim-'), linkId, date: today, subjectName: entry.subjName,
+                subtopicName: 'Simulado', modality: 'Simulado', minutes: secs / 60, seconds: secs
+            });
+        });
+    } else {
+        appState.timeSessions.unshift({
+            id: uid('ts-sim-'), linkId, date: today, subjectName: 'Simulado Geral',
+            subtopicName: 'Simulado', modality: 'Simulado', minutes: totalSec / 60, seconds: totalSec
+        });
+    }
+    if (essay) {
+        appState.essayScores = appState.essayScores || [];
+        appState.essayScores.push(essay);
+    }
+    pendingSimuladoSeconds = 0;
+    resetGlobalTimer();
+    saveAppState();
+    closeModal('modalPostTimerSimulado');
+    renderActiveModule();
+    showToast(essay
+        ? 'Simulado, redação, horas e questões contabilizados no Dashboard!'
+        : 'Simulado, Horas Líquidas e Questões contabilizados no Dashboard e Métricas!', 'success');
+    return true;
+}
+function saveSimuladoTimeOnly() {
+    finalizeSimulado(true);
+}
+function cancelSimuladoModal() {
+    closeModal('modalPostTimerSimulado');
+}
+function deleteEssayScore(id) {
+    if (!confirm('Excluir esta nota de redação?')) return;
+    appState.essayScores = (appState.essayScores || []).filter(e => e.id !== id);
+    saveAppState();
+    renderActiveModule();
+}
+function renderEssayEvolution() {
+    const chartEl = document.getElementById('essayEvolutionChart');
+    const listEl = document.getElementById('essayEvolutionList');
+    const badge = document.getElementById('essayAvgBadge');
+    if (!chartEl || !listEl) return;
+    const data = (appState.essayScores || []).slice().sort((a, b) => a.date.localeCompare(b.date) || (a.id > b.id ? 1 : -1));
+    if (data.length === 0) {
+        chartEl.innerHTML = `<div class="text-center py-6 text-xs text-slate-400 font-mono">Nenhuma redação registrada. Ao finalizar um simulado no Cronômetro, marque "Fiz Redação" e informe a nota.</div>`;
+        listEl.innerHTML = '';
+        if (badge) badge.textContent = '';
+        return;
+    }
+    const pcts = data.map(d => d.max > 0 ? (d.score / d.max) * 100 : 0);
+    const avg = pcts.reduce((a, b) => a + b, 0) / pcts.length;
+    if (badge) badge.textContent = `Média: ${avg.toFixed(1)}% • Última: ${pcts[pcts.length - 1].toFixed(0)}%`;
+    const W = 600, H = 190, padL = 34, padR = 14, padT = 14, padB = 26;
+    const innerW = W - padL - padR, innerH = H - padT - padB;
+    const x = (i) => data.length === 1 ? padL + innerW / 2 : padL + (innerW * i) / (data.length - 1);
+    const y = (p) => padT + innerH - (innerH * Math.max(0, Math.min(100, p))) / 100;
+    const grid = [0, 25, 50, 75, 100].map(g => `
+<line x1="${padL}" y1="${y(g)}" x2="${W - padR}" y2="${y(g)}" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"/>
+<text x="${padL - 6}" y="${y(g) + 3}" text-anchor="end" font-size="9" fill="currentColor" fill-opacity="0.6" font-family="monospace">${g}%</text>`).join('');
+    const points = pcts.map((p, i) => `${x(i).toFixed(1)},${y(p).toFixed(1)}`).join(' ');
+    const dots = pcts.map((p, i) => `
+<circle cx="${x(i).toFixed(1)}" cy="${y(p).toFixed(1)}" r="4" fill="currentColor"><title>${formatDateBR(data[i].date)} — ${data[i].score}/${data[i].max} (${p.toFixed(0)}%)</title></circle>`).join('');
+    const labelStep = Math.max(1, Math.ceil(data.length / 6));
+    const xlabels = data.map((d, i) => (i % labelStep === 0 || i === data.length - 1) ? `
+<text x="${x(i).toFixed(1)}" y="${H - 8}" text-anchor="middle" font-size="9" fill="currentColor" fill-opacity="0.6" font-family="monospace">${d.date.slice(8, 10)}/${d.date.slice(5, 7)}</text>` : '').join('');
+    chartEl.innerHTML = `
+<div class="theme-accent-text w-full overflow-x-auto">
+<svg viewBox="0 0 ${W} ${H}" class="w-full h-auto min-w-[320px]" role="img" aria-label="Evolução da nota da redação">
+${grid}
+${data.length > 1 ? `<polyline points="${points}" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>` : ''}
+${dots}
+${xlabels}
+</svg>
+</div>`;
+    listEl.innerHTML = data.slice().reverse().map(d => {
+        const p = d.max > 0 ? Math.round((d.score / d.max) * 100) : 0;
+        return `
+<div class="flex items-center justify-between gap-2 p-2.5 rounded-xl bg-tactical-bg border border-tactical-border text-xs">
+<div class="min-w-0">
+<span class="font-mono text-slate-300">${formatDateBR(d.date)}</span>
+<span class="text-slate-400"> • ${escapeHTML(d.theme || 'Simulado')}</span>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<span class="font-mono font-bold text-white">${d.score}/${d.max}</span>
+<span class="px-2 py-0.5 rounded theme-accent-soft-bg font-mono font-bold">${p}%</span>
+<button type="button" onclick="deleteEssayScore('${d.id}')" title="Excluir nota" class="p-1 text-slate-400 hover:theme-accent-text"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+</div>
+</div>`;
+    }).join('');
+    lucide.createIcons();
+}
+function moveEditalItem(level, subjId, topId, subId, dir) {
+    let arr = null, idx = -1;
+    const subj = appState.edital.find(s => s.id === subjId);
+    if (level === 'subject') {
+        arr = appState.edital;
+        idx = arr.findIndex(s => s.id === subjId);
+    } else if (level === 'topic' && subj) {
+        arr = subj.topics;
+        idx = arr.findIndex(t => t.id === topId);
+    } else if (level === 'subtopic' && subj) {
+        const top = subj.topics.find(t => t.id === topId);
+        if (top) {
+            arr = top.subtopics;
+            idx = arr.findIndex(st => st.id === subId);
+        }
+    }
+    if (!arr || idx < 0) return;
+    const target = idx + dir;
+    if (target < 0 || target >= arr.length) return;
+    const tmp = arr[idx];
+    arr[idx] = arr[target];
+    arr[target] = tmp;
+    saveAppState();
+    renderActiveModule();
+}
+function openEditEditalItem(level, subjId, topId, subId) {
+    const subj = appState.edital.find(s => s.id === subjId);
+    const top = subj?.topics.find(t => t.id === topId);
+    const sub = top?.subtopics.find(st => st.id === subId);
+    let current = '';
+    let title = '';
+    if (level === 'subject' && subj) { current = subj.name; title = 'Renomear Matéria'; }
+    else if (level === 'topic' && top) { current = top.name; title = 'Renomear Tópico'; }
+    else if (level === 'subtopic' && sub) { current = sub.name; title = 'Editar Assunto'; }
+    else return;
+    document.getElementById('editalEditLevel').value = level;
+    document.getElementById('editalEditSubjId').value = subjId;
+    document.getElementById('editalEditTopId').value = topId || '';
+    document.getElementById('editalEditSubId').value = subId || '';
+    document.getElementById('editalEditName').value = current;
+    document.getElementById('editalEditTitle').textContent = title;
+    const prioWrap = document.getElementById('editalEditPriorityWrap');
+    if (level === 'subtopic') {
+        prioWrap.classList.remove('hidden');
+        document.getElementById('editalEditPriority').value = sub.priority || 'Média';
+    } else {
+        prioWrap.classList.add('hidden');
+    }
+    openModal('modalEditEditalItem');
+}
+function renameInList(joined, oldName, newName) {
+    return String(joined || '').split(' + ').map(n => n === oldName ? newName : n).join(' + ');
+}
+function handleSaveEditalEdit(e) {
+    e.preventDefault();
+    const level = document.getElementById('editalEditLevel').value;
+    const subjId = document.getElementById('editalEditSubjId').value;
+    const topId = document.getElementById('editalEditTopId').value;
+    const subId = document.getElementById('editalEditSubId').value;
+    const newName = document.getElementById('editalEditName').value.trim();
+    if (!newName) {
+        showToast('Informe um nome.', 'warning');
+        return;
+    }
+    const subj = appState.edital.find(s => s.id === subjId);
+    if (!subj) return;
+    if (level === 'subject') {
+        const dup = appState.edital.some(s => s.id !== subjId && s.name.toLowerCase() === newName.toLowerCase());
+        if (dup) { showToast('Já existe uma matéria com esse nome.', 'warning'); return; }
+        const oldName = subj.name;
+        subj.name = newName;
+        if (oldName !== newName) {
+            appState.agenda.forEach(g => { if (g.subjectName === oldName) g.subjectName = newName; });
+            appState.timeSessions.forEach(s => { if (s.subjectName === oldName) s.subjectName = newName; });
+            appState.questionLogs.forEach(q => { if (q.subjectName === oldName) q.subjectName = newName; });
+            appState.reviews.forEach(r => { if (r.subjectName === oldName) r.subjectName = newName; });
+            appState.errorCards.forEach(c => { if (c.subjectName === oldName) c.subjectName = newName; });
+            Object.keys(appState.weeklyPlan || {}).forEach(d => {
+                (appState.weeklyPlan[d] || []).forEach(it => { if (it.subject === oldName) it.subject = newName; });
+            });
+        }
+    } else if (level === 'topic') {
+        const top = subj.topics.find(t => t.id === topId);
+        if (!top) return;
+        top.name = newName;
+    } else if (level === 'subtopic') {
+        const top = subj.topics.find(t => t.id === topId);
+        const sub = top?.subtopics.find(st => st.id === subId);
+        if (!sub) return;
+        const oldName = sub.name;
+        sub.name = newName;
+        sub.priority = document.getElementById('editalEditPriority').value || sub.priority;
+        if (oldName !== newName) {
+            appState.agenda.forEach(g => {
+                if (g.subjectName !== subj.name) return;
+                if (Array.isArray(g.subtopics)) {
+                    g.subtopics.forEach(s => { if (s.id === subId) s.name = newName; });
+                    g.subtopicName = g.subtopics.map(s => s.name).join(' + ');
+                } else if (g.subtopicId === subId) {
+                    g.subtopicName = newName;
+                }
+            });
+            appState.timeSessions.forEach(s => { if (s.subjectName === subj.name) s.subtopicName = renameInList(s.subtopicName, oldName, newName); });
+            appState.questionLogs.forEach(q => {
+                if (q.subjectName !== subj.name) return;
+                if (q.subtopicId === subId) q.subtopicName = newName;
+                else if (q.subtopicId === 'multi') q.subtopicName = renameInList(q.subtopicName, oldName, newName);
+            });
+            appState.reviews.forEach(r => { if (r.subtopicId === subId) r.subtopicName = newName; });
+            appState.errorCards.forEach(c => { if (c.subtopicId === subId) c.subtopicName = newName; });
+        }
+    }
+    saveAppState();
+    closeModal('modalEditEditalItem');
+    renderActiveModule();
+    showToast('Edital atualizado!', 'success');
+}
+function purgeReviewsForSubtopics(ids) {
+    const set = new Set(ids);
+    appState.reviews = appState.reviews.filter(r => !set.has(r.subtopicId));
+}
+function deleteEditalTopic(subjId, topId) {
+    const subj = appState.edital.find(s => s.id === subjId);
+    const top = subj?.topics.find(t => t.id === topId);
+    if (!top) return;
+    const n = top.subtopics.length;
+    if (!confirm(`Excluir o tópico "${top.name}"${n ? ` e seus ${n} assunto(s)` : ''}?\n\nO histórico de estudos já lançado é mantido.`)) return;
+    purgeReviewsForSubtopics(top.subtopics.map(st => st.id));
+    subj.topics = subj.topics.filter(t => t.id !== topId);
+    saveAppState();
+    renderActiveModule();
+    showToast('Tópico excluído.', 'info');
+}
+function deleteEditalSubject(subjId) {
+    const subj = appState.edital.find(s => s.id === subjId);
+    if (!subj) return;
+    const ids = [];
+    subj.topics.forEach(t => t.subtopics.forEach(st => ids.push(st.id)));
+    if (!confirm(`Excluir a matéria "${subj.name}" com todos os seus tópicos e assuntos (${ids.length})?\n\nO histórico de estudos já lançado é mantido.`)) return;
+    purgeReviewsForSubtopics(ids);
+    appState.edital = appState.edital.filter(s => s.id !== subjId);
+    saveAppState();
+    renderActiveModule();
+    showToast('Matéria excluída.', 'info');
+}
+function openAddPlatformCard() {
+    document.getElementById('platEditId').value = '';
+    document.getElementById('modalPlatformTitle').textContent = 'Adicionar Plataforma';
+    document.getElementById('btnSavePlatformCard').textContent = 'Salvar Card';
+    const form = document.getElementById('formPlatformCard');
+    if (form) form.reset();
+    tempPlatformImageBase64 = '';
+    openModal('modalAddPlatformCard');
+}
+function openEditPlatformCard(id) {
+    if (!isCurrentUserMasterAdmin()) return;
+    const item = getPlatformCardsList().find(p => p.id === id);
+    if (!item) return;
+    const form = document.getElementById('formPlatformCard');
+    if (form) form.reset();
+    tempPlatformImageBase64 = '';
+    document.getElementById('platEditId').value = item.id;
+    document.getElementById('modalPlatformTitle').textContent = 'Editar Plataforma';
+    document.getElementById('btnSavePlatformCard').textContent = 'Salvar Alterações';
+    document.getElementById('platInputName').value = item.name || '';
+    document.getElementById('platInputDesc').value = item.desc || '';
+    document.getElementById('platInputUrl').value = item.url || '';
+    document.getElementById('platInputImage').value = (item.image && !String(item.image).startsWith('data:')) ? item.image : '';
+    openModal('modalAddPlatformCard');
 }
 function getEmptyFactoryState() {
 return {
@@ -2494,7 +3447,9 @@ timeSessions: [],
 driveCourses: [],
 authorizedEmails: [MASTER_ADMIN_EMAIL],
 watchedLessons: {},
-lessonNotes: {}
+lessonNotes: {},
+essayScores: [],
+studyMeta: {}
 };
 }
 function getInitialDemoData() {
@@ -2535,7 +3490,9 @@ timeSessions: [],
 driveCourses: [],
 authorizedEmails: [MASTER_ADMIN_EMAIL],
 watchedLessons: {},
-lessonNotes: {}
+lessonNotes: {},
+essayScores: [],
+studyMeta: {}
 };
 }
 function getCurrentUserMultiStorageKey() {
@@ -2671,52 +3628,55 @@ ${ids.length > 1 ? `
 lucide.createIcons();
 }
 function normalizeImportedState(parsed) {
-const base = getEmptyFactoryState();
-if (!parsed || typeof parsed !== 'object') return base;
-base.targetExamName = parsed.targetExamName || base.targetExamName;
-if (parsed.userProfile && typeof parsed.userProfile === 'object') {
-base.userProfile = {
-name: parsed.userProfile.name || 'Nome do Aluno',
-photoBase64: parsed.userProfile.photoBase64 || ''
-};
-}
-if (Array.isArray(parsed.bancas) && parsed.bancas.length > 0) {
-base.bancas = parsed.bancas;
-}
-if (Array.isArray(parsed.edital)) base.edital = parsed.edital;
-if (Array.isArray(parsed.agenda)) base.agenda = parsed.agenda;
-if (Array.isArray(parsed.reviews)) base.reviews = parsed.reviews;
-if (Array.isArray(parsed.questionLogs)) base.questionLogs = parsed.questionLogs;
-if (Array.isArray(parsed.errorCards)) {
-base.errorCards = parsed.errorCards.map(c => ({
-...c,
-showInList: c.showInList !== false,
-showInFlashcard: c.showInFlashcard !== false
-}));
-}
-if (Array.isArray(parsed.timeSessions)) base.timeSessions = parsed.timeSessions;
-if (Array.isArray(parsed.driveCourses)) base.driveCourses = parsed.driveCourses;
-if (Array.isArray(parsed.authorizedEmails)) {
-base.authorizedEmails = parsed.authorizedEmails;
-} else if (Array.isArray(parsed.authorizedCourseEmails)) {
-base.authorizedEmails = parsed.authorizedCourseEmails;
-}
-if (!base.authorizedEmails.some(e => e.toLowerCase() === MASTER_ADMIN_EMAIL.toLowerCase())) {
-base.authorizedEmails.push(MASTER_ADMIN_EMAIL);
-}
-if (parsed.watchedLessons && typeof parsed.watchedLessons === 'object') {
-base.watchedLessons = parsed.watchedLessons;
-}
-if (parsed.lessonNotes && typeof parsed.lessonNotes === 'object') {
-base.lessonNotes = parsed.lessonNotes;
-}
-const days = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'domingo'];
-if (parsed.weeklyPlan && typeof parsed.weeklyPlan === 'object') {
-days.forEach(d => {
-base.weeklyPlan[d] = Array.isArray(parsed.weeklyPlan[d]) ? parsed.weeklyPlan[d] : [];
-});
-}
-return base;
+    const base = getEmptyFactoryState();
+    if (!parsed || typeof parsed !== 'object') return base;
+    base.targetExamName = parsed.targetExamName || base.targetExamName;
+    if (parsed.userProfile && typeof parsed.userProfile === 'object') {
+        base.userProfile = {
+            name: parsed.userProfile.name || 'Nome do Aluno',
+            photoBase64: parsed.userProfile.photoBase64 || ''
+        };
+    }
+    if (Array.isArray(parsed.bancas) && parsed.bancas.length > 0) {
+        base.bancas = parsed.bancas;
+    }
+    if (Array.isArray(parsed.edital)) base.edital = parsed.edital;
+    if (Array.isArray(parsed.agenda)) base.agenda = parsed.agenda;
+    if (Array.isArray(parsed.reviews)) base.reviews = parsed.reviews;
+    if (Array.isArray(parsed.questionLogs)) base.questionLogs = parsed.questionLogs;
+    if (Array.isArray(parsed.errorCards)) {
+        base.errorCards = parsed.errorCards.map(c => ({
+            ...c,
+            showInList: c.showInList !== false,
+            showInFlashcard: c.showInFlashcard !== false
+        }));
+    }
+    if (Array.isArray(parsed.timeSessions)) base.timeSessions = parsed.timeSessions;
+    if (Array.isArray(parsed.driveCourses)) base.driveCourses = parsed.driveCourses;
+    if (Array.isArray(parsed.essayScores)) base.essayScores = parsed.essayScores;
+    if (parsed.studyMeta && typeof parsed.studyMeta === 'object') base.studyMeta = parsed.studyMeta;
+    if (parsed.ankiProgress && typeof parsed.ankiProgress === 'object') base.ankiProgress = parsed.ankiProgress;
+    if (Array.isArray(parsed.authorizedEmails)) {
+        base.authorizedEmails = parsed.authorizedEmails;
+    } else if (Array.isArray(parsed.authorizedCourseEmails)) {
+        base.authorizedEmails = parsed.authorizedCourseEmails;
+    }
+    if (!base.authorizedEmails.some(e => e.toLowerCase() === MASTER_ADMIN_EMAIL.toLowerCase())) {
+        base.authorizedEmails.push(MASTER_ADMIN_EMAIL);
+    }
+    if (parsed.watchedLessons && typeof parsed.watchedLessons === 'object') {
+        base.watchedLessons = parsed.watchedLessons;
+    }
+    if (parsed.lessonNotes && typeof parsed.lessonNotes === 'object') {
+        base.lessonNotes = parsed.lessonNotes;
+    }
+    const days = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'domingo'];
+    if (parsed.weeklyPlan && typeof parsed.weeklyPlan === 'object') {
+        days.forEach(d => {
+            base.weeklyPlan[d] = Array.isArray(parsed.weeklyPlan[d]) ? parsed.weeklyPlan[d] : [];
+        });
+    }
+    return migrateLinkIds(base);
 }
 function saveAppState(triggerDrive = true) {
 try {
@@ -3103,7 +4063,7 @@ if (currentTab === 'mod3') renderReviewsModule();
 if (currentTab === 'mod4') renderQuestionsModule();
 if (currentTab === 'mod5') renderErrorNotebookModule();
 if (currentTab === 'mod6') renderTimerModule();
-if (currentTab === 'mod7') renderDashboardModule();
+if (currentTab === 'mod7') { renderDashboardModule(); renderEssayEvolution(); }
 if (currentTab === 'mod8') renderCoursesModule();
 lucide.createIcons();
 }
@@ -3401,6 +4361,8 @@ subtopicId: 'grade-semanal',
 subtopicName: item.focus || 'Planejamento da Grade Semanal',
 type: item.modality === 'Simulado' ? 'Simulado' : 'Teoria/Questões',
 status: 'Pendente',
+linkId: newLinkId(),
+origin: 'scheduled',
 notes: item.hours ? `Carga prevista: ${item.hours}` : 'Importado da Grade Semanal'
 });
 saveAppState();
@@ -3423,13 +4385,15 @@ items.forEach((item, idx) => {
 const alreadyExists = appState.agenda.some(g => g.date === selectedDate && g.subjectName === item.subject && g.subtopicName === (item.focus || 'Planejamento da Grade Semanal'));
 if (!alreadyExists) {
 appState.agenda.push({
-id: 'ag-' + Date.now() + '-' + idx,
+id: 'ag-' + Date.now() + '-' + idx + '-' + Math.random().toString(36).slice(2, 5),
 date: selectedDate,
 subjectName: item.subject,
 subtopicId: 'grade-semanal',
 subtopicName: item.focus || 'Planejamento da Grade Semanal',
 type: item.modality === 'Simulado' ? 'Simulado' : 'Teoria/Questões',
 status: 'Pendente',
+linkId: newLinkId(),
+origin: 'scheduled',
 notes: item.hours ? `Carga da Grade: ${item.hours}` : ''
 });
 added++;
@@ -3500,204 +4464,193 @@ document.getElementById('agendaFilterDate').value = getTodayISO();
 renderAgendaModule();
 }
 function renderAgendaModule() {
-const today = getTodayISO();
-const filterInput = document.getElementById('agendaFilterDate');
-if (filterInput && !filterInput.value) filterInput.value = today;
-const selectedDate = filterInput ? filterInput.value : today;
-const dateInput = document.getElementById('agendaInputDate');
-if (dateInput && !dateInput.value) dateInput.value = today;
-const dayTasks = appState.agenda.filter(g => g.date === selectedDate);
-const pendentes = dayTasks.filter(g => g.status !== 'Concluído');
-const concluidos = dayTasks.filter(g => g.status === 'Concluído');
-document.getElementById('agendaDayProgressText').textContent = `${concluidos.length}/${dayTasks.length} concluídas`;
-document.getElementById('countAgendaPendente').textContent = pendentes.length;
-document.getElementById('countAgendaConcluido').textContent = concluidos.length;
-const renderCard = (g) => `
+    const today = getTodayISO();
+    const filterInput = document.getElementById('agendaFilterDate');
+    if (filterInput && !filterInput.value) filterInput.value = today;
+    const selectedDate = filterInput ? filterInput.value : today;
+    const dateInput = document.getElementById('agendaInputDate');
+    if (dateInput && !dateInput.value) dateInput.value = today;
+    const dayTasks = appState.agenda.filter(g => g.date === selectedDate);
+    const pendentes = dayTasks.filter(g => g.status !== 'Concluído');
+    const concluidos = dayTasks.filter(g => g.status === 'Concluído');
+    document.getElementById('agendaDayProgressText').textContent = `${concluidos.length}/${dayTasks.length} concluídas`;
+    document.getElementById('countAgendaPendente').textContent = pendentes.length;
+    document.getElementById('countAgendaConcluido').textContent = concluidos.length;
+    const renderCard = (g) => {
+        const secs = (typeof g.studySeconds === 'number') ? g.studySeconds : Math.round((g.studyMinutes || 0) * 60);
+        const topics = goalSubtopics(g).map(s => s.name).join(' + ');
+        return `
 <div class="p-3.5 rounded-xl bg-tactical-bg border border-tactical-border space-y-2">
 <div class="flex items-center justify-between">
-<span class="px-2 py-0.5 rounded text-[10px] font-mono theme-accent-soft-bg font-semibold">${g.type}</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-mono theme-accent-soft-bg font-semibold">${escapeHTML(g.type)}</span>
 <span class="text-[10px] font-mono ${g.status === 'Concluído' ? 'theme-accent-text font-bold' : 'text-slate-400'}">${g.status === 'Concluído' ? '✓ Visto / Concluído' : 'Pendente'}</span>
 </div>
 <div>
-<h4 class="text-xs font-bold text-white">${g.subjectName}</h4>
-<p class="text-xs text-slate-300 mt-0.5">${g.subtopicName}</p>
-${g.studyMinutes > 0 || g.questionsTotal > 0 ? `
+<h4 class="text-xs font-bold text-white">${escapeHTML(g.subjectName)}</h4>
+<p class="text-xs text-slate-300 mt-0.5">${escapeHTML(topics)}</p>
+${secs > 0 || g.questionsTotal > 0 ? `
 <div class="flex flex-wrap items-center gap-2 mt-1.5">
-${g.studyMinutes > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-[10px] font-mono theme-accent-text">⏱️ ${formatMinutesToHours(g.studyMinutes)}</span>` : ''}
+${secs > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-[10px] font-mono theme-accent-text">⏱️ ${formatDurationSec(secs)}</span>` : ''}
 ${g.questionsTotal > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-[10px] font-mono text-white">🎯 ${g.questionsCorrect}/${g.questionsTotal} acertos</span>` : ''}
 </div>
 ` : ''}
-${g.notes ? `<p class="text-[11px] text-slate-400 mt-1 italic">"${g.notes}"</p>` : ''}
+${g.notes ? `<p class="text-[11px] text-slate-400 mt-1 italic">"${escapeHTML(g.notes)}"</p>` : ''}
 </div>
 <div class="pt-2 border-t border-tactical-subtle flex items-center justify-between">
-<button onclick="startTimerFromTask('${g.subjectName.replace(/'/g, "\\'")}', '${g.subtopicName.replace(/'/g, "\\'")}', '${g.type}', '${g.id}')" class="px-2.5 py-1 rounded-lg bg-tactical-accent text-white keep-white text-[11px] font-semibold flex items-center gap-1">
+${g.status !== 'Concluído' ? `
+<button onclick="startTimerFromGoal('${g.id}')" class="px-2.5 py-1 rounded-lg bg-tactical-accent text-white keep-white text-[11px] font-semibold flex items-center gap-1">
 <i data-lucide="play" class="w-3 h-3"></i> Cronometrar
-</button>
+</button>` : '<span></span>'}
 <div class="flex items-center gap-1">
-${g.status !== 'Concluído' ? `<button onclick="updateAgendaStatus('${g.id}', 'Concluído')" title="Marcar como visto/concluído" class="p-1.5 rounded-lg bg-tactical-card hover:bg-tactical-surface text-slate-300"><i data-lucide="check" class="w-3.5 h-3.5"></i></button>` : ''}
+${g.status !== 'Concluído' ? `<button onclick="openStudyRegisterForGoal('${g.id}')" title="Marcar como visto e registrar horas/questões" class="p-1.5 rounded-lg bg-tactical-card hover:bg-tactical-surface text-slate-300"><i data-lucide="check" class="w-3.5 h-3.5"></i></button>` : ''}
 <button onclick="deleteAgendaGoal('${g.id}')" title="Excluir" class="p-1 text-slate-400 hover:theme-accent-text"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
 </div>
 </div>
 </div>
 `;
-document.getElementById('colAgendaPendente').innerHTML = pendentes.map(renderCard).join('') || '<div class="text-xs text-slate-400 text-center py-10 font-mono">Nenhuma meta pendente</div>';
-document.getElementById('colAgendaConcluido').innerHTML = concluidos.map(renderCard).join('') || '<div class="text-xs text-slate-400 text-center py-10 font-mono">Nenhum estudo registrado neste dia</div>';
-renderAgendaPreviousDaysHistory();
-lucide.createIcons();
+    };
+    document.getElementById('colAgendaPendente').innerHTML = pendentes.map(renderCard).join('') || '<div class="text-xs text-slate-400 text-center py-10 font-mono">Nenhuma meta pendente</div>';
+    document.getElementById('colAgendaConcluido').innerHTML = concluidos.map(renderCard).join('') || '<div class="text-xs text-slate-400 text-center py-10 font-mono">Nenhum estudo registrado neste dia</div>';
+    renderAgendaPreviousDaysHistory();
+    lucide.createIcons();
 }
 function renderAgendaPreviousDaysHistory() {
-const container = document.getElementById('agendaPreviousDaysHistory');
-if (!container) return;
-const datesMap = {};
-const ensureDate = (d) => {
-if (!datesMap[d]) {
-datesMap[d] = { goals: [], sessions: [], questions: [] };
-}
-};
-appState.agenda.filter(g => g.status === 'Concluído').forEach(g => {
-ensureDate(g.date);
-datesMap[g.date].goals.push(g);
-});
-appState.timeSessions.forEach(s => {
-ensureDate(s.date);
-datesMap[s.date].sessions.push(s);
-});
-appState.questionLogs.forEach(q => {
-ensureDate(q.date);
-datesMap[q.date].questions.push(q);
-});
-const sortedDates = Object.keys(datesMap).sort((a, b) => b.localeCompare(a));
-if (sortedDates.length === 0) {
-container.innerHTML = `<div class="text-center py-8 text-xs text-slate-400 font-mono">Nenhum histórico registrado ainda.</div>`;
-return;
-}
-container.innerHTML = sortedDates.map(dateStr => {
-const dayData = datesMap[dateStr];
-const totalMins = dayData.sessions.reduce((acc, s) => acc + (s.minutes || 0), 0);
-const totalCorrect = dayData.questions.reduce((acc, q) => acc + (q.correct || 0), 0);
-const totalWrong = dayData.questions.reduce((acc, q) => acc + (q.wrong || 0), 0);
-const totalQ = totalCorrect + totalWrong;
-const pctQ = totalQ > 0 ? ((totalCorrect / totalQ) * 100).toFixed(0) : 0;
-const itemsHTML = [];
-dayData.goals.forEach(g => {
-itemsHTML.push(`
-<div class="flex items-center justify-between text-xs py-1 border-b border-tactical-subtle last:border-0">
-<div>
-<span class="font-semibold text-white">${g.subjectName}</span>
-<span class="text-slate-300"> • ${g.subtopicName}</span>
-${g.notes ? `<span class="text-slate-400 italic"> (${g.notes})</span>` : ''}
-</div>
-<span class="text-[10px] font-mono theme-accent-text shrink-0 ml-2">${g.type}</span>
-</div>
-`);
-});
-dayData.questions.forEach(q => {
-const tot = q.correct + q.wrong;
-itemsHTML.push(`
-<div class="flex items-center justify-between text-xs py-1 border-b border-tactical-subtle last:border-0">
-<div>
-<span class="font-semibold theme-accent-text">[Questões ${q.banca}]</span>
-<span class="text-white"> ${q.subjectName}</span>
-<span class="text-slate-300"> • ${q.subtopicName}</span>
-</div>
-<span class="text-[11px] font-mono font-bold text-white shrink-0 ml-2">${q.correct}/${tot} acertos</span>
-</div>
-`);
-});
-return `
+    const container = document.getElementById('agendaPreviousDaysHistory');
+    if (!container) return;
+    const entries = buildHistoryEntries();
+    if (entries.length === 0) {
+        container.innerHTML = `<div class="text-center py-8 text-xs text-slate-400 font-mono">Nenhum histórico registrado ainda.</div>`;
+        return;
+    }
+    const byDate = {};
+    entries.forEach(e => { (byDate[e.date] = byDate[e.date] || []).push(e); });
+    const sortedDates = Object.keys(byDate).sort((a, b) => b.localeCompare(a));
+    container.innerHTML = sortedDates.map(dateStr => {
+        const dayEntries = byDate[dateStr];
+        const totalSec = dayEntries.reduce((acc, e) => acc + e.sessions.reduce((a2, s) => a2 + sessionSeconds(s), 0), 0);
+        const totalCorrect = dayEntries.reduce((acc, e) => acc + e.questions.reduce((a2, q) => a2 + (q.correct || 0), 0), 0);
+        const totalWrong = dayEntries.reduce((acc, e) => acc + e.questions.reduce((a2, q) => a2 + (q.wrong || 0), 0), 0);
+        const totalQ = totalCorrect + totalWrong;
+        const pctQ = totalQ > 0 ? ((totalCorrect / totalQ) * 100).toFixed(0) : 0;
+        return `
 <div class="p-3.5 rounded-xl bg-tactical-bg border border-tactical-border space-y-2">
 <div class="flex flex-wrap items-center justify-between gap-2 border-b border-tactical-border pb-2">
 <button type="button" onclick="document.getElementById('agendaFilterDate').value='${dateStr}'; renderAgendaModule();" class="text-xs font-mono font-bold theme-accent-text hover:underline flex items-center gap-1.5">
 <i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${formatDateBR(dateStr)} ${dateStr === getTodayISO() ? '(Hoje)' : ''}
 </button>
 <div class="flex items-center gap-2 text-[11px] font-mono">
-${totalMins > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-white">⏱️ ${formatMinutesToHours(totalMins)}</span>` : ''}
+${totalSec > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-white">⏱️ ${formatDurationSec(totalSec)}</span>` : ''}
 ${totalQ > 0 ? `<span class="px-2 py-0.5 rounded theme-accent-soft-bg font-bold">🎯 ${totalQ} questões (${pctQ}%)</span>` : ''}
 </div>
 </div>
-<div class="space-y-1">
-${itemsHTML.join('') || '<div class="text-xs text-slate-400 font-mono">Sessão de tempo registrada.</div>'}
+<div class="space-y-2">
+${dayEntries.map(e => renderHistoryEntryHTML(e, false)).join('')}
 </div>
 </div>
 `;
-}).join('');
+    }).join('');
 }
 function handleAddAgendaGoal(e) {
-e.preventDefault();
-const date = document.getElementById('agendaInputDate').value || getTodayISO();
-const subjectName = document.getElementById('agendaInputSubject').value || 'Geral';
-const subSelect = document.getElementById('agendaInputSubtopic');
-const subtopicId = subSelect.value;
-const subtopicName = subSelect.options[subSelect.selectedIndex]?.text || 'Assunto Geral';
-const type = document.getElementById('agendaInputType').value;
-const banca = document.getElementById('agendaInputBanca')?.value || 'Geral';
-const notes = document.getElementById('agendaInputNotes').value.trim();
-const submitStatus = document.getElementById('agendaSubmitMode')?.value || 'Pendente';
-const studyHoursFloat = parseFloat(document.getElementById('agendaInputStudyHours')?.value) || 0;
-const studyMinutes = Math.round(studyHoursFloat * 60);
-const qCorrect = parseInt(document.getElementById('agendaInputQCorrect')?.value, 10) || 0;
-const qWrong = parseInt(document.getElementById('agendaInputQWrong')?.value, 10) || 0;
-const qTotal = qCorrect + qWrong;
-appState.agenda.push({
-id: 'ag-' + Date.now(),
-date,
-subjectName,
-subtopicId,
-subtopicName,
-type,
-status: submitStatus,
-notes,
-studyMinutes,
-questionsCorrect: qCorrect,
-questionsWrong: qWrong,
-questionsTotal: qTotal
-});
-if (studyMinutes > 0) {
-appState.timeSessions.unshift({
-id: 'ts-ag-' + Date.now(),
-date,
-subjectName,
-subtopicName,
-modality: type,
-minutes: studyMinutes
-});
-}
-if (qTotal > 0) {
-appState.questionLogs.push({
-id: 'q-ag-' + Date.now(),
-date,
-subjectName,
-subtopicId,
-subtopicName,
-banca,
-correct: qCorrect,
-wrong: qWrong
-});
-}
-document.getElementById('agendaInputNotes').value = '';
-if (document.getElementById('agendaInputStudyHours')) document.getElementById('agendaInputStudyHours').value = '';
-if (document.getElementById('agendaInputQCorrect')) document.getElementById('agendaInputQCorrect').value = '';
-if (document.getElementById('agendaInputQWrong')) document.getElementById('agendaInputQWrong').value = '';
-document.getElementById('agendaFilterDate').value = date;
-saveAppState();
-renderAgendaModule();
-if (submitStatus === 'Concluído') {
-showToast('Estudo, horas e questões registrados com sucesso!', 'success');
-} else {
-showToast('Meta agendada!', 'success');
-}
+    e.preventDefault();
+    const date = document.getElementById('agendaInputDate').value || getTodayISO();
+    const subjectName = document.getElementById('agendaInputSubject').value || 'Geral';
+    const checked = getCheckedSubtopics('agendaInputSubtopicList');
+    const subtopics = checked.length ? checked : [{ id: 'geral', name: 'Assunto Geral' }];
+    const subtopicName = subtopics.map(s => s.name).join(' + ');
+    const type = document.getElementById('agendaInputType').value;
+    const banca = document.getElementById('agendaInputBanca')?.value || 'Geral';
+    const notes = document.getElementById('agendaInputNotes').value.trim();
+    const submitStatus = document.getElementById('agendaSubmitMode')?.value || 'Pendente';
+    const seconds = readHMS('agendaInputStudyH', 'agendaInputStudyM', 'agendaInputStudyS');
+    const qCorrect = Math.max(0, parseInt(document.getElementById('agendaInputQCorrect')?.value, 10) || 0);
+    const qWrong = Math.max(0, parseInt(document.getElementById('agendaInputQWrong')?.value, 10) || 0);
+    const qTotal = qCorrect + qWrong;
+    const markSeen = document.getElementById('agendaMarkSeen')?.checked;
+    const isDone = submitStatus === 'Concluído';
+    const linkId = newLinkId();
+
+    const goal = {
+        id: uid('ag-'),
+        linkId,
+        date,
+        subjectName,
+        subtopicId: subtopics[0].id,
+        subtopicName,
+        subtopics,
+        type,
+        status: submitStatus,
+        notes,
+        studySeconds: isDone ? seconds : 0,
+        studyMinutes: isDone ? seconds / 60 : 0,
+        questionsCorrect: isDone ? qCorrect : 0,
+        questionsWrong: isDone ? qWrong : 0,
+        questionsTotal: isDone ? qTotal : 0,
+        origin: isDone ? 'registered' : 'scheduled'
+    };
+    appState.agenda.push(goal);
+
+    if (isDone) {
+        if (seconds > 0) {
+            appState.timeSessions.unshift({
+                id: uid('ts-'), linkId, date, subjectName, subtopicName, modality: type,
+                minutes: seconds / 60, seconds
+            });
+        }
+        if (qTotal > 0) {
+            const qSub = resolveQuestionSubtopic(checked, document.getElementById('agendaInputQSubtopic')?.value, subtopics[0]);
+            appState.questionLogs.push({
+                id: uid('q-'), linkId, date, subjectName,
+                subtopicId: qSub.id, subtopicName: qSub.name, banca, correct: qCorrect, wrong: qWrong
+            });
+        }
+        if (markSeen) {
+            const seen = markSubtopicsSeen(subtopics, date);
+            if (seen.completedIds.length || seen.createdReviewIds.length) {
+                appState.studyMeta = appState.studyMeta || {};
+                appState.studyMeta[linkId] = seen;
+            }
+        }
+    }
+
+    document.getElementById('agendaInputNotes').value = '';
+    ['agendaInputStudyH', 'agendaInputStudyM', 'agendaInputStudyS', 'agendaInputQCorrect', 'agendaInputQWrong'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+    document.getElementById('agendaFilterDate').value = date;
+    saveAppState();
+    renderActiveModule();
+    renderAgendaSubtopicChecklist(true);
+    if (isDone) {
+        showToast('Estudo, horas e questões registrados com sucesso!', 'success');
+    } else if (seconds > 0 || qTotal > 0) {
+        showToast('Meta agendada! Horas e questões só contam quando o estudo for concluído.', 'info');
+    } else {
+        showToast('Meta agendada!', 'success');
+    }
 }
 function updateAgendaStatus(goalId, newStatus) {
-const g = appState.agenda.find(item => item.id === goalId);
-if (!g) return;
-g.status = newStatus;
-saveAppState();
-renderActiveModule();
+    const g = appState.agenda.find(item => item.id === goalId);
+    if (!g) return;
+    if (newStatus === 'Concluído') {
+        openStudyRegisterForGoal(goalId);
+        return;
+    }
+    g.status = newStatus;
+    saveAppState();
+    renderActiveModule();
 }
 function deleteAgendaGoal(goalId) {
-appState.agenda = appState.agenda.filter(item => item.id !== goalId);
-saveAppState();
-renderAgendaModule();
+    const g = appState.agenda.find(item => item.id === goalId);
+    if (!g) return;
+    if (g.status === 'Concluído') {
+        if (!confirm('Excluir este estudo concluído?\n\nAs horas, questões e assuntos vistos lançados nele também serão abatidos.')) return;
+        removeLinkedRecords(g.linkId || ('lk-' + g.id), true);
+    } else {
+        appState.agenda = appState.agenda.filter(item => item.id !== goalId);
+    }
+    saveAppState();
+    renderActiveModule();
 }
 // MÓDULO 3: REVISÕES ESPAÇADAS
 function setReviewTab(tab) {
@@ -3781,21 +4734,21 @@ ${!r.completedAll ? `
 lucide.createIcons();
 }
 function completeReviewStage(reviewId) {
-const rev = appState.reviews.find(r => r.id === reviewId);
-if (!rev || rev.completedAll) return;
-const today = getTodayISO();
-const finishedCycleDays = REVIEW_CYCLES[rev.currentCycleIndex] || 1;
-rev.history.push({ cycle: finishedCycleDays, date: today });
-if (rev.currentCycleIndex + 1 < REVIEW_CYCLES.length) {
-rev.currentCycleIndex++;
-rev.dueDate = addDaysISO(today, REVIEW_CYCLES[rev.currentCycleIndex]);
-showToast(`Revisão concluída! Próxima agendada.`, 'success');
-} else {
-rev.completedAll = true;
-showToast('Ciclo de revisões finalizado!', 'success');
-}
-saveAppState();
-renderActiveModule();
+    const rev = appState.reviews.find(r => r.id === reviewId);
+    if (!rev || rev.completedAll) return;
+    openStudyRegister({
+        flow: 'review',
+        reviewId: rev.id,
+        date: getTodayISO(),
+        subjectName: rev.subjectName,
+        subtopicIds: [rev.subtopicId],
+        fallbackSubtopicId: rev.subtopicId || 'geral',
+        fallbackSubtopicName: rev.subtopicName,
+        seconds: 0,
+        modality: 'Revisão',
+        noMarkSeen: true,
+        contextNote: `Revisão: ${rev.subtopicName}`
+    });
 }
 // MÓDULO 4: QUESTÕES & MÉTRICAS
 function updateLiveQuestionPreview() {
@@ -4148,14 +5101,15 @@ document.getElementById('miniTimerModality').textContent = timerModality;
 updatePipCanvas();
 }
 function startTimerFromTask(subjectName, subtopicName, modality, agendaGoalId) {
-switchTab('mod6');
-const subjSel = document.getElementById('timerSubjectSelect');
-if (subjSel) {
-subjSel.value = subjectName;
-populateSubtopicSelect('timerSubjectSelect', 'timerSubtopicSelect');
-}
-selectTimerModality(modality === 'Simulado' ? 'Simulado' : 'Teoria/Questões');
-if (!timerRunning) toggleGlobalTimer();
+    if (agendaGoalId) { startTimerFromGoal(agendaGoalId); return; }
+    switchTab('mod6');
+    const subjSel = document.getElementById('timerSubjectSelect');
+    if (subjSel) {
+        subjSel.value = subjectName;
+        populateSubtopicSelect('timerSubjectSelect', 'timerSubtopicSelect');
+    }
+    selectTimerModality(modality === 'Simulado' ? 'Simulado' : 'Teoria/Questões');
+    if (!timerRunning) toggleGlobalTimer();
 }
 function toggleGlobalTimer() {
 const miniWidget = document.getElementById('miniTimerWidget');
@@ -4176,13 +5130,15 @@ updateTimerButtonsUI();
 updatePipCanvas();
 }
 function resetGlobalTimer() {
-clearInterval(timerInterval);
-timerRunning = false;
-timerSeconds = 0;
-document.getElementById('miniTimerWidget').classList.remove('timer-active-glow');
-updateTimerDisplays();
-updateTimerButtonsUI();
-updatePipCanvas();
+    clearInterval(timerInterval);
+    timerRunning = false;
+    timerSeconds = 0;
+    timerLinkedGoalId = null;
+    document.getElementById('miniTimerWidget').classList.remove('timer-active-glow');
+    updateTimerDisplays();
+    updateTimerButtonsUI();
+    updateTimerLinkedInfo();
+    updatePipCanvas();
 }
 function updateTimerDisplays() {
 const formatted = formatSecondsToHHMMSS(timerSeconds);
@@ -4191,84 +5147,86 @@ const mainDisp = document.getElementById('mainTimerDisplay');
 if (mainDisp) mainDisp.textContent = formatted;
 }
 function updateTimerButtonsUI() {
-const miniBtn = document.getElementById('miniTimerPlayBtn');
-const mainBtn = document.getElementById('mainTimerPlayBtn');
-if (timerRunning) {
-miniBtn.innerHTML = `<i data-lucide="pause" class="w-3.5 h-3.5"></i>`;
-if (mainBtn) mainBtn.innerHTML = `<i data-lucide="pause" class="w-4 h-4"></i> Pausar`;
-} else {
-miniBtn.innerHTML = `<i data-lucide="play" class="w-3.5 h-3.5"></i>`;
-if (mainBtn) mainBtn.innerHTML = `<i data-lucide="play" class="w-4 h-4"></i> Iniciar`;
-}
-lucide.createIcons();
-}
-function updatePostTimerTheoryTotal() {
-const c = parseInt(document.getElementById('postTimerCorrect')?.value, 10) || 0;
-const w = parseInt(document.getElementById('postTimerWrong')?.value, 10) || 0;
-const totalEl = document.getElementById('postTimerTotalPreview');
-if (totalEl) totalEl.textContent = `${c + w} questões`;
+    const miniBtn = document.getElementById('miniTimerPlayBtn');
+    const mainBtn = document.getElementById('mainTimerPlayBtn');
+    const statusLbl = document.getElementById('mainTimerStatusLabel');
+    if (timerRunning) {
+        miniBtn.innerHTML = `<i data-lucide="pause" class="w-3.5 h-3.5"></i>`;
+        if (mainBtn) mainBtn.innerHTML = `<i data-lucide="pause" class="w-4 h-4"></i> Pausar`;
+        if (statusLbl) statusLbl.textContent = 'EM ANDAMENTO';
+    } else {
+        miniBtn.innerHTML = `<i data-lucide="play" class="w-3.5 h-3.5"></i>`;
+        if (mainBtn) mainBtn.innerHTML = `<i data-lucide="play" class="w-4 h-4"></i> ${timerSeconds > 0 ? 'Continuar' : 'Iniciar'}`;
+        if (statusLbl) statusLbl.textContent = timerSeconds > 0 ? 'PAUSADO' : 'PRONTO';
+    }
+    lucide.createIcons();
 }
 function saveCurrentTimerSession() {
-if (timerSeconds < 1) {
-showToast('Inicie o cronômetro antes de finalizar.', 'warning');
-return;
+    if (timerSeconds < 1) {
+        showToast('Inicie o cronômetro antes de finalizar.', 'warning');
+        return;
+    }
+    if (timerRunning) toggleGlobalTimer();
+    const seconds = timerSeconds;
+    if (timerModality === 'Simulado') {
+        pendingSimuladoSeconds = seconds;
+        openSimuladoPostModal(seconds);
+        return;
+    }
+    const goal = timerLinkedGoalId ? appState.agenda.find(g => g.id === timerLinkedGoalId) : null;
+    const subjSel = document.getElementById('timerSubjectSelect');
+    const subSel = document.getElementById('timerSubtopicSelect');
+    const selSubId = subSel?.value || 'geral';
+    const selSubName = subSel?.options[subSel.selectedIndex]?.text || 'Assunto Geral';
+    if (goal) {
+        const subs = goalSubtopics(goal);
+        openStudyRegister({
+            flow: 'timer', goalId: goal.id, date: getTodayISO(),
+            subjectName: goal.subjectName,
+            subtopicIds: subs.map(s => s.id),
+            fallbackSubtopicId: subs[0].id,
+            fallbackSubtopicName: subs.map(s => s.name).join(' + '),
+            seconds, modality: 'Teoria/Questões',
+            contextNote: 'Meta vinculada da Agenda'
+        });
+    } else {
+        openStudyRegister({
+            flow: 'timer', date: getTodayISO(),
+            subjectName: subjSel?.value || 'Geral',
+            subtopicIds: [selSubId],
+            fallbackSubtopicId: selSubId,
+            fallbackSubtopicName: selSubName,
+            seconds, modality: 'Teoria/Questões'
+        });
+    }
 }
-const minutes = Math.max(1, Math.round(timerSeconds / 60));
-const today = getTodayISO();
-resetGlobalTimer();
-if (timerModality === 'Simulado') {
-pendingSimuladoMinutes = minutes;
-openSimuladoPostModal(minutes);
-return;
-}
-const subjectName = document.getElementById('timerSubjectSelect')?.value || 'Geral';
-const subSel = document.getElementById('timerSubtopicSelect');
-const subtopicId = subSel?.value || 'geral';
-const subtopicName = subSel?.options[subSel.selectedIndex]?.text || 'Geral';
-appState.timeSessions.unshift({
-id: 'ts-' + Date.now(),
-date: today,
-subjectName,
-subtopicName,
-modality: 'Teoria/Questões',
-minutes
-});
-const existing = appState.agenda.find(g => g.date === today && g.subjectName === subjectName && g.status !== 'Concluído');
-if (existing) {
-existing.status = 'Concluído';
-}
-saveAppState();
-renderActiveModule();
-pendingSessionForQuestions = { date: today, subjectName, subtopicId, subtopicName };
-document.getElementById('postTimerSubjLabel').textContent = subjectName;
-document.getElementById('postTimerTopicLabel').textContent = subtopicName;
-document.getElementById('postTimerMinsLabel').textContent = minutes;
-document.getElementById('postTimerCorrect').value = 0;
-document.getElementById('postTimerWrong').value = 0;
-updatePostTimerTheoryTotal();
-openModal('modalPostTimerQuestions');
-}
-function openSimuladoPostModal(minutes) {
-document.getElementById('simuladoMinsLabel').textContent = minutes;
-const container = document.getElementById('simuladoSubjectsRowsContainer');
-container.innerHTML = '';
-const subjectsList = appState.edital.length > 0
-? appState.edital.map(s => s.name)
-: ['Direito Constitucional', 'Direito Administrativo', 'Português', 'Raciocínio Lógico'];
-subjectsList.forEach(subjName => {
-appendSimuladoRowHTML(subjName);
-});
-updateSimuladoLiveSummary();
-openModal('modalPostTimerSimulado');
+function openSimuladoPostModal(seconds) {
+    document.getElementById('simuladoMinsLabel').textContent = formatDurationSec(seconds);
+    const container = document.getElementById('simuladoSubjectsRowsContainer');
+    container.innerHTML = '';
+    const subjectsList = appState.edital.length > 0
+        ? appState.edital.map(s => s.name)
+        : ['Direito Constitucional', 'Direito Administrativo', 'Português', 'Raciocínio Lógico'];
+    subjectsList.forEach(subjName => {
+        appendSimuladoRowHTML(subjName);
+    });
+    const chk = document.getElementById('simuladoEssayCheck');
+    if (chk) chk.checked = false;
+    ['simuladoEssayTheme', 'simuladoEssayScore'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    const mx = document.getElementById('simuladoEssayMax');
+    if (mx) mx.value = 10;
+    toggleSimuladoEssayFields();
+    updateSimuladoLiveSummary();
+    openModal('modalPostTimerSimulado');
 }
 function appendSimuladoRowHTML(defaultSubject = '') {
-const container = document.getElementById('simuladoSubjectsRowsContainer');
-const row = document.createElement('div');
-row.className = 'simulado-subj-row p-3 rounded-xl bg-tactical-bg border border-tactical-border grid grid-cols-1 sm:grid-cols-12 gap-2 items-center';
-row.innerHTML = `
+    const container = document.getElementById('simuladoSubjectsRowsContainer');
+    const row = document.createElement('div');
+    row.className = 'simulado-subj-row p-3 rounded-xl bg-tactical-bg border border-tactical-border grid grid-cols-1 sm:grid-cols-12 gap-2 items-center';
+    row.innerHTML = `
 <div class="sm:col-span-6">
 <label class="block text-[10px] font-mono uppercase text-slate-400 mb-0.5">Matéria</label>
-<input type="text" list="existingSubjectsDatalist" value="${defaultSubject}" placeholder="Nome da matéria..." class="sim-subj-name w-full px-2.5 py-1.5 rounded-lg text-xs font-semibold">
+<input type="text" list="existingSubjectsDatalist" value="${escapeHTML(defaultSubject)}" placeholder="Nome da matéria..." class="sim-subj-name w-full px-2.5 py-1.5 rounded-lg text-xs font-semibold">
 </div>
 <div class="sm:col-span-3">
 <label class="block text-[10px] font-mono uppercase text-slate-300 mb-0.5">Certas</label>
@@ -4279,7 +5237,7 @@ row.innerHTML = `
 <input type="number" min="0" value="0" oninput="updateSimuladoLiveSummary()" class="sim-subj-wrong w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
 </div>
 `;
-container.appendChild(row);
+    container.appendChild(row);
 }
 function addSimuladoSubjectRow() {
 appendSimuladoRowHTML('');
@@ -4298,225 +5256,176 @@ const el = document.getElementById('simuladoLiveSummary');
 if (el) el.textContent = `${tot} feitas • ${totalC} certas • ${totalW} erradas (${pct}%)`;
 }
 function confirmPostTimerSimulado(e) {
-e.preventDefault();
-const today = getTodayISO();
-const banca = document.getElementById('simuladoBancaSelect')?.value || 'Geral';
-const rows = document.querySelectorAll('.simulado-subj-row');
-const validEntries = [];
-rows.forEach(row => {
-const subjName = (row.querySelector('.sim-subj-name')?.value || '').trim();
-const correct = parseInt(row.querySelector('.sim-subj-correct')?.value, 10) || 0;
-const wrong = parseInt(row.querySelector('.sim-subj-wrong')?.value, 10) || 0;
-if (subjName && (correct + wrong > 0)) {
-validEntries.push({ subjName, correct, wrong });
-}
-});
-if (validEntries.length > 0) {
-const minsPerSubject = Math.max(1, Math.round(pendingSimuladoMinutes / validEntries.length));
-validEntries.forEach((entry, idx) => {
-appState.questionLogs.push({
-id: 'q-sim-' + Date.now() + '-' + idx,
-date: today,
-subjectName: entry.subjName,
-subtopicId: 'simulado',
-subtopicName: 'Simulado',
-banca,
-correct: entry.correct,
-wrong: entry.wrong
-});
-appState.timeSessions.unshift({
-id: 'ts-sim-' + Date.now() + '-' + idx,
-date: today,
-subjectName: entry.subjName,
-subtopicName: 'Simulado',
-modality: 'Simulado',
-minutes: minsPerSubject
-});
-});
-} else {
-appState.timeSessions.unshift({
-id: 'ts-sim-' + Date.now(),
-date: today,
-subjectName: 'Simulado Geral',
-subtopicName: 'Simulado',
-modality: 'Simulado',
-minutes: pendingSimuladoMinutes
-});
-}
-pendingSimuladoMinutes = 0;
-saveAppState();
-closeModal('modalPostTimerSimulado');
-renderActiveModule();
-showToast('Simulado, Horas Líquidas e Questões contabilizados no Dashboard e Métricas!', 'success');
-}
-function confirmPostTimerQuestions(e) {
-e.preventDefault();
-if (!pendingSessionForQuestions) {
-closeModal('modalPostTimerQuestions');
-return;
-}
-const correct = parseInt(document.getElementById('postTimerCorrect').value, 10) || 0;
-const wrong = parseInt(document.getElementById('postTimerWrong').value, 10) || 0;
-const banca = document.getElementById('postTimerBanca').value || 'Geral';
-if (correct + wrong > 0) {
-appState.questionLogs.push({
-id: 'q-' + Date.now(),
-date: pendingSessionForQuestions.date,
-subjectName: pendingSessionForQuestions.subjectName,
-subtopicId: pendingSessionForQuestions.subtopicId,
-subtopicName: pendingSessionForQuestions.subtopicName,
-banca,
-correct,
-wrong
-});
-saveAppState();
-showToast('Tempo e questões contabilizados no Dashboard e em Métricas!', 'success');
-} else {
-showToast('Tempo líquido contabilizado!', 'info');
-}
-pendingSessionForQuestions = null;
-closeModal('modalPostTimerQuestions');
-renderActiveModule();
-}
-function skipPostTimerQuestions() {
-pendingSessionForQuestions = null;
-closeModal('modalPostTimerQuestions');
-showToast('Tempo líquido contabilizado!', 'info');
+    e.preventDefault();
+    finalizeSimulado(false);
 }
 function renderTimerModule() {
-selectTimerModality(timerModality);
-const stats = calculateTimeStats();
-document.getElementById('accTotalTime').textContent = formatMinutesToHours(stats.totalMinutes);
-document.getElementById('accDailyAvg').textContent = formatMinutesToHours(stats.dailyAvg7d);
-document.getElementById('accWeeklyTotal').textContent = formatMinutesToHours(stats.last7DaysMinutes);
-const modList = document.getElementById('timeByModalityList');
-modList.innerHTML = Object.entries(stats.byModality).map(([k, v]) => `
+    selectTimerModality(timerModality);
+    updateTimerButtonsUI();
+    updateTimerLinkedInfo();
+    const stats = calculateTimeStats();
+    document.getElementById('accTotalTime').textContent = formatMinutesToHours(stats.totalMinutes);
+    document.getElementById('accDailyAvg').textContent = formatMinutesToHours(stats.dailyAvg7d);
+    document.getElementById('accWeeklyTotal').textContent = formatMinutesToHours(stats.last7DaysMinutes);
+    const modList = document.getElementById('timeByModalityList');
+    modList.innerHTML = Object.entries(stats.byModality).map(([k, v]) => `
 <div class="flex items-center justify-between text-xs p-3 rounded-xl bg-tactical-bg border border-tactical-border">
 <span class="text-slate-300">${k}</span>
 <span class="font-mono font-bold theme-accent-text">${formatMinutesToHours(v)}</span>
 </div>
 `).join('');
-const histList = document.getElementById('timeSessionsHistoryList');
-histList.innerHTML = appState.timeSessions.length > 0 ? appState.timeSessions.map(s => `
-<div class="p-2.5 rounded-xl bg-tactical-bg border border-tactical-border flex items-center justify-between text-xs">
-<div>
-<span class="font-bold text-white">${s.subjectName}</span>
-<span class="text-slate-400"> • ${s.subtopicName}</span>
-</div>
-<div class="font-mono theme-accent-text shrink-0">${s.modality} (${s.minutes}m)</div>
-</div>
-`).join('') : '<div class="text-xs text-slate-400 font-mono text-center py-6">Nenhuma sessão registrada</div>';
+    const histList = document.getElementById('timeSessionsHistoryList');
+    const entries = buildHistoryEntries();
+    histList.innerHTML = entries.length > 0
+        ? entries.map(e => renderHistoryEntryHTML(e, true)).join('')
+        : '<div class="text-xs text-slate-400 font-mono text-center py-6">Nenhuma sessão registrada</div>';
+    lucide.createIcons();
 }
 // MÓDULO 1: EDITAL VERTICALIZADO
 function renderEditalModule() {
-const search = (document.getElementById('editalSearchInput')?.value || '').toLowerCase();
-const prioFilter = document.getElementById('editalFilterPriority')?.value || 'ALL';
-const statusFilter = document.getElementById('editalFilterStatus')?.value || 'ALL';
-const container = document.getElementById('editalAccordionContainer');
-container.innerHTML = '';
-const datalist = document.getElementById('existingSubjectsDatalist');
-if (datalist) {
-datalist.innerHTML = appState.edital.map(s => `<option value="${s.name}">`).join('');
-}
-if (appState.edital.length === 0) {
-container.innerHTML = `<div class="bg-tactical-surface border border-tactical-border rounded-2xl p-8 text-center text-xs text-slate-400 font-mono">Nenhum assunto no edital. Adicione um novo assunto.</div>`;
-return;
-}
-appState.edital.forEach(subj => {
-let totalSub = 0, doneSub = 0;
-subj.topics.forEach(t => t.subtopics.forEach(st => {
-totalSub++;
-if (st.completed) doneSub++;
-}));
-const subjPct = totalSub > 0 ? Math.round((doneSub / totalSub) * 100) : 0;
-let filteredTopicsHTML = '';
-subj.topics.forEach(top => {
-const matchingSubtopics = top.subtopics.filter(sub => {
-const matchText = !search || subj.name.toLowerCase().includes(search) || top.name.toLowerCase().includes(search) || sub.name.toLowerCase().includes(search);
-const matchPrio = prioFilter === 'ALL' || sub.priority === prioFilter;
-const matchStatus = statusFilter === 'ALL' || (statusFilter === 'DONE' && sub.completed) || (statusFilter === 'PENDING' && !sub.completed);
-return matchText && matchPrio && matchStatus;
-});
-if (matchingSubtopics.length === 0) return;
-let subtopicsRowsHTML = '';
-matchingSubtopics.forEach(sub => {
-subtopicsRowsHTML += `
+    const search = (document.getElementById('editalSearchInput')?.value || '').toLowerCase();
+    const prioFilter = document.getElementById('editalFilterPriority')?.value || 'ALL';
+    const statusFilter = document.getElementById('editalFilterStatus')?.value || 'ALL';
+    const noFilters = !search && prioFilter === 'ALL' && statusFilter === 'ALL';
+    const container = document.getElementById('editalAccordionContainer');
+    container.innerHTML = '';
+    const datalist = document.getElementById('existingSubjectsDatalist');
+    if (datalist) {
+        datalist.innerHTML = appState.edital.map(s => `<option value="${escapeHTML(s.name)}">`).join('');
+    }
+    if (appState.edital.length === 0) {
+        container.innerHTML = `<div class="bg-tactical-surface border border-tactical-border rounded-2xl p-8 text-center text-xs text-slate-400 font-mono">Nenhum assunto no edital. Adicione um novo assunto.</div>`;
+        return;
+    }
+    const iconBtn = (icon, title, onclick, extra = '') =>
+        `<button type="button" onclick="${onclick}" title="${title}" class="p-1.5 rounded-lg text-slate-400 hover:theme-accent-text hover:bg-tactical-card transition ${extra}"><i data-lucide="${icon}" class="w-4 h-4"></i></button>`;
+    const moveBtns = (level, sId, tId, stId, idx, len) => noFilters ? `
+${idx > 0 ? iconBtn('chevron-up', 'Mover para cima', `moveEditalItem('${level}','${sId}','${tId}','${stId}',-1)`) : '<span class="w-7"></span>'}
+${idx < len - 1 ? iconBtn('chevron-down', 'Mover para baixo', `moveEditalItem('${level}','${sId}','${tId}','${stId}',1)`) : '<span class="w-7"></span>'}` : '';
+
+    appState.edital.forEach((subj, subjIdx) => {
+        let totalSub = 0, doneSub = 0;
+        subj.topics.forEach(t => t.subtopics.forEach(st => {
+            totalSub++;
+            if (st.completed) doneSub++;
+        }));
+        const subjPct = totalSub > 0 ? Math.round((doneSub / totalSub) * 100) : 0;
+        let filteredTopicsHTML = '';
+        subj.topics.forEach((top, topIdx) => {
+            const matchingSubtopics = top.subtopics.filter(sub => {
+                const matchText = !search || subj.name.toLowerCase().includes(search) || top.name.toLowerCase().includes(search) || sub.name.toLowerCase().includes(search);
+                const matchPrio = prioFilter === 'ALL' || sub.priority === prioFilter;
+                const matchStatus = statusFilter === 'ALL' || (statusFilter === 'DONE' && sub.completed) || (statusFilter === 'PENDING' && !sub.completed);
+                return matchText && matchPrio && matchStatus;
+            });
+            if (matchingSubtopics.length === 0 && !noFilters) return;
+            let subtopicsRowsHTML = '';
+            matchingSubtopics.forEach((sub) => {
+                const realIdx = top.subtopics.findIndex(x => x.id === sub.id);
+                subtopicsRowsHTML += `
 <div class="p-3 rounded-xl bg-tactical-bg border border-tactical-subtle flex items-center justify-between gap-3">
-<label class="flex items-center gap-3 cursor-pointer flex-1">
-<input type="checkbox" ${sub.completed ? 'checked' : ''} onchange="toggleSubtopicCompletion('${subj.id}', '${top.id}', '${sub.id}', this.checked)" class="w-4 h-4 rounded cursor-pointer">
-<div>
-<span class="text-xs sm:text-sm font-medium ${sub.completed ? 'line-through text-slate-400' : 'text-white'}">${sub.name}</span>
+<label class="flex items-center gap-3 cursor-pointer flex-1 min-w-0">
+<input type="checkbox" ${sub.completed ? 'checked' : ''} onchange="toggleSubtopicCompletion('${subj.id}', '${top.id}', '${sub.id}', this.checked)" class="w-4 h-4 rounded cursor-pointer shrink-0">
+<div class="min-w-0">
+<span class="text-xs sm:text-sm font-medium ${sub.completed ? 'line-through text-slate-400' : 'text-white'}">${escapeHTML(sub.name)}</span>
 <div class="flex items-center gap-2 mt-0.5">
-<span class="px-2 py-0.5 rounded text-[10px] font-mono theme-accent-soft-bg">${sub.priority}</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-mono theme-accent-soft-bg">${escapeHTML(sub.priority)}</span>
 ${sub.completed ? `<span class="text-[10px] font-mono theme-accent-text">✓ ${formatDateBR(sub.completedAt)}</span>` : ''}
 </div>
 </div>
 </label>
-<div class="flex items-center gap-1 shrink-0">
-<button onclick="deleteSubtopicItem('${subj.id}', '${top.id}', '${sub.id}')" class="p-1.5 text-slate-400 hover:theme-accent-text"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+<div class="flex items-center gap-0.5 shrink-0">
+${moveBtns('subtopic', subj.id, top.id, sub.id, realIdx, top.subtopics.length)}
+${iconBtn('pencil', 'Editar nome / prioridade', `openEditEditalItem('subtopic','${subj.id}','${top.id}','${sub.id}')`)}
+<button onclick="deleteSubtopicItem('${subj.id}', '${top.id}', '${sub.id}')" title="Excluir assunto" class="p-1.5 text-slate-400 hover:theme-accent-text"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
 </div>
 </div>
 `;
-});
-filteredTopicsHTML += `
+            });
+            if (!subtopicsRowsHTML) {
+                subtopicsRowsHTML = `<div class="text-[11px] text-slate-400 font-mono px-1">Nenhum assunto neste tópico.</div>`;
+            }
+            filteredTopicsHTML += `
 <div class="space-y-2 pl-3 border-l-2 border-tactical-border">
-<div class="text-xs font-mono font-bold uppercase theme-accent-text">${top.name}</div>
+<div class="flex items-center justify-between gap-2">
+<div class="text-xs font-mono font-bold uppercase theme-accent-text min-w-0 truncate">${escapeHTML(top.name)}</div>
+<div class="flex items-center gap-0.5 shrink-0">
+${moveBtns('topic', subj.id, top.id, '', topIdx, subj.topics.length)}
+${iconBtn('pencil', 'Renomear tópico', `openEditEditalItem('topic','${subj.id}','${top.id}','')`)}
+${iconBtn('trash-2', 'Excluir tópico e seus assuntos', `deleteEditalTopic('${subj.id}','${top.id}')`)}
+</div>
+</div>
 <div class="space-y-2">${subtopicsRowsHTML}</div>
 </div>
 `;
-});
-if (!filteredTopicsHTML) return;
-container.innerHTML += `
+        });
+        if (!filteredTopicsHTML && !noFilters) return;
+        if (!filteredTopicsHTML) {
+            filteredTopicsHTML = `<div class="text-[11px] text-slate-400 font-mono">Esta matéria ainda não tem tópicos. Use "Novo Assunto" para adicionar.</div>`;
+        }
+        container.innerHTML += `
 <div class="bg-tactical-surface border border-tactical-border rounded-2xl overflow-hidden shadow-sm">
-<div class="p-4 bg-tactical-card/50 border-b border-tactical-border flex items-center justify-between gap-3">
-<div>
-<h4 class="text-sm sm:text-base font-bold text-white">${subj.name}</h4>
+<div class="p-4 bg-tactical-card/50 border-b border-tactical-border flex flex-wrap items-center justify-between gap-3">
+<div class="min-w-0">
+<h4 class="text-sm sm:text-base font-bold text-white">${escapeHTML(subj.name)}</h4>
 <span class="text-xs font-mono text-slate-400">${doneSub}/${totalSub} (${subjPct}%)</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="flex items-center gap-0.5">
+${moveBtns('subject', subj.id, '', '', subjIdx, appState.edital.length)}
+${iconBtn('pencil', 'Renomear matéria', `openEditEditalItem('subject','${subj.id}','','')`)}
+${iconBtn('trash-2', 'Excluir matéria inteira', `deleteEditalSubject('${subj.id}')`)}
 </div>
 <div class="w-32 h-2 bg-tactical-bg rounded-full overflow-hidden">
 <div class="h-full bg-tactical-accent" style="width: ${subjPct}%"></div>
 </div>
 </div>
+</div>
 <div class="p-4 space-y-4">${filteredTopicsHTML}</div>
 </div>
 `;
-});
-lucide.createIcons();
+    });
+    if (!noFilters) {
+        container.insertAdjacentHTML('afterbegin', `<div class="text-[11px] font-mono text-slate-400 px-1">Filtros ativos: limpe a busca e os filtros para reordenar matérias, tópicos e assuntos.</div>`);
+    }
+    lucide.createIcons();
 }
 function toggleSubtopicCompletion(subjId, topId, subId, isChecked) {
-const subj = appState.edital.find(s => s.id === subjId);
-const top = subj?.topics.find(t => t.id === topId);
-const sub = top?.subtopics.find(st => st.id === subId);
-if (!sub) return;
-const today = getTodayISO();
-sub.completed = isChecked;
-sub.completedAt = isChecked ? today : null;
-if (isChecked) {
-const existingRev = appState.reviews.find(r => r.subtopicId === subId);
-if (!existingRev) {
-const firstDueDate = addDaysISO(today, REVIEW_CYCLES[0]);
-appState.reviews.push({
-id: 'rev-' + Date.now(),
-subtopicId: sub.id,
-subjectName: subj.name,
-subtopicName: sub.name,
-currentCycleIndex: 0,
-dueDate: firstDueDate,
-completedAll: false,
-history: []
-});
-}
-}
-saveAppState();
-renderEditalModule();
+    const subj = appState.edital.find(s => s.id === subjId);
+    const top = subj?.topics.find(t => t.id === topId);
+    const sub = top?.subtopics.find(st => st.id === subId);
+    if (!sub) return;
+    const today = getTodayISO();
+    sub.completed = isChecked;
+    sub.completedAt = isChecked ? today : null;
+    if (isChecked) {
+        const existingRev = appState.reviews.find(r => r.subtopicId === subId);
+        if (!existingRev) {
+            appState.reviews.push({
+                id: uid('rev-'),
+                subtopicId: sub.id,
+                subjectName: subj.name,
+                subtopicName: sub.name,
+                currentCycleIndex: 0,
+                dueDate: addDaysISO(today, REVIEW_CYCLES[0]),
+                completedAll: false,
+                history: []
+            });
+        }
+    }
+    saveAppState();
+    renderEditalModule();
 }
 function deleteSubtopicItem(subjId, topId, subId) {
-const subj = appState.edital.find(s => s.id === subjId);
-const top = subj?.topics.find(t => t.id === topId);
-if (!top) return;
-top.subtopics = top.subtopics.filter(st => st.id !== subId);
-saveAppState();
-renderEditalModule();
+    const subj = appState.edital.find(s => s.id === subjId);
+    const top = subj?.topics.find(t => t.id === topId);
+    const sub = top?.subtopics.find(st => st.id === subId);
+    if (!top || !sub) return;
+    if (!confirm(`Excluir o assunto "${sub.name}"?\n\nO histórico de estudos já lançado é mantido.`)) return;
+    purgeReviewsForSubtopics([subId]);
+    top.subtopics = top.subtopics.filter(st => st.id !== subId);
+    saveAppState();
+    renderActiveModule();
 }
 function handleAddEditalItem(e) {
 e.preventDefault();
@@ -4655,59 +5564,63 @@ covContainer.innerHTML += `
 }
 }
 function populateAllSubjectSelects() {
-const ids = ['agendaInputSubject', 'qInputSubject', 'errInputSubject', 'timerSubjectSelect', 'revInputSubject'];
-ids.forEach(id => {
-const el = document.getElementById(id);
-if (!el) return;
-const prev = el.value;
-if (appState.edital.length === 0) {
-el.innerHTML = `<option value="Geral">Geral</option>`;
-} else {
-el.innerHTML = appState.edital.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
-}
-if (prev && Array.from(el.options).some(o => o.value === prev)) el.value = prev;
-});
-['qFilterSubject', 'errorFilterSubject'].forEach(id => {
-const el = document.getElementById(id);
-if (!el) return;
-const prev = el.value || 'ALL';
-el.innerHTML = `<option value="ALL">Todas as Matérias</option>` + appState.edital.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
-el.value = prev;
-});
-populateSubtopicSelect('agendaInputSubject', 'agendaInputSubtopic');
-populateSubtopicSelect('qInputSubject', 'qInputSubtopic');
-populateSubtopicSelect('errInputSubject', 'errInputSubtopic');
-populateSubtopicSelect('timerSubjectSelect', 'timerSubtopicSelect');
-populateSubtopicSelect('revInputSubject', 'revInputSubtopic');
+    const ids = ['agendaInputSubject', 'qInputSubject', 'errInputSubject', 'timerSubjectSelect', 'revInputSubject'];
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const prev = el.value;
+        if (appState.edital.length === 0) {
+            el.innerHTML = `<option value="Geral">Geral</option>`;
+        } else {
+            el.innerHTML = appState.edital.map(s => `<option value="${escapeHTML(s.name)}">${escapeHTML(s.name)}</option>`).join('');
+        }
+        if (prev && Array.from(el.options).some(o => o.value === prev)) el.value = prev;
+    });
+    ['qFilterSubject', 'errorFilterSubject'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const prev = el.value || 'ALL';
+        el.innerHTML = `<option value="ALL">Todas as Matérias</option>` + appState.edital.map(s => `<option value="${escapeHTML(s.name)}">${escapeHTML(s.name)}</option>`).join('');
+        el.value = prev;
+    });
+    renderAgendaSubtopicChecklist(false);
+    populateSubtopicSelect('qInputSubject', 'qInputSubtopic');
+    populateSubtopicSelect('errInputSubject', 'errInputSubtopic');
+    populateSubtopicSelect('timerSubjectSelect', 'timerSubtopicSelect');
+    populateSubtopicSelect('revInputSubject', 'revInputSubtopic');
 }
 function populateSubtopicSelect(subjectSelectId, subtopicSelectId) {
-const subjEl = document.getElementById(subjectSelectId);
-const subEl = document.getElementById(subtopicSelectId);
-if (!subjEl || !subEl) return;
-const subjName = subjEl.value;
-const subjObj = appState.edital.find(s => s.name === subjName);
-if (!subjObj) {
-subEl.innerHTML = `<option value="geral">Assunto Geral</option>`;
-return;
-}
-let opts = '';
-subjObj.topics.forEach(t => t.subtopics.forEach(st => opts += `<option value="${st.id}">${st.name}</option>`));
-subEl.innerHTML = opts || `<option value="geral">Assunto Geral</option>`;
+    const subjEl = document.getElementById(subjectSelectId);
+    const subEl = document.getElementById(subtopicSelectId);
+    if (!subjEl || !subEl) return;
+    const prev = subEl.value;
+    const subjName = subjEl.value;
+    const subjObj = appState.edital.find(s => s.name === subjName);
+    if (!subjObj) {
+        subEl.innerHTML = `<option value="geral">Assunto Geral</option>`;
+        return;
+    }
+    let opts = '';
+    subjObj.topics.forEach(t => t.subtopics.forEach(st => opts += `<option value="${escapeHTML(st.id)}">${escapeHTML(st.name)}</option>`));
+    subEl.innerHTML = opts || `<option value="geral">Assunto Geral</option>`;
+    if (prev && Array.from(subEl.options).some(o => o.value === prev)) subEl.value = prev;
 }
 function populateAllBancaSelects() {
-const ids = ['qInputBanca', 'errInputBanca', 'postTimerBanca', 'simuladoBancaSelect', 'agendaInputBanca'];
-ids.forEach(id => {
-const el = document.getElementById(id);
-if (!el) return;
-el.innerHTML = appState.bancas.map(b => `<option value="${b}">${b}</option>`).join('');
-});
-['qFilterBanca', 'errorFilterBanca'].forEach(id => {
-const el = document.getElementById(id);
-if (!el) return;
-const prev = el.value || 'ALL';
-el.innerHTML = `<option value="ALL">Todas as Bancas</option>` + appState.bancas.map(b => `<option value="${b}">${b}</option>`).join('');
-el.value = prev;
-});
+    const ids = ['qInputBanca', 'errInputBanca', 'studyRegBanca', 'simuladoBancaSelect', 'agendaInputBanca'];
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const prev = el.value;
+        el.innerHTML = appState.bancas.map(b => `<option value="${escapeHTML(b)}">${escapeHTML(b)}</option>`).join('');
+        if (prev && Array.from(el.options).some(o => o.value === prev)) el.value = prev;
+    });
+    ['qFilterBanca', 'errorFilterBanca'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const prev = el.value || 'ALL';
+        el.innerHTML = `<option value="ALL">Todas as Bancas</option>` + appState.bancas.map(b => `<option value="${escapeHTML(b)}">${escapeHTML(b)}</option>`).join('');
+        el.value = prev;
+    });
 }
 function openModal(id) {
 const m = document.getElementById(id);
@@ -4914,73 +5827,90 @@ showToast('Imagem otimizada e pronta para salvar!', 'info');
 });
 }
 function renderCoursesModule() {
-updateCourseAdminVisibility();
-const grid = document.getElementById('platformsCardsGrid');
-const badgeMod8 = document.getElementById('badge-mod8');
-const list = getPlatformCardsList();
-if (badgeMod8) badgeMod8.textContent = list.length;
-if (!grid) return;
-if (list.length === 0) {
-grid.innerHTML = `<div class="col-span-full bg-tactical-surface border border-tactical-border rounded-2xl p-10 text-center text-xs text-slate-400 font-mono">Nenhuma plataforma cadastrada.</div>`;
-return;
-}
-const canEdit = isCurrentUserMasterAdmin();
-grid.innerHTML = list.map(item => `
+    updateCourseAdminVisibility();
+    const grid = document.getElementById('platformsCardsGrid');
+    const badgeMod8 = document.getElementById('badge-mod8');
+    const list = getPlatformCardsList();
+    if (badgeMod8) badgeMod8.textContent = list.length;
+    if (!grid) return;
+    if (list.length === 0) {
+        grid.innerHTML = `<div class="col-span-full bg-tactical-surface border border-tactical-border rounded-2xl p-10 text-center text-xs text-slate-400 font-mono">Nenhuma plataforma cadastrada.</div>`;
+        return;
+    }
+    const canEdit = isCurrentUserMasterAdmin();
+    grid.innerHTML = list.map(item => `
 <div class="group relative bg-tactical-surface border border-tactical-border rounded-2xl overflow-hidden shadow-lg interactive-card flex flex-col justify-between">
 <div>
 <div class="relative w-full h-40 bg-tactical-card overflow-hidden">
-<img src="${item.image}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop&q=80'" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+<img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}" onerror="this.src='https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop&q=80'" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
 <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
 ${canEdit ? `
-<button type="button" onclick="deletePlatformCardItem('${item.id}')" title="Remover Plataforma" class="absolute top-3 right-3 p-2 rounded-xl bg-black/70 hover:bg-[#e50914] text-white keep-white transition z-10 shadow">
+<div class="absolute top-3 right-3 flex items-center gap-2 z-10">
+<button type="button" onclick="openEditPlatformCard('${item.id}')" title="Editar Plataforma" class="p-2 rounded-xl bg-black/70 hover:bg-tactical-accent text-white keep-white transition shadow">
+<i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+</button>
+<button type="button" onclick="deletePlatformCardItem('${item.id}')" title="Remover Plataforma" class="p-2 rounded-xl bg-black/70 hover:bg-[#e50914] text-white keep-white transition shadow">
 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
 </button>
+</div>
 ` : ''}
 <div class="absolute bottom-3 left-3.5 right-3.5">
 <span class="px-2 py-0.5 rounded bg-black/60 border border-white/15 text-[10px] font-mono uppercase theme-accent-text font-bold">Plataforma</span>
-<h4 class="text-base font-extrabold text-white keep-white truncate mt-1">${item.name}</h4>
+<h4 class="text-base font-extrabold text-white keep-white truncate mt-1">${escapeHTML(item.name)}</h4>
 </div>
 </div>
 <div class="p-4">
-<p class="text-xs text-slate-300 line-clamp-2 min-h-[32px]">${item.desc || 'Clique abaixo para acessar diretamente a plataforma.'}</p>
+<p class="text-xs text-slate-300 line-clamp-2 min-h-[32px]">${escapeHTML(item.desc || 'Clique abaixo para acessar diretamente a plataforma.')}</p>
 </div>
 </div>
 <div class="px-4 pb-4">
-<a href="${item.url}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-bold flex items-center justify-center gap-2 transition shadow-md">
+<a href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-bold flex items-center justify-center gap-2 transition shadow-md">
 <i data-lucide="external-link" class="w-4 h-4"></i>
 <span>Acessar Plataforma</span>
 </a>
 </div>
 </div>
 `).join('');
-lucide.createIcons();
+    lucide.createIcons();
 }
 function handleSavePlatformCard(e) {
-e.preventDefault();
-if (!isCurrentUserMasterAdmin()) {
-showToast('Apenas o Gabriel (Admin) pode adicionar plataformas.', 'warning');
-return;
-}
-const name = document.getElementById('platInputName').value.trim();
-const desc = document.getElementById('platInputDesc').value.trim();
-const url = document.getElementById('platInputUrl').value.trim();
-const imageUrl = document.getElementById('platInputImage').value.trim();
-if (!name || !url) return;
-const list = getPlatformCardsList();
-list.push({
-id: 'plat-' + Date.now(),
-name,
-desc,
-url,
-image: tempPlatformImageBase64 || imageUrl || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop&q=80'
-});
-tempPlatformImageBase64 = '';
-savePlatformCardsList(list, true);
-closeModal('modalAddPlatformCard');
-e.target.reset();
-renderCoursesModule();
-updateGlobalHeaderAndSidebar();
-showToast(`Plataforma "${name}" salva para todos os perfis!`, 'success');
+    e.preventDefault();
+    if (!isCurrentUserMasterAdmin()) {
+        showToast('Apenas o Gabriel (Admin) pode adicionar ou editar plataformas.', 'warning');
+        return;
+    }
+    const editId = document.getElementById('platEditId').value;
+    const name = document.getElementById('platInputName').value.trim();
+    const desc = document.getElementById('platInputDesc').value.trim();
+    const url = document.getElementById('platInputUrl').value.trim();
+    const imageUrl = document.getElementById('platInputImage').value.trim();
+    if (!name || !url) return;
+    const list = getPlatformCardsList();
+    const fallbackImg = 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop&q=80';
+    if (editId) {
+        const idx = list.findIndex(p => p.id === editId);
+        if (idx < 0) return;
+        const old = list[idx];
+        let image = tempPlatformImageBase64 || imageUrl;
+        if (!image) image = old.image || fallbackImg;
+        list[idx] = { ...old, name, desc, url, image };
+    } else {
+        list.push({
+            id: 'plat-' + Date.now(),
+            name,
+            desc,
+            url,
+            image: tempPlatformImageBase64 || imageUrl || fallbackImg
+        });
+    }
+    tempPlatformImageBase64 = '';
+    savePlatformCardsList(list, true);
+    closeModal('modalAddPlatformCard');
+    e.target.reset();
+    document.getElementById('platEditId').value = '';
+    renderCoursesModule();
+    updateGlobalHeaderAndSidebar();
+    showToast(editId ? `Plataforma "${name}" atualizada para todos os perfis!` : `Plataforma "${name}" salva para todos os perfis!`, 'success');
 }
 function deletePlatformCardItem(id) {
 if (!isCurrentUserMasterAdmin()) return;
@@ -4991,14 +5921,22 @@ updateGlobalHeaderAndSidebar();
 showToast('Plataforma removida para todos os perfis.', 'info');
 }
 function closeModal(id) {
-const m = document.getElementById(id);
-if (m) {
-m.classList.add('hidden');
-m.classList.remove('flex');
-}
-if (id === 'modalAddErrorCard') {
-document.getElementById('errEditCardId').value = '';
-}
+    const m = document.getElementById(id);
+    if (m) {
+        m.classList.add('hidden');
+        m.classList.remove('flex');
+    }
+    if (id === 'modalAddErrorCard') {
+        document.getElementById('errEditCardId').value = '';
+    }
+    if (id === 'modalAddPlatformCard') {
+        const pe = document.getElementById('platEditId');
+        if (pe) pe.value = '';
+        tempPlatformImageBase64 = '';
+    }
+    if (id === 'modalStudyRegister') {
+        studyRegCtx = null;
+    }
 }
 function exportDataJSON() {
 try {
@@ -5083,6 +6021,9 @@ showToast('Dados limpos!', 'info');
         let activeAnkiCardIndex = 0;
         let tempApkgBannerBase64 = '';
         let sharedAnkiDriveFileId = null;
+        let ankiCoursesCache = null;
+        let activeAnkiTotal = 0;
+        let activeAnkiSeen = new Set();
 
         function injectAnkiModuleDOMAndScripts() {
             // 1. Injeta bibliotecas JSZip e SQL.js no <head> automaticamente
@@ -5107,7 +6048,7 @@ showToast('Dados limpos!', 'info');
                 btn9.innerHTML = `
                     <div class="flex items-center gap-3">
                         <i data-lucide="layers" class="w-4 h-4"></i>
-                        <span>Anki (.apkg)</span>
+                        <span>Anki</span>
                     </div>
                     <span id="badge-mod9" class="text-[11px] font-mono px-2 py-0.5 rounded-md theme-accent-soft-bg font-semibold">0</span>
                 `;
@@ -5126,7 +6067,7 @@ showToast('Dados limpos!', 'info');
                                     <i data-lucide="layers" class="w-5 h-5"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-lg font-bold text-white tracking-tight">Anki Flashcards (.apkg)</h3>
+                                    <h3 class="text-lg font-bold text-white tracking-tight">Anki</h3>
                                     <p class="text-xs text-slate-400">Escolha o curso abaixo, filtre por matéria/assunto e resolva seus flashcards</p>
                                 </div>
                             </div>
@@ -5154,6 +6095,9 @@ showToast('Dados limpos!', 'info');
                                 <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
                                 <input type="text" id="ankiSearchTopicInput" oninput="renderAnkiSubjectsTree()" placeholder="Buscar matéria ou assunto dentro do deck..." class="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm">
                             </div>
+                            <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer px-1">
+                                <input type="checkbox" id="ankiOnlyPendingChk" class="w-4 h-4 rounded"> Estudar somente cards pendentes (novos e em aprendizado)
+                            </label>
                             <div id="ankiSubjectsTreeContainer" class="space-y-4"></div>
                         </div>
 
@@ -5163,6 +6107,7 @@ showToast('Dados limpos!', 'info');
                                 <div>
                                     <span id="ankiStudyBreadcrumb" class="text-[11px] font-mono uppercase theme-accent-text font-bold block">--</span>
                                     <h4 id="ankiStudyTopicTitle" class="text-sm font-bold text-white">--</h4>
+                                    <span id="ankiStudyProgressTxt" class="text-[11px] font-mono text-slate-400 block mt-0.5"></span>
                                 </div>
                                 <div class="flex items-center gap-3 text-xs font-mono">
                                     <span class="px-2.5 py-1 rounded-lg bg-blue-500/15 text-blue-400 font-bold">Novos: <b id="ankiCountNew">0</b></span>
@@ -5253,7 +6198,7 @@ showToast('Dados limpos!', 'info');
             }
         }
 
-        MODULE_NAMES.mod9 = 'Anki Flashcards';
+        MODULE_NAMES.mod9 = 'Anki';
         const _origRenderActiveModule = renderActiveModule;
         renderActiveModule = function() {
             injectAnkiModuleDOMAndScripts();
@@ -5283,26 +6228,31 @@ showToast('Dados limpos!', 'info');
         };
 
         function getAnkiCoursesList() {
+            if (Array.isArray(ankiCoursesCache)) return ankiCoursesCache;
             try {
                 const raw = localStorage.getItem(ANKI_COURSES_KEY);
                 if (raw) {
                     const parsed = JSON.parse(raw);
-                    if (Array.isArray(parsed)) return parsed;
+                    if (Array.isArray(parsed)) {
+                        ankiCoursesCache = parsed;
+                        return parsed;
+                    }
                 }
             } catch (e) {}
             return [];
         }
 
         function saveAnkiCoursesList(list, syncToCloud = true) {
+            ankiCoursesCache = list;
             try {
                 localStorage.setItem(ANKI_COURSES_KEY, JSON.stringify(list));
-                const b9 = document.getElementById('badge-mod9');
-                if (b9) b9.textContent = list.length;
-                if (syncToCloud && isGabrielDriveAdminAuthenticated()) {
-                    syncSharedAnkiCoursesToDrive();
-                }
             } catch (e) {
-                showToast('Deck muito grande para memória local; mantendo na sessão.', 'warning');
+                showToast('Deck grande demais para o armazenamento local: ele ficará disponível nesta sessão e no Drive (se conectado).', 'warning');
+            }
+            const b9 = document.getElementById('badge-mod9');
+            if (b9) b9.textContent = list.length;
+            if (syncToCloud && isGabrielDriveAdminAuthenticated()) {
+                syncSharedAnkiCoursesToDrive();
             }
         }
 
@@ -5349,91 +6299,183 @@ showToast('Dados limpos!', 'info');
             const bannerUrl = document.getElementById('apkgCourseBannerUrl').value.trim();
             const statusBox = document.getElementById('apkgImportStatusBox');
             const submitBtn = document.getElementById('btnSubmitApkgImport');
+            const setStatus = (t) => { statusBox.textContent = t; };
 
             statusBox.classList.remove('hidden');
+            setStatus('Extraindo banco de dados e cartões do arquivo .apkg...');
             submitBtn.disabled = true;
 
             try {
+                if (typeof JSZip === 'undefined' || typeof initSqlJs === 'undefined') {
+                    throw new Error('As bibliotecas de leitura ainda estão carregando. Aguarde alguns segundos e tente de novo.');
+                }
                 const zip = await JSZip.loadAsync(file);
-                const dbFile = zip.file('collection.anki21') || zip.file('collection.anki2');
-                if (!dbFile) {
+                const SQL = await initSqlJs({
+                    locateFile: f => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${f}`
+                });
+
+                let db = null;
+                for (const dbName of ['collection.anki21', 'collection.anki2']) {
+                    const f = zip.file(dbName);
+                    if (!f) continue;
+                    const bytes = await f.async('uint8array');
+                    const cand = new SQL.Database(bytes);
+                    let cnt = 0;
+                    try { cnt = cand.exec('SELECT COUNT(*) FROM cards')[0].values[0][0]; } catch (_) {}
+                    if (cnt > 0) { db = cand; break; }
+                    cand.close();
+                }
+                if (!db) {
+                    if (zip.file('collection.anki21b')) {
+                        throw new Error('Este .apkg está no formato novo do Anki (.anki21b). No Anki, exporte de novo marcando "Suporte para versões antigas do Anki".');
+                    }
                     throw new Error('Banco de dados do Anki não encontrado dentro deste .apkg.');
                 }
-
-                const dbUint8 = await dbFile.async('uint8array');
-                const SQL = await initSqlJs({
-                    locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}`
-                });
-                const db = new SQL.Database(dbUint8);
+                if (zip.file('collection.anki21b') && !zip.file('collection.anki21')) {
+                    db.close();
+                    throw new Error('Este .apkg está no formato novo do Anki (.anki21b). No Anki, exporte de novo marcando "Suporte para versões antigas do Anki".');
+                }
 
                 const decksMap = {};
+                let models = {};
                 try {
-                    const colRes = db.exec("SELECT decks FROM col LIMIT 1");
-                    if (colRes.length > 0 && colRes[0].values[0][0]) {
-                        const decksJson = JSON.parse(colRes[0].values[0][0]);
-                        Object.values(decksJson).forEach(d => {
-                            decksMap[String(d.id)] = d.name;
-                        });
+                    const colRes = db.exec('SELECT decks, models FROM col LIMIT 1');
+                    if (colRes.length > 0) {
+                        const decksJson = JSON.parse(colRes[0].values[0][0] || '{}');
+                        Object.values(decksJson).forEach(d => { decksMap[String(d.id)] = d.name; });
+                        models = JSON.parse(colRes[0].values[0][1] || '{}');
                     }
                 } catch (_) {}
-
                 if (Object.keys(decksMap).length === 0) {
                     try {
-                        const dRes = db.exec("SELECT id, name FROM decks");
+                        const dRes = db.exec('SELECT id, name FROM decks');
                         if (dRes.length > 0) {
-                            dRes[0].values.forEach(r => {
-                                decksMap[String(r[0])] = String(r[1]).replace(/\x1f/g, '::');
-                            });
+                            dRes[0].values.forEach(r => { decksMap[String(r[0])] = String(r[1]).replace(/\x1f/g, '::'); });
                         }
                     } catch (_) {}
                 }
 
-                const notesRes = db.exec("SELECT c.id, c.did, n.flds FROM cards c JOIN notes n ON c.nid = n.id");
-                const subjectsTree = {};
-                let totalCards = 0;
-
-                if (notesRes.length > 0) {
-                    notesRes[0].values.forEach(row => {
-                        const cardId = String(row[0]);
-                        const did = String(row[1]);
-                        const rawFlds = String(row[2] || '');
-                        const parts = rawFlds.split('\x1f');
-                        const front = (parts[0] || '').replace(/\[sound:[^\]]+\]/g, '').trim();
-                        const back = (parts.slice(1).join('<hr class="my-2 border-white/10">') || '').replace(/\[sound:[^\]]+\]/g, '').trim();
-                        if (!front && !back) return;
-
-                        const fullDeckName = decksMap[did] || 'Geral::Assunto Geral';
-                        const segments = fullDeckName.split('::').map(s => s.trim()).filter(Boolean);
-
-                        let subjectName = 'Matéria Geral';
-                        let topicName = 'Assunto Geral';
-
-                        if (segments.length === 1) {
-                            subjectName = segments[0];
-                        } else if (segments.length === 2) {
-                            subjectName = segments[0];
-                            topicName = segments[1];
-                        } else if (segments.length >= 3) {
-                            subjectName = segments[1];
-                            topicName = segments.slice(2).join(' › ');
-                        }
-
-                        if (!subjectsTree[subjectName]) subjectsTree[subjectName] = {};
-                        if (!subjectsTree[subjectName][topicName]) subjectsTree[subjectName][topicName] = [];
-
-                        subjectsTree[subjectName][topicName].push({
-                            id: 'ak-' + cardId,
-                            front,
-                            back
-                        });
-                        totalCards++;
-                    });
-                }
-
+                setStatus('Lendo e ordenando os flashcards...');
+                const res = db.exec('SELECT c.id, c.did, c.ord, c.type, c.due, n.id, n.mid, n.flds FROM cards c JOIN notes n ON c.nid = n.id');
+                const rows = res.length > 0 ? res[0].values : [];
                 db.close();
+
+                // Agrupa por baralho e ordena igual ao Anki (ordem de posição para cards novos; criação para os demais)
+                const byDeck = {};
+                rows.forEach(r => { (byDeck[String(r[1])] = byDeck[String(r[1])] || []).push(r); });
+                const deckIds = Object.keys(byDeck).sort((a, b) => ankiNaturalCompare(decksMap[a] || '', decksMap[b] || ''));
+                const ordered = [];
+                deckIds.forEach(did => {
+                    const arr = byDeck[did];
+                    const allNew = arr.every(r => r[3] === 0);
+                    arr.sort((x, y) => allNew
+                        ? ((x[4] - y[4]) || (x[2] - y[2]) || (x[0] - y[0]))
+                        : ((x[5] - y[5]) || (x[2] - y[2]) || (x[0] - y[0])));
+                    ordered.push(...arr);
+                });
+
+                // Estrutura Matéria > Assunto a partir dos nomes dos baralhos
+                const deckSegs = {};
+                deckIds.forEach(did => {
+                    deckSegs[did] = String(decksMap[did] || 'Geral').split('::').map(s => s.trim()).filter(Boolean);
+                });
+                const firstSegs = new Set(deckIds.map(d => deckSegs[d][0] || ''));
+                const dropRoot = firstSegs.size === 1 && deckIds.some(d => deckSegs[d].length >= 2);
+                const rootName = deckIds.length ? (deckSegs[deckIds[0]][0] || 'Geral') : 'Geral';
+                const mapDeck = (did) => {
+                    let segs = deckSegs[did] || ['Geral'];
+                    if (dropRoot) segs = segs.slice(1);
+                    if (segs.length === 0) return { subject: rootName, topic: 'Assunto Geral' };
+                    if (segs.length === 1) return { subject: segs[0], topic: 'Assunto Geral' };
+                    if (segs.length === 2) return { subject: segs[0], topic: segs[1] };
+                    return { subject: segs[0], topic: segs.slice(1).join(' › ') };
+                };
+
+                const subjectsTree = {};
+                const flatCards = [];
+                let totalCards = 0;
+                ordered.forEach((row, idx) => {
+                    const cardId = String(row[0]);
+                    const did = String(row[1]);
+                    const ord = row[2];
+                    const mid = String(row[6]);
+                    const rawFlds = String(row[7] || '');
+                    const parts = rawFlds.split('\x1f');
+                    const model = models[mid];
+                    let front = '', back = '';
+                    if (model && Array.isArray(model.flds) && Array.isArray(model.tmpls)) {
+                        const fields = {};
+                        model.flds.forEach(f => { fields[f.name] = parts[f.ord] !== undefined ? parts[f.ord] : ''; });
+                        const isCloze = model.type === 1;
+                        const tmpl = isCloze ? model.tmpls[0] : (model.tmpls.find(t => t.ord === ord) || model.tmpls[0]);
+                        const clozeNum = ord + 1;
+                        front = ankiRenderTemplate(tmpl.qfmt, fields, { clozeNum, showAnswer: false });
+                        back = ankiRenderTemplate(tmpl.afmt, fields, { clozeNum, showAnswer: true, frontHtml: '' })
+                            .replace(/<hr[^>]*id=["']?answer["']?[^>]*>/gi, '');
+                    } else {
+                        front = parts[0] || '';
+                        back = parts.slice(1).join('<hr class="my-2 border-white/10">');
+                    }
+                    front = ankiSanitizeHtml(front.replace(/\[sound:[^\]]+\]/g, '')).trim();
+                    back = ankiSanitizeHtml(back.replace(/\[sound:[^\]]+\]/g, '')).trim();
+                    if (!front && !back) return;
+                    if (!back) back = front;
+
+                    const { subject, topic } = mapDeck(did);
+                    if (!subjectsTree[subject]) subjectsTree[subject] = {};
+                    if (!subjectsTree[subject][topic]) subjectsTree[subject][topic] = [];
+                    const card = { id: 'ak-' + cardId, front, back, o: idx };
+                    subjectsTree[subject][topic].push(card);
+                    flatCards.push(card);
+                    totalCards++;
+                });
 
                 if (totalCards === 0) {
                     throw new Error('Nenhum flashcard válido encontrado neste arquivo .apkg.');
+                }
+
+                // Imagens do deck (reduzidas e embutidas)
+                setStatus('Processando imagens do deck...');
+                const mediaIndex = {};
+                try {
+                    const mf = zip.file('media');
+                    if (mf) {
+                        const obj = JSON.parse(await mf.async('string'));
+                        Object.entries(obj).forEach(([k, v]) => { mediaIndex[v] = k; });
+                    }
+                } catch (_) {}
+                const needed = new Set();
+                const imgRe = /<img[^>]*?\ssrc\s*=\s*(?:"([^"]+)"|'([^']+)'|([^\s>]+))[^>]*>/gi;
+                flatCards.forEach(c => {
+                    [c.front, c.back].forEach(str => {
+                        imgRe.lastIndex = 0;
+                        let m;
+                        while ((m = imgRe.exec(str))) needed.add(ankiSafeDecode(m[1] || m[2] || m[3] || ''));
+                    });
+                });
+                const dataMap = {};
+                let budget = 3 * 1024 * 1024;
+                let skipped = 0;
+                for (const name of needed) {
+                    const key = mediaIndex[name];
+                    const zf = key !== undefined ? zip.file(key) : null;
+                    if (!zf) continue;
+                    if (budget <= 0) { skipped++; continue; }
+                    const blob = await zf.async('blob');
+                    const ext = (name.split('.').pop() || '').toLowerCase();
+                    const dataUrl = await ankiBlobToDataUrl(blob, ext);
+                    if (dataUrl && dataUrl.length < budget) {
+                        dataMap[name] = dataUrl;
+                        budget -= dataUrl.length;
+                    } else {
+                        skipped++;
+                    }
+                }
+                if (needed.size > 0) {
+                    flatCards.forEach(c => {
+                        c.front = ankiReplaceImages(c.front, dataMap);
+                        c.back = ankiReplaceImages(c.back, dataMap);
+                    });
                 }
 
                 const newCourse = {
@@ -5445,14 +6487,14 @@ showToast('Dados limpos!', 'info');
                 };
 
                 tempApkgBannerBase64 = '';
-                const list = getAnkiCoursesList();
+                const list = getAnkiCoursesList().slice();
                 list.unshift(newCourse);
                 saveAnkiCoursesList(list, true);
 
                 closeModal('modalUploadApkg');
                 e.target.reset();
                 renderAnkiModule();
-                showToast(`Curso "${courseTitle}" importado com ${totalCards} flashcards!`, 'success');
+                showToast(`Curso "${courseTitle}" importado com ${totalCards} flashcards!${skipped ? ` (${skipped} imagem(ns) grande(s) omitida(s))` : ''}`, 'success');
             } catch (err) {
                 console.error(err);
                 showToast(err.message || 'Erro ao ler o arquivo .apkg.', 'warning');
@@ -5546,12 +6588,12 @@ showToast('Dados limpos!', 'info');
 
             const header = document.getElementById('ankiActiveCourseHeader');
             header.innerHTML = `
-                <img src="${course.banner}" class="absolute inset-0 w-full h-full object-cover opacity-40">
+                <img src="${escapeHTML(course.banner)}" class="absolute inset-0 w-full h-full object-cover opacity-40">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
                 <div class="relative z-10 flex flex-wrap items-end justify-between gap-4 w-full">
                     <div>
                         <span class="px-2.5 py-0.5 rounded bg-[#e50914] text-white keep-white text-[10px] font-mono uppercase font-bold">Curso de Flashcards</span>
-                        <h3 class="text-2xl sm:text-3xl font-black text-white keep-white mt-1">${course.title}</h3>
+                        <h3 class="text-2xl sm:text-3xl font-black text-white keep-white mt-1">${escapeHTML(course.title)}</h3>
                     </div>
                     <span class="text-xs font-mono text-slate-300">${course.totalCards || 0} Flashcards disponíveis</span>
                 </div>
@@ -5562,12 +6604,17 @@ showToast('Dados limpos!', 'info');
             const treeContainer = document.getElementById('ankiSubjectsTreeContainer');
             treeContainer.innerHTML = '';
 
-            Object.entries(course.subjects || {}).forEach(([subjectName, topicsObj]) => {
+            const subjectNames = Object.keys(course.subjects || {}).sort(ankiNaturalCompare);
+            subjectNames.forEach(subjectName => {
+                const topicsObj = course.subjects[subjectName];
                 let topicsHTML = '';
-                Object.entries(topicsObj).forEach(([topicName, cardsArr]) => {
+                let subjCards = 0;
+                Object.keys(topicsObj).sort(ankiNaturalCompare).forEach(topicName => {
+                    const cardsArr = topicsObj[topicName];
                     if (search && !subjectName.toLowerCase().includes(search) && !topicName.toLowerCase().includes(search)) {
                         return;
                     }
+                    subjCards += cardsArr.length;
 
                     let countNew = 0, countLearn = 0, countRev = 0;
                     cardsArr.forEach(c => {
@@ -5577,14 +6624,12 @@ showToast('Dados limpos!', 'info');
                         else countRev++;
                     });
 
-                    const safeSubj = subjectName.replace(/'/g, "\\'");
-                    const safeTop = topicName.replace(/'/g, "\\'");
-
                     topicsHTML += `
-                        <div onclick="startAnkiStudySession('${safeSubj}', '${safeTop}')" class="p-3.5 rounded-xl bg-tactical-bg hover:bg-tactical-card border border-tactical-subtle hover:border-tactical-accent flex flex-wrap items-center justify-between gap-3 cursor-pointer transition">
-                            <div class="flex items-center gap-2.5">
-                                <i data-lucide="book-open-check" class="w-4 h-4 theme-accent-text"></i>
-                                <span class="text-xs sm:text-sm font-semibold text-white">${topicName}</span>
+                        <div data-subj="${encodeURIComponent(subjectName)}" data-top="${encodeURIComponent(topicName)}" onclick="startAnkiStudySessionEnc(this.dataset.subj, this.dataset.top)" class="p-3.5 rounded-xl bg-tactical-bg hover:bg-tactical-card border border-tactical-subtle hover:border-tactical-accent flex flex-wrap items-center justify-between gap-3 cursor-pointer transition">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <i data-lucide="book-open-check" class="w-4 h-4 theme-accent-text shrink-0"></i>
+                                <span class="text-xs sm:text-sm font-semibold text-white">${escapeHTML(topicName)}</span>
+                                <span class="text-[10px] font-mono text-slate-400">${cardsArr.length} cards</span>
                             </div>
                             <div class="flex items-center gap-3 text-xs font-mono">
                                 <span class="text-blue-400 font-bold" title="Novos">${countNew}</span>
@@ -5600,39 +6645,45 @@ showToast('Dados limpos!', 'info');
 
                 treeContainer.innerHTML += `
                     <div class="bg-tactical-surface border border-tactical-border rounded-2xl overflow-hidden shadow-sm">
-                        <div class="px-4 py-3 bg-tactical-card/60 border-b border-tactical-border flex items-center justify-between">
+                        <div class="px-4 py-3 bg-tactical-card/60 border-b border-tactical-border flex flex-wrap items-center justify-between gap-2">
                             <h4 class="text-sm font-extrabold text-white uppercase tracking-wide flex items-center gap-2">
-                                <i data-lucide="folder-kanban" class="w-4 h-4 theme-accent-text"></i> ${subjectName}
+                                <i data-lucide="folder-kanban" class="w-4 h-4 theme-accent-text"></i> ${escapeHTML(subjectName)}
+                                <span class="text-[10px] font-mono text-slate-400 normal-case">${subjCards} cards</span>
                             </h4>
+                            <button type="button" data-subj="${encodeURIComponent(subjectName)}" onclick="startAnkiSubjectSession(this.dataset.subj)" class="px-3 py-1 rounded-lg bg-tactical-card hover:bg-tactical-bg border border-tactical-border text-[11px] font-semibold text-slate-200 flex items-center gap-1.5">
+                                <i data-lucide="play" class="w-3 h-3 theme-accent-text"></i> Estudar matéria toda
+                            </button>
                         </div>
                         <div class="p-3 space-y-2">${topicsHTML}</div>
                     </div>
                 `;
             });
 
+            if (!treeContainer.innerHTML) {
+                treeContainer.innerHTML = `<div class="text-center py-8 text-xs text-slate-400 font-mono">Nenhuma matéria ou assunto encontrado.</div>`;
+            }
             lucide.createIcons();
         }
 
         function startAnkiStudySession(subjectName, topicName) {
             const course = getAnkiCoursesList().find(c => c.id === activeAnkiCourseId);
             const cards = course?.subjects?.[subjectName]?.[topicName] || [];
-            if (cards.length === 0) return;
-
-            activeAnkiStudyQueue = [...cards];
-            activeAnkiCardIndex = 0;
-
-            document.getElementById('ankiSubjectsView').classList.add('hidden');
-            document.getElementById('ankiStudyPlayerView').classList.remove('hidden');
-            document.getElementById('ankiStudyBreadcrumb').textContent = `${course.title} › ${subjectName}`;
-            document.getElementById('ankiStudyTopicTitle').textContent = topicName;
-
-            renderCurrentAnkiStudyCard();
+            if (!course || cards.length === 0) return;
+            beginAnkiSession(`${course.title} › ${subjectName}`, topicName, ankiCardsInOrder(cards));
         }
 
         function renderCurrentAnkiStudyCard() {
             const progMap = getAnkiUserProgressMap();
+            const remaining = [];
+            const seenIds = new Set();
+            for (let i = activeAnkiCardIndex; i < activeAnkiStudyQueue.length; i++) {
+                const c = activeAnkiStudyQueue[i];
+                if (seenIds.has(c.id)) continue;
+                seenIds.add(c.id);
+                remaining.push(c);
+            }
             let cNew = 0, cLearn = 0, cRev = 0;
-            activeAnkiStudyQueue.forEach(c => {
+            remaining.forEach(c => {
                 const st = progMap[c.id]?.state || 'NEW';
                 if (st === 'NEW') cNew++;
                 else if (st === 'LEARN') cLearn++;
@@ -5642,16 +6693,18 @@ showToast('Dados limpos!', 'info');
             document.getElementById('ankiCountNew').textContent = cNew;
             document.getElementById('ankiCountLearn').textContent = cLearn;
             document.getElementById('ankiCountRev').textContent = cRev;
+            const progTxt = document.getElementById('ankiStudyProgressTxt');
+            if (progTxt) progTxt.textContent = `${activeAnkiSeen.size} de ${activeAnkiTotal} cards concluídos nesta sessão`;
 
             if (activeAnkiCardIndex >= activeAnkiStudyQueue.length) {
-                showToast('Parabéns! Você concluiu todos os flashcards deste assunto!', 'success');
+                showToast('Parabéns! Você concluiu todos os flashcards desta sessão!', 'success');
                 closeAnkiStudyPlayer();
                 return;
             }
 
             const card = activeAnkiStudyQueue[activeAnkiCardIndex];
-            document.getElementById('ankiCardFrontContent').innerHTML = card.front;
-            document.getElementById('ankiCardBackContent').innerHTML = card.back;
+            document.getElementById('ankiCardFrontContent').innerHTML = ankiSanitizeHtml(card.front);
+            document.getElementById('ankiCardBackContent').innerHTML = ankiSanitizeHtml(card.back);
             document.getElementById('ankiCardBackWrapper').classList.add('hidden');
             document.getElementById('btnAnkiShowAnswer').classList.remove('hidden');
 
@@ -5675,16 +6728,149 @@ showToast('Dados limpos!', 'info');
             const progMap = getAnkiUserProgressMap();
             if (rating === 'AGAIN') {
                 progMap[card.id] = { state: 'LEARN', updatedAt: Date.now() };
-                activeAnkiStudyQueue.push(card);
+                // volta a aparecer daqui a poucos cards (sem bagunçar a ordem do deck)
+                const insertAt = Math.min(activeAnkiCardIndex + 4, activeAnkiStudyQueue.length);
+                activeAnkiStudyQueue.splice(insertAt, 0, card);
             } else if (rating === 'HARD') {
                 progMap[card.id] = { state: 'LEARN', updatedAt: Date.now() };
+                activeAnkiSeen.add(card.id);
             } else {
                 progMap[card.id] = { state: 'REVIEW', updatedAt: Date.now() };
+                activeAnkiSeen.add(card.id);
             }
 
             saveAnkiUserProgressMap(progMap);
             activeAnkiCardIndex++;
             renderCurrentAnkiStudyCard();
+        }
+
+        function ankiNaturalCompare(a, b) {
+            return String(a).localeCompare(String(b), 'pt-BR', { numeric: true, sensitivity: 'base' });
+        }
+        function ankiSafeDecode(s) {
+            try { return decodeURIComponent(s); } catch (_) { return s; }
+        }
+        function ankiSanitizeHtml(html) {
+            return String(html || '')
+                .replace(/<\s*(script|style|iframe|object|embed|link|meta)[\s\S]*?<\s*\/\s*\1\s*>/gi, '')
+                .replace(/<\s*(script|style|iframe|object|embed|link|meta)[^>]*>/gi, '')
+                .replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
+                .replace(/(href|src)\s*=\s*(["'])\s*javascript:[^"']*\2/gi, '$1=$2#$2');
+        }
+        function ankiRenderCloze(text, activeNum, showAnswer) {
+            return String(text || '').replace(/\{\{c(\d+)::([\s\S]*?)(?:::([\s\S]*?))?\}\}/g, (m, n, ans, hint) => {
+                if (parseInt(n, 10) === activeNum) {
+                    return showAnswer
+                        ? `<span class="font-extrabold theme-accent-text">${ans}</span>`
+                        : `<span class="font-extrabold theme-accent-text">[${hint ? hint : '...'}]</span>`;
+                }
+                return ans;
+            });
+        }
+        function ankiRenderTemplate(tpl, fields, opts) {
+            let out = String(tpl || '');
+            for (let guard = 0; guard < 10; guard++) {
+                const before = out;
+                out = out.replace(/\{\{([#^])\s*([^}]+?)\s*\}\}([\s\S]*?)\{\{\/\s*\2\s*\}\}/g, (m, kind, name, inner) => {
+                    const val = String(fields[name.trim()] || '').replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+                    const has = val.length > 0;
+                    return (kind === '#' ? has : !has) ? inner : '';
+                });
+                if (out === before) break;
+            }
+            out = out.replace(/\{\{([^}]+)\}\}/g, (m, raw) => {
+                const key = raw.trim();
+                if (key === 'FrontSide') return opts.frontHtml || '';
+                if (['Tags', 'Deck', 'Subdeck', 'Card', 'Type'].includes(key)) return '';
+                const parts = key.split(':');
+                const fname = parts[parts.length - 1].trim();
+                const filters = parts.slice(0, -1).map(f => f.trim().toLowerCase());
+                const val = fields[fname];
+                if (val === undefined) return '';
+                if (filters.includes('cloze')) return ankiRenderCloze(val, opts.clozeNum, !!opts.showAnswer);
+                if (filters.includes('type') || filters.includes('hint')) return '';
+                if (filters.includes('text')) return String(val).replace(/<[^>]*>/g, '');
+                return val;
+            });
+            return out;
+        }
+        function ankiBlobToDataUrl(blob, ext) {
+            return new Promise((resolve) => {
+                const lower = (ext || '').toLowerCase();
+                if (lower === 'svg' || lower === 'gif') {
+                    if (blob.size > 100 * 1024) { resolve(null); return; }
+                    const fr = new FileReader();
+                    fr.onload = () => resolve(fr.result);
+                    fr.onerror = () => resolve(null);
+                    fr.readAsDataURL(new Blob([blob], { type: lower === 'svg' ? 'image/svg+xml' : 'image/gif' }));
+                    return;
+                }
+                const mime = lower === 'png' ? 'image/png' : (lower === 'webp' ? 'image/webp' : 'image/jpeg');
+                const url = URL.createObjectURL(new Blob([blob], { type: mime }));
+                const img = new Image();
+                img.onload = () => {
+                    const maxW = 640;
+                    let w = img.width, h = img.height;
+                    if (w > maxW) { h = Math.round((h * maxW) / w); w = maxW; }
+                    const cv = document.createElement('canvas');
+                    cv.width = w; cv.height = h;
+                    const ctx = cv.getContext('2d');
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, w, h);
+                    ctx.drawImage(img, 0, 0, w, h);
+                    URL.revokeObjectURL(url);
+                    resolve(cv.toDataURL('image/jpeg', 0.72));
+                };
+                img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+                img.src = url;
+            });
+        }
+        function ankiReplaceImages(html, dataMap) {
+            return String(html || '').replace(/<img([^>]*?)\ssrc\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))([^>]*)>/gi, (m, pre, a, b, c, post) => {
+                const name = ankiSafeDecode(a || b || c || '');
+                const data = dataMap[name];
+                if (data) return `<img${pre} src="${data}"${post} style="max-width:100%;height:auto;border-radius:8px;margin:6px auto;display:block">`;
+                if (/^(https?:|data:)/i.test(name)) return m;
+                return '<span class="text-[11px] font-mono text-slate-400">[imagem não incluída no deck]</span>';
+            });
+        }
+        function ankiCardsInOrder(cards) {
+            return cards
+                .map((c, i) => ({ c, i }))
+                .sort((x, y) => ((x.c.o !== undefined ? x.c.o : x.i) - (y.c.o !== undefined ? y.c.o : y.i)) || (x.i - y.i))
+                .map(x => x.c);
+        }
+        function beginAnkiSession(breadcrumb, title, cards) {
+            const onlyPending = !!document.getElementById('ankiOnlyPendingChk')?.checked;
+            const progMap = getAnkiUserProgressMap();
+            let queue = cards.slice();
+            if (onlyPending) queue = queue.filter(c => (progMap[c.id]?.state || 'NEW') !== 'REVIEW');
+            if (queue.length === 0) {
+                showToast(onlyPending ? 'Nenhum card pendente aqui. Desmarque "somente pendentes" para rever tudo.' : 'Este assunto não tem flashcards.', 'info');
+                return;
+            }
+            activeAnkiStudyQueue = queue;
+            activeAnkiCardIndex = 0;
+            activeAnkiTotal = queue.length;
+            activeAnkiSeen = new Set();
+
+            document.getElementById('ankiSubjectsView').classList.add('hidden');
+            document.getElementById('ankiStudyPlayerView').classList.remove('hidden');
+            document.getElementById('ankiStudyBreadcrumb').textContent = breadcrumb;
+            document.getElementById('ankiStudyTopicTitle').textContent = title;
+            renderCurrentAnkiStudyCard();
+        }
+        function startAnkiStudySessionEnc(encSubj, encTop) {
+            startAnkiStudySession(ankiSafeDecode(encSubj), ankiSafeDecode(encTop));
+        }
+        function startAnkiSubjectSession(encSubj) {
+            const subjectName = ankiSafeDecode(encSubj);
+            const course = getAnkiCoursesList().find(c => c.id === activeAnkiCourseId);
+            const topicsObj = course?.subjects?.[subjectName];
+            if (!course || !topicsObj) return;
+            let all = [];
+            Object.keys(topicsObj).sort(ankiNaturalCompare).forEach(t => { all = all.concat(ankiCardsInOrder(topicsObj[t])); });
+            beginAnkiSession(`${course.title}`, `${subjectName} (matéria completa)`, all);
         }
 
         function closeAnkiStudyPlayer() {
