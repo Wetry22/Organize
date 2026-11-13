@@ -46,42 +46,44 @@ accentSoft: 'var(--accent-soft)',
 }
 </script>
 <style>
-/* 1. ESCURO TÁTICO */
+/* 1. ESCURO TÁTICO (INSPIRADO NO DESIGN CAVEIRA / EAGLECODE) */
 :root,
 [data-theme="dark"] {
---bg-main: #090d14;
---bg-surface: #111722;
---bg-card: #161e2e;
---border-primary: rgba(148, 163, 184, 0.16);
---border-subtle: rgba(148, 163, 184, 0.10);
---border-input: #334155;
---text-main: #f8fafc;
---text-muted: #94a3b8;
---accent-main: #0b61f5;
---accent-hover: #2574f7;
---accent-soft: rgba(11, 97, 245, 0.15);
---accent-text: #60a5fa;
---banner-grad: rgba(11, 97, 245, 0.18);
---grid-dot: rgba(11, 97, 245, 0.08);
---scroll-track: #090d14;
---scroll-thumb: #232f46;
+--bg-main: #121314;
+--bg-surface: #1b1d1f;
+--bg-card: #232629;
+--bg-input-focus: #17191b;
+--border-primary: transparent;
+--border-subtle: rgba(255, 255, 255, 0.04);
+--border-input: rgba(255, 255, 255, 0.07);
+--text-main: #f3f4f6;
+--text-muted: #9ca3af;
+--accent-main: #536451;
+--accent-hover: #62765f;
+--accent-soft: rgba(143, 168, 139, 0.14);
+--accent-text: #9bb098;
+--banner-grad: transparent;
+--grid-dot: rgba(255, 255, 255, 0.035);
+--scroll-track: #121314;
+--scroll-thumb: #2b2f33;
 }
 /* 2. ROSA BEBÊ COM BRANCO */
 [data-theme="pink"] {
 --bg-main: #fff5f8;
 --bg-surface: #ffffff;
 --bg-card: #ffe4ed;
---border-primary: #fbcfe8;
---border-subtle: #fce7f3;
---border-input: #f9a8d4;
+--bg-input-focus: #ffd8e6;
+--border-primary: transparent;
+--border-subtle: rgba(236, 72, 153, 0.08);
+--border-input: rgba(236, 72, 153, 0.20);
 --text-main: #831843;
 --text-muted: #be185d;
 --accent-main: #ec4899;
 --accent-hover: #db2777;
---accent-soft: rgba(236, 72, 153, 0.15);
+--accent-soft: rgba(236, 72, 153, 0.14);
 --accent-text: #be185d;
---banner-grad: rgba(244, 114, 182, 0.18);
---grid-dot: rgba(236, 72, 153, 0.14);
+--banner-grad: transparent;
+--grid-dot: rgba(236, 72, 153, 0.10);
 --scroll-track: #fff5f8;
 --scroll-thumb: #f472b6;
 }
@@ -90,60 +92,101 @@ accentSoft: 'var(--accent-soft)',
 --bg-main: #f0f8ff;
 --bg-surface: #ffffff;
 --bg-card: #e0f2fe;
---border-primary: #bae6fd;
---border-subtle: #e0f2fe;
---border-input: #7dd3fc;
+--bg-input-focus: #bae6fd;
+--border-primary: transparent;
+--border-subtle: rgba(2, 132, 199, 0.08);
+--border-input: rgba(2, 132, 199, 0.20);
 --text-main: #075985;
 --text-muted: #0284c7;
 --accent-main: #0284c7;
 --accent-hover: #0369a1;
---accent-soft: rgba(2, 132, 199, 0.15);
+--accent-soft: rgba(2, 132, 199, 0.14);
 --accent-text: #0369a1;
---banner-grad: rgba(56, 189, 248, 0.18);
---grid-dot: rgba(2, 132, 199, 0.14);
+--banner-grad: transparent;
+--grid-dot: rgba(2, 132, 199, 0.10);
 --scroll-track: #f0f8ff;
 --scroll-thumb: #38bdf8;
 }
 /* 4. VERDE MILITAR E PRETO */
 [data-theme="military"] {
---bg-main: #070a06;
---bg-surface: #0f140d;
---bg-card: #161f14;
---border-primary: rgba(101, 133, 76, 0.28);
---border-subtle: rgba(101, 133, 76, 0.15);
---border-input: #364929;
+--bg-main: #0c0e0b;
+--bg-surface: #141812;
+--bg-card: #1c2219;
+--bg-input-focus: #181e15;
+--border-primary: transparent;
+--border-subtle: rgba(132, 204, 22, 0.06);
+--border-input: rgba(132, 204, 22, 0.12);
 --text-main: #ecfccb;
 --text-muted: #849a73;
---accent-main: #4d7c0f;
---accent-hover: #65a30d;
---accent-soft: rgba(77, 124, 15, 0.22);
---accent-text: #84cc16;
---banner-grad: rgba(77, 124, 15, 0.25);
---grid-dot: rgba(132, 204, 22, 0.08);
---scroll-track: #070a06;
---scroll-thumb: #2e4021;
+--accent-main: #4a6337;
+--accent-hover: #5b7844;
+--accent-soft: rgba(91, 120, 68, 0.20);
+--accent-text: #98b880;
+--banner-grad: transparent;
+--grid-dot: rgba(132, 204, 22, 0.05);
+--scroll-track: #0c0e0b;
+--scroll-thumb: #263120;
 }
 /* 5. FLAMENGO (VERMELHO E PRETO) */
 [data-theme="flamengo"] {
---bg-main: #0a0607;
---bg-surface: #130b0d;
---bg-card: #1c1013;
---border-primary: rgba(225, 29, 72, 0.25);
---border-subtle: rgba(225, 29, 72, 0.12);
---border-input: #4c1117;
+--bg-main: #0d090a;
+--bg-surface: #161012;
+--bg-card: #201619;
+--bg-input-focus: #1a1214;
+--border-primary: transparent;
+--border-subtle: rgba(225, 29, 72, 0.06);
+--border-input: rgba(225, 29, 72, 0.14);
 --text-main: #fff1f2;
 --text-muted: #a17178;
---accent-main: #c91424;
---accent-hover: #e11d48;
---accent-soft: rgba(201, 20, 36, 0.20);
---accent-text: #ff4d5e;
---banner-grad: rgba(201, 20, 36, 0.25);
---grid-dot: rgba(225, 29, 72, 0.10);
---scroll-track: #0a0607;
---scroll-thumb: #3f1116;
+--accent-main: #b91c1c;
+--accent-hover: #dc2626;
+--accent-soft: rgba(185, 28, 28, 0.18);
+--accent-text: #f87171;
+--banner-grad: transparent;
+--grid-dot: rgba(225, 29, 72, 0.06);
+--scroll-track: #0d090a;
+--scroll-thumb: #331418;
 }
+/* Remoção global de bordas e aspectos de IA */
 *, ::before, ::after {
-border-color: var(--border-primary);
+border-color: transparent;
+}
+.border,
+.border-2,
+.border-t,
+.border-b,
+.border-l,
+.border-r,
+.border-l-2,
+.border-tactical-border,
+.border-tactical-subtle,
+.border-tactical-accent,
+.border-white\/10,
+.border-white\/15,
+.border-white\/20,
+.border-white\/25 {
+border-color: transparent !important;
+border-width: 0 !important;
+}
+.divide-y > :not([hidden]) ~ :not([hidden]) {
+border-top-width: 1px !important;
+border-color: var(--border-subtle) !important;
+}
+/* Geometria reta e sóbria inspirada nas telas de referência */
+.rounded-3xl,
+.rounded-2xl,
+.rounded-xl,
+.rounded-lg,
+.rounded-md {
+border-radius: 4px !important;
+}
+.shadow-2xl,
+.shadow-xl,
+.shadow-lg,
+.shadow-md,
+.shadow-sm,
+.shadow-inner {
+box-shadow: none !important;
 }
 body {
 background-color: var(--bg-main);
@@ -164,10 +207,10 @@ background-color: var(--accent-soft) !important;
 color: var(--accent-text) !important;
 }
 .theme-accent-border {
-border-color: var(--accent-main) !important;
+border-color: transparent !important;
 }
 .brand-header-banner {
-background: linear-gradient(to right, var(--banner-grad), transparent) !important;
+background: var(--bg-surface) !important;
 }
 /* Ajustes de contraste para Temas Claros */
 [data-theme="pink"] .text-white:not(.keep-white),
@@ -228,130 +271,164 @@ background-image: var(--theme-custom-bg, url('chibi-nezuko-kamado-demon-slayer-d
 aside#sidebar,
 header,
 .bg-tactical-surface {
-backdrop-filter: blur(12px);
--webkit-backdrop-filter: blur(12px);
-transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+background-color: var(--bg-surface) !important;
+transition: background-color 0.2s ease;
 }
 .module-section {
-animation: fadeSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+animation: fadeSlideUp 0.2s ease-out;
 }
 @keyframes fadeSlideUp {
-from { opacity: 0; transform: translateY(12px) scale(0.99); }
-to { opacity: 1; transform: translateY(0) scale(1); }
+from { opacity: 0; transform: translateY(4px); }
+to { opacity: 1; transform: translateY(0); }
 }
-/* Efeito de elevação e brilho nos cards */
 .bg-tactical-surface {
 position: relative;
 }
-.bg-tactical-surface:hover {
-box-shadow: 0 12px 32px -8px var(--accent-soft), 0 0 1px 1px var(--border-primary);
-}
-/* Card interativo com efeito 3D suave */
-.interactive-card {
-transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease;
-}
+.bg-tactical-surface:hover,
 .interactive-card:hover {
-transform: translateY(-3px);
-border-color: var(--accent-main) !important;
-box-shadow: 0 14px 30px -10px var(--accent-soft);
-}
-/* Efeito Shimmer (Brilho Corrente) nas Barras de Progresso */
-@keyframes progressShimmer {
-0% { background-position: -200% 0; }
-100% { background-position: 200% 0; }
+transform: none !important;
+box-shadow: none !important;
+border-color: transparent !important;
 }
 .progress-shimmer {
-background: linear-gradient(
-90deg,
-var(--accent-main) 0%,
-var(--accent-hover) 45%,
-#ffffff 50%,
-var(--accent-hover) 55%,
-var(--accent-main) 100%
-);
-background-size: 200% 100%;
-animation: progressShimmer 3.5s infinite linear;
-box-shadow: 0 0 12px var(--accent-soft);
+background: var(--accent-text) !important;
+animation: none !important;
+box-shadow: none !important;
 }
-/* Luz ambiente flutuante de fundo */
 #ambientGlow {
-position: fixed;
-top: -120px;
-right: -120px;
-width: 420px;
-height: 420px;
-border-radius: 9999px;
-background: radial-gradient(circle, var(--accent-soft) 0%, transparent 70%);
-filter: blur(55px);
-pointer-events: none;
-z-index: 0;
-animation: floatGlow 8s ease-in-out infinite alternate;
+display: none !important;
 }
-@keyframes floatGlow {
-0% { transform: translate(0, 0) scale(1); }
-100% { transform: translate(-40px, 35px) scale(1.12); }
-}
+/* ==========================================
+MENU DE NAVEGAÇÃO LATERAL AUTO-RETRÁTIL
+========================================== */
 .nav-btn {
 position: relative;
 overflow: hidden;
+border-radius: 0 !important;
+border-left: 3px solid transparent !important;
+transition: background-color 0.15s ease, color 0.15s ease;
 }
 .nav-btn:hover {
-transform: translateX(4px);
+transform: none !important;
+background-color: rgba(255, 255, 255, 0.04) !important;
 }
-button:active:not(:disabled) {
-transform: scale(0.96);
+.nav-btn.nav-active {
+border-left: 3px solid var(--accent-text) !important;
+background-color: rgba(255, 255, 255, 0.05) !important;
+color: var(--text-main) !important;
 }
-.module-section {
-animation: fadeSlideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+[data-theme="pink"] .nav-btn:hover,
+[data-theme="blue"] .nav-btn:hover {
+background-color: var(--accent-soft) !important;
 }
-@keyframes fadeSlideUp {
-from { opacity: 0; transform: translateY(10px); }
-to { opacity: 1; transform: translateY(0); }
+[data-theme="pink"] .nav-btn.nav-active,
+[data-theme="blue"] .nav-btn.nav-active {
+border-left: 3px solid var(--accent-main) !important;
+background-color: var(--accent-soft) !important;
+color: var(--text-main) !important;
 }
-.bg-tactical-surface:hover {
-box-shadow: 0 10px 28px -8px var(--accent-soft);
+@media (min-width: 768px) {
+aside#sidebar {
+position: fixed !important;
+top: 0;
+left: 0;
+height: 100vh;
+width: 64px;
+z-index: 50;
+overflow-x: hidden;
+transition: width 0.22s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.22s ease !important;
 }
-.nav-btn {
-position: relative;
-overflow: hidden;
+aside#sidebar.sidebar-expanded {
+width: 260px;
+box-shadow: 8px 0 28px rgba(0, 0, 0, 0.55) !important;
 }
-.nav-btn:hover {
-transform: translateX(3px);
+aside#sidebar:not(.sidebar-expanded) .sidebar-hide-collapsed {
+display: none !important;
 }
-button:active:not(:disabled) {
-transform: scale(0.97);
+aside#sidebar:not(.sidebar-expanded) .sidebar-show-collapsed {
+display: flex !important;
+}
+aside#sidebar.sidebar-expanded .sidebar-show-collapsed {
+display: none !important;
+}
+aside#sidebar:not(.sidebar-expanded) .nav-btn {
+justify-content: center !important;
+padding-left: 0 !important;
+padding-right: 0 !important;
+}
+aside#sidebar:not(.sidebar-expanded) .nav-btn .nav-item-inner {
+justify-content: center !important;
+gap: 0 !important;
+}
+aside#sidebar:not(.sidebar-expanded) #sidebarBrandHeader {
+justify-content: center !important;
+padding-left: 0 !important;
+padding-right: 0 !important;
+}
+#mainContentWrapper {
+padding-left: 64px;
+}
 }
 [data-theme="pink"] aside#sidebar,
 [data-theme="pink"] header,
 [data-theme="pink"] .bg-tactical-surface {
-background-color: rgba(255, 255, 255, 0.84) !important;
+background-color: rgba(255, 255, 255, 0.94) !important;
 }
 [data-theme="blue"] aside#sidebar,
 [data-theme="blue"] header,
 [data-theme="blue"] .bg-tactical-surface {
-background-color: rgba(255, 255, 255, 0.86) !important;
+background-color: rgba(255, 255, 255, 0.94) !important;
 }
-[data-theme="dark"] .bg-tactical-surface,
-[data-theme="military"] .bg-tactical-surface,
-[data-theme="flamengo"] .bg-tactical-surface {
-background-color: color-mix(in srgb, var(--bg-surface) 88%, transparent) !important;
+input[type="checkbox"] {
+accent-color: var(--accent-main);
+}
+[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="military"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="flamengo"] input[type="date"]::-webkit-calendar-picker-indicator {
+filter: invert(0.75);
+cursor: pointer;
 }
 input:not([type="checkbox"]):not([type="file"]):not([type="color"]),
 select,
 textarea,
-.rich-editor {
-border: 1px solid var(--border-input) !important;
+.rich-editor,
+.subtopic-dropdown-trigger {
+border: none !important;
 background-color: var(--bg-main) !important;
 color: var(--text-main) !important;
-transition: border-color 0.2s ease, box-shadow 0.2s ease;
+border-radius: 3px !important;
+transition: background-color 0.15s ease;
+}
+.bg-tactical-bg input:not([type="checkbox"]):not([type="file"]):not([type="color"]),
+.bg-tactical-bg select,
+.bg-tactical-bg textarea,
+.bg-tactical-bg .subtopic-dropdown-trigger,
+[class*="bg-tactical-bg/"] input:not([type="checkbox"]):not([type="file"]):not([type="color"]),
+[class*="bg-tactical-bg/"] select {
+background-color: var(--bg-card) !important;
 }
 input:not([type="checkbox"]):not([type="file"]):not([type="color"]):focus,
 select:focus,
 textarea:focus,
-.rich-editor:focus {
-border-color: var(--accent-main) !important;
-box-shadow: 0 0 0 3px var(--accent-soft) !important;
+.rich-editor:focus,
+.subtopic-dropdown-trigger:focus {
+border: none !important;
+background-color: var(--bg-input-focus, var(--bg-card)) !important;
+box-shadow: none !important;
 outline: none !important;
+}
+.bg-tactical-bg input:not([type="checkbox"]):not([type="file"]):not([type="color"]):focus,
+.bg-tactical-bg select:focus,
+.bg-tactical-bg textarea:focus,
+[class*="bg-tactical-bg/"] input:not([type="checkbox"]):not([type="file"]):not([type="color"]):focus,
+[class*="bg-tactical-bg/"] select:focus {
+background-color: var(--bg-surface) !important;
+}
+.subtopic-dropdown-panel {
+background-color: var(--bg-card) !important;
+border: none !important;
+border-radius: 4px !important;
+box-shadow: 0 14px 32px rgba(0, 0, 0, 0.72) !important;
 }
 .rich-editor:empty:before {
 content: attr(data-placeholder);
@@ -368,7 +445,7 @@ background: var(--scroll-track);
 }
 ::-webkit-scrollbar-thumb {
 background: var(--scroll-thumb);
-border-radius: 9999px;
+border-radius: 3px;
 }
 .perspective-1000 {
 perspective: 1000px;
@@ -461,22 +538,16 @@ pointer-events: none;
 100% { opacity: 0; transform: scaleX(2.2); }
 }
 .netflix-profile-card {
-transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+transition: transform 0.2s ease;
 }
 .netflix-profile-card:hover .netflix-avatar-box {
-transform: scale(1.08);
-border-color: #ffffff !important;
-box-shadow: 0 18px 40px -10px rgba(0, 0, 0, 0.85), 0 0 28px rgba(229, 9, 20, 0.35);
+transform: scale(1.04);
 }
 .netflix-profile-card:hover .netflix-profile-name {
 color: #ffffff !important;
 }
-@keyframes pulse-border {
-0%, 100% { border-color: var(--accent-main); box-shadow: 0 0 10px var(--accent-soft); }
-50% { border-color: var(--accent-hover); box-shadow: 0 0 16px var(--accent-soft); }
-}
 .timer-active-glow {
-animation: pulse-border 2s infinite;
+background-color: var(--bg-card);
 }
 </style>
 </head>
@@ -643,31 +714,31 @@ Salvar Chaves
 <video id="pipVideo" autoplay="" muted="" class="hidden"></video>
 <!-- SIDEBAR BACKDROP MOBILE -->
 <div id="mobileSidebarBackdrop" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-black/70 z-40 hidden md:hidden backdrop-blur-sm"></div>
-<!-- SIDEBAR -->
-<aside id="sidebar" class="fixed md:sticky top-0 left-0 z-50 h-screen w-72 bg-tactical-surface border-r border-tactical-border flex flex-col transition-transform duration-300 -translate-x-full md:translate-x-0 shrink-0 shadow-xl md:shadow-none">
+<!-- SIDEBAR AUTO-RETRÁTIL -->
+<aside id="sidebar" onmouseenter="expandSidebar()" onmousemove="onSidebarMouseMove()" onmouseleave="collapseSidebar()" class="sidebar-collapsed fixed md:fixed top-0 left-0 z-50 h-screen w-72 md:w-16 bg-tactical-surface flex flex-col transition-all duration-200 -translate-x-full md:translate-x-0 shrink-0">
 <!-- Brand Header -->
-<div class="brand-header-banner p-5 border-b border-tactical-border flex items-center justify-between">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-xl bg-tactical-accent flex items-center justify-center shadow-lg border border-white/20">
-<i data-lucide="book-open" class="w-5 h-5 text-white keep-white"></i>
+<div id="sidebarBrandHeader" class="brand-header-banner px-4 py-4 flex items-center justify-between">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-9 h-9 rounded theme-accent-bg flex items-center justify-center shrink-0">
+<i data-lucide="shield" class="w-5 h-5 text-white keep-white"></i>
 </div>
-<div>
-<h1 class="font-extrabold text-lg tracking-wide text-white leading-none">Organize</h1>
-<span class="text-[10px] font-mono theme-accent-text tracking-wider uppercase">estudos</span>
+<div class="sidebar-hide-collapsed min-w-0">
+<h1 class="font-extrabold text-base tracking-wide text-white leading-none truncate">ORGANIZE</h1>
+<span class="text-[10px] font-mono theme-accent-text tracking-wider uppercase">Plataforma Tática</span>
 </div>
 </div>
 <button onclick="toggleMobileSidebar()" class="md:hidden text-slate-400 hover:text-white p-1">
 <i data-lucide="x" class="w-5 h-5"></i>
 </button>
 </div>
-<!-- Google Drive Sync Status Banner -->
-<div class="px-4 py-2.5 border-b border-tactical-border bg-tactical-card/60 flex items-center justify-between">
+<!-- Google Drive Sync Status Banner (Visível quando expandido) -->
+<div class="sidebar-hide-collapsed px-4 py-2 bg-tactical-card/60 flex items-center justify-between">
 <div class="flex items-center gap-2 min-w-0">
 <i data-lucide="cloud" id="gdriveStatusIcon" class="w-4 h-4 theme-accent-text shrink-0"></i>
 <span id="gdriveStatusText" class="text-[11px] font-mono text-slate-300 truncate">Drive Desconectado</span>
 </div>
 <div class="flex items-center gap-1 shrink-0">
-<button type="button" onclick="handleDriveAuthClick()" id="sidebarDriveConnectBtn" title="Conectar / Desconectar Google Drive" class="px-2 py-1 rounded-lg theme-accent-soft-bg text-[10px] font-mono font-bold transition">
+<button type="button" onclick="handleDriveAuthClick()" id="sidebarDriveConnectBtn" title="Conectar / Desconectar Google Drive" class="px-2 py-1 rounded theme-accent-soft-bg text-[10px] font-mono font-bold transition">
 Conectar
 </button>
 <button type="button" onclick="openModal('modalGDriveConfig')" title="Configurar Chaves do Google Drive" class="p-1 rounded hover:bg-tactical-surface text-slate-400 hover:theme-accent-text transition">
@@ -675,12 +746,12 @@ Conectar
 </button>
 </div>
 </div>
-<!-- Edital Alvo (Múltiplos Perfis Isolados - Grid Corrigida) -->
-<div class="p-3.5 border-b border-tactical-border bg-tactical-card/40">
-<div class="p-3 rounded-xl bg-tactical-bg/90 border border-tactical-border space-y-2.5 shadow-inner">
+<!-- Edital Alvo (Visível quando expandido) -->
+<div class="sidebar-hide-collapsed p-3 bg-tactical-card/30">
+<div class="p-2.5 rounded bg-tactical-bg/90 space-y-2">
 <div class="flex items-center justify-between gap-2">
 <div class="flex items-center gap-1.5 min-w-0">
-<span class="w-2 h-2 rounded-full bg-tactical-accent animate-pulse shrink-0"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-tactical-accentText shrink-0"></span>
 <span class="font-mono text-[10px] uppercase tracking-wider text-slate-400 truncate">Perfil / Edital Alvo</span>
 </div>
 <span id="sidebarGlobalProgressTxt" class="font-mono text-xs theme-accent-text font-extrabold shrink-0">0%</span>
@@ -689,156 +760,160 @@ Conectar
 <span id="targetExamName" class="hidden">Definir Edital Alvo</span>
 <div class="grid grid-cols-12 gap-1.5 items-center">
 <div class="col-span-9 min-w-0">
-<select id="profileSwitcherSelect" onchange="switchExamProfile(this.value)" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-bold truncate cursor-pointer"></select>
+<select id="profileSwitcherSelect" onchange="switchExamProfile(this.value)" class="w-full px-2.5 py-1.5 rounded text-xs font-bold truncate cursor-pointer"></select>
 </div>
 <div class="col-span-3 flex justify-end">
-<button type="button" onclick="openModal('modalEditTargetExam')" title="Gerenciar / Criar Novo Edital" class="w-full py-1.5 rounded-lg bg-tactical-card hover:bg-tactical-accent hover:text-white border border-tactical-border text-slate-300 transition flex items-center justify-center">
+<button type="button" onclick="openModal('modalEditTargetExam')" title="Gerenciar / Criar Novo Edital" class="w-full py-1.5 rounded bg-tactical-card hover:bg-tactical-accent hover:text-white text-slate-300 transition flex items-center justify-center">
 <i data-lucide="folder-plus" class="w-3.5 h-3.5"></i>
 </button>
 </div>
 </div>
-<div class="w-full h-2 bg-tactical-card rounded-full overflow-hidden p-0.5 border border-tactical-subtle">
-<div id="sidebarGlobalProgressBar" class="h-full rounded-full progress-shimmer transition-all duration-500" style="width: 0%"></div>
+<div class="w-full h-1.5 bg-tactical-card rounded-full overflow-hidden">
+<div id="sidebarGlobalProgressBar" class="h-full progress-shimmer transition-all duration-500" style="width: 0%"></div>
 </div>
 </div>
 </div>
 <!-- Módulos de Navegação -->
-<nav class="flex-1 overflow-y-auto p-3 space-y-1.5">
-<button onclick="switchTab('mod1')" id="nav-mod1" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all">
-<div class="flex items-center gap-3">
-<i data-lucide="list-tree" class="w-4 h-4"></i>
-<span>Edital Verticalizado</span>
-</div>
-<span id="badge-mod1" class="text-[11px] font-mono px-2 py-0.5 rounded-md bg-tactical-card text-slate-300">0%</span>
-</button>
-<button onclick="switchTab('mod2')" id="nav-mod2" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all">
-<div class="flex items-center gap-3">
-<i data-lucide="calendar-check-2" class="w-4 h-4"></i>
-<span>Agenda do Dia</span>
-</div>
-<span id="badge-mod2" class="text-[11px] font-mono px-2 py-0.5 rounded-md theme-accent-soft-bg font-semibold">0</span>
-</button>
-<button onclick="switchTab('mod3')" id="nav-mod3" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all">
-<div class="flex items-center gap-3">
-<i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-<span>Revisões Espaçadas</span>
-</div>
-<span id="badge-mod3" class="text-[11px] font-mono px-2 py-0.5 rounded-md theme-accent-soft-bg font-semibold">0</span>
-</button>
-<button onclick="switchTab('mod4')" id="nav-mod4" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all">
-<div class="flex items-center gap-3">
-<i data-lucide="bar-chart-3" class="w-4 h-4"></i>
-<span>Métricas & Questões</span>
+<nav class="flex-1 overflow-y-auto py-2 space-y-0.5">
+<button onclick="switchTab('mod7')" id="nav-mod7" title="Dashboard" class="nav-btn w-full flex items-center justify-between px-3.5 py-3 text-sm font-medium transition-all">
+<div class="nav-item-inner flex items-center gap-3 min-w-0">
+<i data-lucide="home" class="w-5 h-5 shrink-0"></i>
+<span class="sidebar-hide-collapsed truncate">Dashboard</span>
 </div>
 </button>
-<button onclick="switchTab('mod5')" id="nav-mod5" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all">
-<div class="flex items-center gap-3">
-<i data-lucide="book-x" class="w-4 h-4"></i>
-<span>Caderno de Erros</span>
+<button onclick="switchTab('mod1')" id="nav-mod1" title="Edital Verticalizado" class="nav-btn w-full flex items-center justify-between px-3.5 py-3 text-sm font-medium transition-all">
+<div class="nav-item-inner flex items-center gap-3 min-w-0">
+<i data-lucide="list-tree" class="w-5 h-5 shrink-0"></i>
+<span class="sidebar-hide-collapsed truncate">Edital Verticalizado</span>
 </div>
-<span id="badge-mod5" class="text-[11px] font-mono px-2 py-0.5 rounded-md theme-accent-soft-bg font-semibold">0</span>
+<span id="badge-mod1" class="sidebar-hide-collapsed text-[10px] font-mono px-1.5 py-0.5 rounded bg-tactical-card text-slate-300">0%</span>
 </button>
-<button onclick="switchTab('mod6')" id="nav-mod6" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all">
-<div class="flex items-center gap-3">
-<i data-lucide="timer" class="w-4 h-4"></i>
-<span>Cronômetro</span>
+<button onclick="switchTab('mod2')" id="nav-mod2" title="Agenda do Dia" class="nav-btn w-full flex items-center justify-between px-3.5 py-3 text-sm font-medium transition-all">
+<div class="nav-item-inner flex items-center gap-3 min-w-0">
+<i data-lucide="calendar-check-2" class="w-5 h-5 shrink-0"></i>
+<span class="sidebar-hide-collapsed truncate">Agenda do Dia</span>
+</div>
+<span id="badge-mod2" class="sidebar-hide-collapsed text-[10px] font-mono px-1.5 py-0.5 rounded theme-accent-soft-bg font-semibold">0</span>
+</button>
+<button onclick="switchTab('mod3')" id="nav-mod3" title="Revisões Espaçadas" class="nav-btn w-full flex items-center justify-between px-3.5 py-3 text-sm font-medium transition-all">
+<div class="nav-item-inner flex items-center gap-3 min-w-0">
+<i data-lucide="rotate-ccw" class="w-5 h-5 shrink-0"></i>
+<span class="sidebar-hide-collapsed truncate">Revisões Espaçadas</span>
+</div>
+<span id="badge-mod3" class="sidebar-hide-collapsed text-[10px] font-mono px-1.5 py-0.5 rounded theme-accent-soft-bg font-semibold">0</span>
+</button>
+<button onclick="switchTab('mod4')" id="nav-mod4" title="Métricas & Questões" class="nav-btn w-full flex items-center justify-between px-3.5 py-3 text-sm font-medium transition-all">
+<div class="nav-item-inner flex items-center gap-3 min-w-0">
+<i data-lucide="bar-chart-3" class="w-5 h-5 shrink-0"></i>
+<span class="sidebar-hide-collapsed truncate">Métricas & Questões</span>
 </div>
 </button>
-<button onclick="switchTab('mod7')" id="nav-mod7" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all">
-<div class="flex items-center gap-3">
-<i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-<span>Dashboard</span>
+<button onclick="switchTab('mod5')" id="nav-mod5" title="Caderno de Erros" class="nav-btn w-full flex items-center justify-between px-3.5 py-3 text-sm font-medium transition-all">
+<div class="nav-item-inner flex items-center gap-3 min-w-0">
+<i data-lucide="book-x" class="w-5 h-5 shrink-0"></i>
+<span class="sidebar-hide-collapsed truncate">Caderno de Erros</span>
+</div>
+<span id="badge-mod5" class="sidebar-hide-collapsed text-[10px] font-mono px-1.5 py-0.5 rounded theme-accent-soft-bg font-semibold">0</span>
+</button>
+<button onclick="switchTab('mod6')" id="nav-mod6" title="Cronômetro" class="nav-btn w-full flex items-center justify-between px-3.5 py-3 text-sm font-medium transition-all">
+<div class="nav-item-inner flex items-center gap-3 min-w-0">
+<i data-lucide="timer" class="w-5 h-5 shrink-0"></i>
+<span class="sidebar-hide-collapsed truncate">Cronômetro</span>
 </div>
 </button>
-<button onclick="switchTab('mod8')" id="nav-mod8" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all">
-<div class="flex items-center gap-3">
-<i data-lucide="layout-grid" class="w-4 h-4"></i>
-<span>Plataformas</span>
+<button onclick="switchTab('mod8')" id="nav-mod8" title="Plataformas" class="nav-btn w-full flex items-center justify-between px-3.5 py-3 text-sm font-medium transition-all">
+<div class="nav-item-inner flex items-center gap-3 min-w-0">
+<i data-lucide="layout-grid" class="w-5 h-5 shrink-0"></i>
+<span class="sidebar-hide-collapsed truncate">Plataformas</span>
 </div>
-<span id="badge-mod8" class="text-[11px] font-mono px-2 py-0.5 rounded-md theme-accent-soft-bg font-semibold">3</span>
+<span id="badge-mod8" class="sidebar-hide-collapsed text-[10px] font-mono px-1.5 py-0.5 rounded theme-accent-soft-bg font-semibold">3</span>
 </button>
 </nav>
-<!-- Sidebar Backup Footer -->
-<div class="p-4 border-t border-tactical-border bg-tactical-bg/60 space-y-2">
+<!-- Ícone compacto de rodapé quando retraído -->
+<div class="sidebar-show-collapsed hidden py-3 items-center justify-center text-slate-400">
+<i data-lucide="database" class="w-4 h-4"></i>
+</div>
+<!-- Sidebar Backup Footer (Visível quando expandido) -->
+<div class="sidebar-hide-collapsed p-3 bg-tactical-bg/50 space-y-2">
 <div class="grid grid-cols-2 gap-2">
-<button type="button" onclick="exportDataJSON()" class="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-medium text-slate-300 transition cursor-pointer">
+<button type="button" onclick="exportDataJSON()" class="flex items-center justify-center gap-1.5 px-3 py-2 rounded bg-tactical-card hover:bg-tactical-surface text-xs font-medium text-slate-300 transition cursor-pointer">
 <i data-lucide="download" class="w-3.5 h-3.5 theme-accent-text"></i> Exportar
 </button>
-<button type="button" onclick="triggerImportFile()" class="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-medium text-slate-300 transition cursor-pointer">
+<button type="button" onclick="triggerImportFile()" class="flex items-center justify-center gap-1.5 px-3 py-2 rounded bg-tactical-card hover:bg-tactical-surface text-xs font-medium text-slate-300 transition cursor-pointer">
 <i data-lucide="upload" class="w-3.5 h-3.5 theme-accent-text"></i> Importar
 </button>
 <input type="file" id="importJsonInput" accept=".json,application/json" class="hidden" onchange="importDataJSON(event)">
 </div>
-<button type="button" onclick="syncDriveNow(false)" class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg theme-accent-soft-bg border border-tactical-border text-xs font-semibold transition">
+<button type="button" onclick="syncDriveNow(false)" class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded theme-accent-soft-bg text-xs font-semibold transition">
 <i data-lucide="cloud-upload" class="w-3.5 h-3.5"></i> Sincronizar Google Drive
 </button>
-<button type="button" onclick="openResetModal()" class="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-tactical-card text-[11px] font-mono text-slate-400 hover:text-white transition">
+<button type="button" onclick="openResetModal()" class="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded hover:bg-tactical-card text-[11px] font-mono text-slate-400 hover:text-white transition">
 <i data-lucide="refresh-cw" class="w-3 h-3"></i> Restaurar Dados
 </button>
 </div>
 </aside>
 <!-- WRAPPER CONTEÚDO -->
-<div class="flex-1 flex flex-col min-w-0">
-<!-- CABEÇALHO -->
-<header class="sticky top-0 z-30 bg-tactical-surface/90 backdrop-blur-md border-b border-tactical-border px-4 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+<div id="mainContentWrapper" class="flex-1 flex flex-col min-w-0">
+<!-- CABEÇALHO INSPIRADO NAS IMAGENS DE DESIGN -->
+<header class="sticky top-0 z-30 bg-tactical-surface px-4 lg:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3">
 <div class="flex items-center gap-3">
-<button onclick="toggleMobileSidebar()" class="md:hidden p-2 rounded-lg bg-tactical-card border border-tactical-border text-slate-300 hover:text-white">
+<button onclick="toggleMobileSidebar()" class="md:hidden p-2 rounded bg-tactical-card text-slate-300 hover:text-white">
 <i data-lucide="menu" class="w-5 h-5"></i>
 </button>
 <div>
-<h2 id="headerModuleTitle" class="text-lg sm:text-xl font-bold text-white tracking-tight">Dashboard</h2>
+<h2 id="headerModuleTitle" class="text-sm sm:text-base font-medium text-slate-200 tracking-wide">Dashboard</h2>
 </div>
 </div>
 <div class="flex items-center gap-2 sm:gap-3 ml-auto">
-<!-- Mini Widget do Cronômetro com suporte a PiP -->
-<div id="miniTimerWidget" class="flex items-center gap-2 bg-tactical-bg border border-tactical-border px-3 py-1.5 rounded-xl transition-all">
-<i data-lucide="clock" class="w-4 h-4 theme-accent-text hidden sm:inline"></i>
-<div class="hidden md:block text-left">
-<div id="miniTimerLabel" class="text-[10px] font-mono text-slate-400 max-w-[100px] truncate">Cronômetro</div>
+<!-- Mini Widget do Cronômetro estilo Barra Superior Tática -->
+<div id="miniTimerWidget" class="flex items-center gap-2.5 px-2.5 py-1 transition-all">
+<div class="hidden lg:block text-right pr-1">
+<div id="miniTimerLabel" class="text-[10px] font-mono text-slate-400 max-w-[110px] truncate">Cronômetro</div>
 <div id="miniTimerModality" class="text-[9px] uppercase tracking-wider theme-accent-text font-semibold">Teoria/Questões</div>
 </div>
-<div id="miniTimerDisplay" class="font-mono text-sm sm:text-base font-bold text-white tracking-wider px-2 py-0.5 bg-tactical-card rounded-lg border border-tactical-subtle">
+<button onclick="toggleGlobalTimer()" id="miniTimerPlayBtn" title="Iniciar / Pausar" class="p-1.5 rounded text-slate-300 hover:text-white hover:bg-tactical-card transition">
+<i data-lucide="play" class="w-4 h-4"></i>
+</button>
+<button onclick="resetGlobalTimer()" title="Zerar Cronômetro" class="p-1.5 rounded text-slate-400 hover:text-white hover:bg-tactical-card transition hidden sm:inline-flex">
+<i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+</button>
+<div id="miniTimerDisplay" class="font-mono text-sm sm:text-base font-semibold text-white tracking-wider px-1.5">
 00:00:00
 </div>
-<button onclick="toggleGlobalTimer()" id="miniTimerPlayBtn" title="Iniciar / Pausar" class="p-1.5 rounded-lg bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white transition">
-<i data-lucide="play" class="w-3.5 h-3.5"></i>
-</button>
-<button onclick="togglePictureInPicture()" title="Picture-in-Picture (Janela Flutuante)" class="p-1.5 rounded-lg bg-tactical-card hover:bg-tactical-surface text-slate-300 border border-tactical-border transition">
+<button onclick="togglePictureInPicture()" title="Picture-in-Picture (Janela Flutuante)" class="p-1.5 rounded text-slate-400 hover:text-white hover:bg-tactical-card transition">
 <i data-lucide="picture-in-picture-2" class="w-3.5 h-3.5"></i>
 </button>
-<button onclick="switchTab('mod6')" title="Abrir Cronômetro" class="p-1.5 rounded-lg bg-tactical-card hover:bg-tactical-surface text-slate-300 border border-tactical-border transition">
-<i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+<button onclick="switchTab('mod6')" title="Abrir Cronômetro" class="p-1.5 rounded text-slate-400 hover:text-white hover:bg-tactical-card transition">
+<i data-lucide="maximize" class="w-3.5 h-3.5"></i>
 </button>
 </div>
 <!-- Seletor de Temas + Imagem de Fundo -->
 <div class="flex items-center gap-1.5">
-<i data-lucide="palette" class="w-4 h-4 theme-accent-text hidden sm:inline"></i>
-<select id="themeSelectDropdown" onchange="applyTheme(this.value)" class="px-2.5 py-2 rounded-xl bg-tactical-card border border-tactical-border text-xs font-semibold text-white cursor-pointer">
-<option value="dark">🌑 Escuro Tático</option>
-<option value="pink">🌸 Rosa Bebê & Nezuko</option>
-<option value="blue">💎 Azul Bebê & Branco</option>
-<option value="military">🪖 Verde Militar & Preto</option>
-<option value="flamengo">🔴⚫ Flamengo</option>
+<select id="themeSelectDropdown" onchange="applyTheme(this.value)" class="px-2.5 py-1.5 rounded bg-tactical-card text-xs font-medium text-slate-200 cursor-pointer">
+<option value="dark">Escuro Tático</option>
+<option value="military">Verde Militar</option>
+<option value="flamengo">Rubro-Negro</option>
+<option value="pink">Rosa & Branco</option>
+<option value="blue">Azul & Branco</option>
 </select>
-<button type="button" id="btnCustomNezukoBg" onclick="document.getElementById('nezukoCustomBgInput').click()" title="Escolher Imagem de Fundo para este Tema" class="p-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs theme-accent-text transition flex items-center gap-1">
+<button type="button" id="btnCustomNezukoBg" onclick="document.getElementById('nezukoCustomBgInput').click()" title="Escolher Imagem de Fundo para este Tema" class="p-1.5 rounded bg-tactical-card hover:bg-tactical-surface text-xs text-slate-300 hover:text-white transition flex items-center gap-1">
 <i data-lucide="image" class="w-4 h-4"></i>
 </button>
-<button type="button" id="btnRemoveCustomBg" onclick="clearCurrentThemeBg()" title="Remover Imagem de Fundo deste Tema" class="hidden p-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs text-slate-400 hover:theme-accent-text transition">
+<button type="button" id="btnRemoveCustomBg" onclick="clearCurrentThemeBg()" title="Remover Imagem de Fundo deste Tema" class="hidden p-1.5 rounded bg-tactical-card hover:bg-tactical-surface text-xs text-slate-400 hover:theme-accent-text transition">
 <i data-lucide="image-off" class="w-4 h-4"></i>
 </button>
 </div>
-<!-- Botão Trocar Perfil (Estilo Netflix) -->
-<button type="button" onclick="openNetflixProfileSwitcher()" title="Trocar de Perfil (Quem está estudando?)" class="pl-1.5 pr-3 py-1.5 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-bold text-white flex items-center gap-2 transition">
-<div id="headerNetflixAvatar" class="w-6 h-6 rounded-lg bg-gradient-to-br from-red-600 to-rose-900 flex items-center justify-center text-white keep-white font-black text-[11px]">
+<!-- Botão Trocar Perfil -->
+<button type="button" onclick="openNetflixProfileSwitcher()" title="Trocar de Perfil (Quem está estudando?)" class="pl-1.5 pr-2.5 py-1 rounded bg-tactical-card hover:bg-tactical-surface text-xs font-semibold text-white flex items-center gap-2 transition">
+<div id="headerNetflixAvatar" class="w-6 h-6 rounded bg-gradient-to-br from-red-600 to-rose-900 flex items-center justify-center text-white keep-white font-black text-[11px]">
 G
 </div>
 <span id="headerNetflixName" class="hidden sm:inline truncate max-w-[90px]">Gabriel</span>
-<i data-lucide="users" class="w-3.5 h-3.5 theme-accent-text"></i>
 </button>
 <!-- Botão Rápido Google Drive -->
-<button type="button" onclick="handleDriveAuthClick()" id="headerDriveBtn" class="px-3 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-white flex items-center gap-1.5 transition">
+<button type="button" onclick="handleDriveAuthClick()" id="headerDriveBtn" class="px-2.5 py-1.5 rounded bg-tactical-card hover:bg-tactical-surface text-xs font-medium text-slate-200 flex items-center gap-1.5 transition">
 <i data-lucide="cloud" class="w-4 h-4 theme-accent-text"></i>
-<span id="headerDriveBtnText" class="hidden sm:inline">Conectar Drive</span>
+<span id="headerDriveBtnText" class="hidden sm:inline">Drive</span>
 </button>
 </div>
 </header>
@@ -909,12 +984,26 @@ Grade Semanal (Segunda a Domingo)
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Disciplina</label>
 <select id="agendaInputSubject" onchange="renderAgendaSubtopicChecklist(true)" required class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
 </div>
-<div>
+<div class="relative" id="agendaSubtopicDropdownContainer">
 <div class="flex items-center justify-between mb-1">
 <label class="block text-xs font-mono uppercase text-slate-400">Assuntos (marque um ou vários)</label>
 <span id="agendaSubtopicCount" class="text-[10px] font-mono theme-accent-text">nenhum selecionado</span>
 </div>
-<div id="agendaInputSubtopicList" class="max-h-44 overflow-y-auto p-2.5 rounded-xl bg-tactical-bg border border-tactical-border space-y-0.5"></div>
+<button type="button" id="agendaSubtopicDropdownBtn" onclick="toggleSubtopicDropdown('agenda')" class="subtopic-dropdown-trigger w-full px-3.5 py-2 text-sm flex items-center justify-between gap-2 text-left cursor-pointer">
+<span id="agendaSubtopicDropdownLabel" class="truncate text-slate-400">Selecione os assuntos vistos...</span>
+<i data-lucide="chevron-down" id="agendaSubtopicDropdownIcon" class="w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200"></i>
+</button>
+<div id="agendaSubtopicDropdownPanel" class="subtopic-dropdown-panel hidden absolute left-0 right-0 top-full mt-1 z-40 overflow-hidden">
+<div class="p-2 bg-tactical-bg flex items-center gap-1.5">
+<div class="relative flex-1">
+<i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2"></i>
+<input type="text" id="agendaSubtopicSearchInput" oninput="filterSubtopicDropdown('agendaInputSubtopicList', this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();event.stopPropagation();}" placeholder="Filtrar assunto..." class="w-full pl-8 pr-2 py-1 text-xs">
+</div>
+<button type="button" onclick="selectAllSubtopicsInDropdown('agendaInputSubtopicList', true, 'onAgendaSubtopicToggle()')" class="px-2 py-1 rounded text-[10px] font-mono text-slate-300 hover:text-white bg-tactical-card">Todos</button>
+<button type="button" onclick="selectAllSubtopicsInDropdown('agendaInputSubtopicList', false, 'onAgendaSubtopicToggle()')" class="px-2 py-1 rounded text-[10px] font-mono text-slate-400 hover:text-white bg-tactical-card">Limpar</button>
+</div>
+<div id="agendaInputSubtopicList" class="max-h-56 overflow-y-auto p-2 space-y-0.5"></div>
+</div>
 </div>
 <div class="grid grid-cols-2 gap-2.5">
 <div>
@@ -1299,7 +1388,7 @@ Dominado
 <button type="button" onclick="selectTimerModality('Teoria/Questões')" id="modBtn-TeoriaQuestoes" class="modality-btn px-3 py-2.5 rounded-xl border border-tactical-accent bg-tactical-accent text-white keep-white text-xs font-semibold flex items-center justify-center gap-2 transition">
 <i data-lucide="book-open" class="w-4 h-4"></i> Teoria/Questões
 </button>
-<button type="button" onclick="selectTimerModality('Simulado')" id="modBtn-Simulado" class="modality-btn px-3 py-2.5 rounded-xl border border-tactical-border text-xs font-semibold flex items-center justify-center gap-2 transition text-slate-300">
+<button type="button" onclick="selectTimerModality('Simulado')" id="modBtn-Simulado" class="modality-btn px-3 py-2.5 rounded-xl bg-tactical-card hover:bg-tactical-bg border border-tactical-border text-xs font-semibold flex items-center justify-center gap-2 transition text-slate-300">
 <i data-lucide="file-check-2" class="w-4 h-4"></i> Simulado
 </button>
 </div>
@@ -1554,12 +1643,26 @@ Evolução da Redação
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Disciplina</label>
 <select id="studyRegSubject" onchange="onStudyRegSubjectChange()" class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
 </div>
-<div>
+<div class="relative" id="studyRegSubtopicDropdownContainer">
 <div class="flex items-center justify-between mb-1">
 <label class="block text-xs font-mono uppercase text-slate-400">Assuntos vistos</label>
 <span id="studyRegSubtopicCount" class="text-[10px] font-mono theme-accent-text">0 assuntos vistos</span>
 </div>
-<div id="studyRegSubtopicList" class="max-h-40 overflow-y-auto p-2.5 rounded-xl bg-tactical-bg border border-tactical-border space-y-0.5"></div>
+<button type="button" id="studyRegSubtopicDropdownBtn" onclick="toggleSubtopicDropdown('studyReg')" class="subtopic-dropdown-trigger w-full px-3.5 py-2 text-sm flex items-center justify-between gap-2 text-left cursor-pointer">
+<span id="studyRegSubtopicDropdownLabel" class="truncate text-slate-400">Selecione os assuntos vistos...</span>
+<i data-lucide="chevron-down" id="studyRegSubtopicDropdownIcon" class="w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200"></i>
+</button>
+<div id="studyRegSubtopicDropdownPanel" class="subtopic-dropdown-panel hidden absolute left-0 right-0 top-full mt-1 z-40 overflow-hidden">
+<div class="p-2 bg-tactical-bg flex items-center gap-1.5">
+<div class="relative flex-1">
+<i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2"></i>
+<input type="text" id="studyRegSubtopicSearchInput" oninput="filterSubtopicDropdown('studyRegSubtopicList', this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();event.stopPropagation();}" placeholder="Filtrar assunto..." class="w-full pl-8 pr-2 py-1 text-xs">
+</div>
+<button type="button" onclick="selectAllSubtopicsInDropdown('studyRegSubtopicList', true, 'onStudyRegSubtopicToggle()')" class="px-2 py-1 rounded text-[10px] font-mono text-slate-300 hover:text-white bg-tactical-card">Todos</button>
+<button type="button" onclick="selectAllSubtopicsInDropdown('studyRegSubtopicList', false, 'onStudyRegSubtopicToggle()')" class="px-2 py-1 rounded text-[10px] font-mono text-slate-400 hover:text-white bg-tactical-card">Limpar</button>
+</div>
+<div id="studyRegSubtopicList" class="max-h-52 overflow-y-auto p-2 space-y-0.5"></div>
+</div>
 </div>
 <div>
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Tempo estudado</label>
@@ -2768,8 +2871,8 @@ ${g.notes ? `<span class="text-slate-400 italic"> (${escapeHTML(g.notes)})</span
 <div class="flex flex-wrap items-center justify-between gap-2">
 <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono">
 ${showDate ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-slate-200">${formatDateBR(e.date)}</span>` : ''}
-${totalSec > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-white">⏱️ ${formatDurationSec(totalSec)}</span>` : ''}
-${qT > 0 ? `<span class="px-2 py-0.5 rounded theme-accent-soft-bg font-bold">🎯 ${qT} questões (${Math.round((qC / qT) * 100)}%)</span>` : ''}
+${totalSec > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-white">${formatDurationSec(totalSec)}</span>` : ''}
+${qT > 0 ? `<span class="px-2 py-0.5 rounded theme-accent-soft-bg font-bold">${qT} questões (${Math.round((qC / qT) * 100)}%)</span>` : ''}
 </div>
 <button type="button" data-link="${escapeHTML(e.linkId)}" onclick="deleteHistoryEntry(this.dataset.link)" title="Excluir do histórico (abate horas, questões e assuntos vistos)" class="p-1 text-slate-400 hover:theme-accent-text">
 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
@@ -2867,23 +2970,138 @@ function deleteHistoryEntry(linkId) {
     renderActiveModule();
     showToast('Registro excluído e valores abatidos!', 'info');
 }
+function normalizeSearchText(str) {
+    return String(str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
 function buildSubtopicChecklistHTML(subjectName, checkedIds, onchangeFn, inputClass) {
     const subj = appState.edital.find(s => s.name === subjectName);
-    const emptyMsg = '<div class="text-[11px] text-slate-400 font-mono px-1 py-1">Sem assuntos cadastrados para esta disciplina (será registrado como "Assunto Geral").</div>';
+    const emptyMsg = '<div class="text-[11px] text-slate-400 font-mono px-2 py-2">Sem assuntos cadastrados para esta disciplina (será registrado como "Assunto Geral").</div>';
     if (!subj) return emptyMsg;
     let html = '';
     subj.topics.forEach(t => {
         if (!t.subtopics.length) return;
-        html += `<div class="text-[10px] font-mono uppercase theme-accent-text font-bold pt-1.5">${escapeHTML(t.name)}</div>`;
+        let rowsHtml = '';
         t.subtopics.forEach(st => {
-            html += `<label class="flex items-center gap-2 text-xs text-slate-200 cursor-pointer py-0.5">
-<input type="checkbox" class="${inputClass} w-3.5 h-3.5 rounded" value="${escapeHTML(st.id)}" data-name="${escapeHTML(st.name)}" ${checkedIds.includes(st.id) ? 'checked' : ''} onchange="${onchangeFn}">
-<span class="${st.completed ? 'line-through text-slate-400' : ''}">${escapeHTML(st.name)}</span>
+            const searchStr = normalizeSearchText(`${t.name} ${st.name}`);
+            rowsHtml += `<label data-search="${escapeHTML(searchStr)}" class="subtopic-option-row flex items-center justify-between gap-2 text-xs text-slate-200 cursor-pointer px-2 py-1.5 rounded hover:bg-tactical-card transition">
+<div class="flex items-center gap-2.5 min-w-0">
+<input type="checkbox" class="${inputClass} w-3.5 h-3.5 rounded shrink-0" value="${escapeHTML(st.id)}" data-name="${escapeHTML(st.name)}" ${checkedIds.includes(st.id) ? 'checked' : ''} onchange="${onchangeFn}">
+<span class="${st.completed ? 'text-slate-400' : 'text-slate-100'} leading-snug">${escapeHTML(st.name)}</span>
+</div>
+${st.completed ? '<span class="text-[9px] font-mono theme-accent-text shrink-0">✓ Visto</span>' : ''}
 </label>`;
         });
+        html += `<div class="subtopic-topic-group space-y-0.5 pb-1">
+<div class="subtopic-group-header text-[10px] font-mono uppercase theme-accent-text font-bold px-2 pt-1.5 pb-0.5">${escapeHTML(t.name)}</div>
+${rowsHtml}
+</div>`;
     });
     return html || emptyMsg;
 }
+function updateSubtopicDropdownTriggerLabel(containerId, labelId, emptyText) {
+    const labelEl = document.getElementById(labelId);
+    if (!labelEl) return;
+    const checked = getCheckedSubtopics(containerId);
+    if (checked.length === 0) {
+        labelEl.textContent = emptyText || 'Selecione os assuntos vistos...';
+        labelEl.className = 'truncate text-slate-400';
+    } else if (checked.length === 1) {
+        labelEl.textContent = checked[0].name;
+        labelEl.className = 'truncate text-white font-medium';
+    } else {
+        labelEl.textContent = `${checked.length} assuntos: ${checked.map(c => c.name).join(', ')}`;
+        labelEl.className = 'truncate text-white font-medium';
+    }
+}
+function toggleSubtopicDropdown(kind) {
+    const map = {
+        agenda: { panel: 'agendaSubtopicDropdownPanel', icon: 'agendaSubtopicDropdownIcon', search: 'agendaSubtopicSearchInput', list: 'agendaInputSubtopicList' },
+        studyReg: { panel: 'studyRegSubtopicDropdownPanel', icon: 'studyRegSubtopicDropdownIcon', search: 'studyRegSubtopicSearchInput', list: 'studyRegSubtopicList' }
+    };
+    const cfg = map[kind];
+    if (!cfg) return;
+    const panel = document.getElementById(cfg.panel);
+    const icon = document.getElementById(cfg.icon);
+    if (!panel) return;
+    const willOpen = panel.classList.contains('hidden');
+    closeAllSubtopicDropdowns();
+    if (willOpen) {
+        panel.classList.remove('hidden');
+        if (icon) icon.classList.add('rotate-180');
+        const searchEl = document.getElementById(cfg.search);
+        if (searchEl) {
+            searchEl.value = '';
+            filterSubtopicDropdown(cfg.list, '');
+        }
+    }
+}
+function closeAllSubtopicDropdowns() {
+    ['agenda', 'studyReg'].forEach(k => {
+        const panel = document.getElementById(k === 'agenda' ? 'agendaSubtopicDropdownPanel' : 'studyRegSubtopicDropdownPanel');
+        const icon = document.getElementById(k === 'agenda' ? 'agendaSubtopicDropdownIcon' : 'studyRegSubtopicDropdownIcon');
+        if (panel) panel.classList.add('hidden');
+        if (icon) icon.classList.remove('rotate-180');
+    });
+}
+function filterSubtopicDropdown(listId, query) {
+    const box = document.getElementById(listId);
+    if (!box) return;
+    const q = normalizeSearchText(query);
+    const groups = box.querySelectorAll('.subtopic-topic-group');
+    let totalVisible = 0;
+    groups.forEach(group => {
+        let visibleCount = 0;
+        group.querySelectorAll('.subtopic-option-row').forEach(row => {
+            const rowText = normalizeSearchText(row.dataset.search || row.textContent || '');
+            const match = !q || rowText.includes(q);
+            row.classList.toggle('hidden', !match);
+            if (match) {
+                visibleCount++;
+                totalVisible++;
+            }
+        });
+        group.classList.toggle('hidden', visibleCount === 0);
+    });
+    let emptyEl = box.querySelector('.subtopic-filter-empty');
+    if (groups.length > 0 && totalVisible === 0) {
+        if (!emptyEl) {
+            emptyEl = document.createElement('div');
+            emptyEl.className = 'subtopic-filter-empty text-[11px] text-slate-400 font-mono px-2 py-3 text-center';
+            emptyEl.textContent = 'Nenhum assunto encontrado para este filtro.';
+            box.appendChild(emptyEl);
+        }
+        emptyEl.classList.remove('hidden');
+    } else if (emptyEl) {
+        emptyEl.classList.add('hidden');
+    }
+}
+function selectAllSubtopicsInDropdown(listId, checkState, onchangeCall) {
+    const box = document.getElementById(listId);
+    if (!box) return;
+    const selector = checkState
+        ? '.subtopic-option-row:not(.hidden) input[type="checkbox"]'
+        : '.subtopic-option-row input[type="checkbox"]';
+    box.querySelectorAll(selector).forEach(chk => {
+        chk.checked = Boolean(checkState);
+    });
+    if (onchangeCall === 'onAgendaSubtopicToggle()') onAgendaSubtopicToggle();
+    if (onchangeCall === 'onStudyRegSubtopicToggle()') onStudyRegSubtopicToggle();
+}
+document.addEventListener('click', (evt) => {
+    const agWrap = document.getElementById('agendaSubtopicDropdownContainer');
+    const srWrap = document.getElementById('studyRegSubtopicDropdownContainer');
+    if (agWrap && !agWrap.contains(evt.target)) {
+        document.getElementById('agendaSubtopicDropdownPanel')?.classList.add('hidden');
+        document.getElementById('agendaSubtopicDropdownIcon')?.classList.remove('rotate-180');
+    }
+    if (srWrap && !srWrap.contains(evt.target)) {
+        document.getElementById('studyRegSubtopicDropdownPanel')?.classList.add('hidden');
+        document.getElementById('studyRegSubtopicDropdownIcon')?.classList.remove('rotate-180');
+    }
+});
+document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape') closeAllSubtopicDropdowns();
+});
 function getCheckedSubtopics(containerId) {
     const box = document.getElementById(containerId);
     if (!box) return [];
@@ -2929,6 +3147,7 @@ function openStudyRegister(ctx) {
     subjSel.value = ctx.subjectName || names[0];
     document.getElementById('studyRegSubtopicList').innerHTML =
         buildSubtopicChecklistHTML(subjSel.value, ctx.subtopicIds || [], 'onStudyRegSubtopicToggle()', 'studyreg-sub-chk');
+    closeAllSubtopicDropdowns();
     writeHMS('studyRegH', 'studyRegM', 'studyRegS', ctx.seconds || 0);
     document.getElementById('studyRegCorrect').value = 0;
     document.getElementById('studyRegWrong').value = 0;
@@ -2942,12 +3161,15 @@ function onStudyRegSubjectChange() {
     const subjName = document.getElementById('studyRegSubject').value;
     document.getElementById('studyRegSubtopicList').innerHTML =
         buildSubtopicChecklistHTML(subjName, [], 'onStudyRegSubtopicToggle()', 'studyreg-sub-chk');
+    const searchEl = document.getElementById('studyRegSubtopicSearchInput');
+    if (searchEl) searchEl.value = '';
     onStudyRegSubtopicToggle();
 }
 function onStudyRegSubtopicToggle() {
     const n = getCheckedSubtopics('studyRegSubtopicList').length;
     const el = document.getElementById('studyRegSubtopicCount');
     if (el) el.textContent = `${n} assunto${n === 1 ? '' : 's'} visto${n === 1 ? '' : 's'}`;
+    updateSubtopicDropdownTriggerLabel('studyRegSubtopicList', 'studyRegSubtopicDropdownLabel', 'Selecione os assuntos vistos...');
     updateQSubtopicSelect('studyRegSubtopicList', 'studyRegQSubWrap', 'studyRegQSub');
 }
 function updateStudyRegPreview() {
@@ -2958,6 +3180,7 @@ function updateStudyRegPreview() {
 }
 function cancelStudyRegister() {
     studyRegCtx = null;
+    closeAllSubtopicDropdowns();
     closeModal('modalStudyRegister');
 }
 function finalizeReviewStage(rev, linkId) {
@@ -3049,6 +3272,7 @@ function confirmStudyRegister(e) {
     if (ctx.flow === 'timer') resetGlobalTimer();
 
     studyRegCtx = null;
+    closeAllSubtopicDropdowns();
     saveAppState();
     closeModal('modalStudyRegister');
     renderActiveModule();
@@ -3060,6 +3284,11 @@ function renderAgendaSubtopicChecklist(reset) {
     if (!box || !subjSel) return;
     const prevChecked = reset ? [] : getCheckedSubtopics('agendaInputSubtopicList').map(c => c.id);
     box.innerHTML = buildSubtopicChecklistHTML(subjSel.value, prevChecked, 'onAgendaSubtopicToggle()', 'agenda-sub-chk');
+    const searchEl = document.getElementById('agendaSubtopicSearchInput');
+    if (searchEl) {
+        if (reset) searchEl.value = '';
+        else if (searchEl.value) filterSubtopicDropdown('agendaInputSubtopicList', searchEl.value);
+    }
     onAgendaSubtopicToggle();
 }
 function onAgendaSubtopicToggle() {
@@ -3067,6 +3296,7 @@ function onAgendaSubtopicToggle() {
     const n = getCheckedSubtopics('agendaInputSubtopicList').length;
     const el = document.getElementById('agendaSubtopicCount');
     if (el) el.textContent = n > 0 ? `${n} selecionado${n === 1 ? '' : 's'}` : 'nenhum selecionado';
+    updateSubtopicDropdownTriggerLabel('agendaInputSubtopicList', 'agendaSubtopicDropdownLabel', 'Selecione os assuntos vistos...');
 }
 function openStudyRegisterForGoal(goalId) {
     const g = appState.agenda.find(item => item.id === goalId);
@@ -4012,15 +4242,39 @@ toast.style.opacity = '0';
 setTimeout(() => toast.remove(), 250);
 }, 3000);
 }
+let sidebarCollapseLockUntil = 0;
+function expandSidebar() {
+const sb = document.getElementById('sidebar');
+if (!sb || window.innerWidth < 768) return;
+sb.classList.remove('sidebar-collapsed');
+sb.classList.add('sidebar-expanded');
+}
+function onSidebarMouseMove() {
+const sb = document.getElementById('sidebar');
+if (!sb || window.innerWidth < 768) return;
+if (Date.now() < sidebarCollapseLockUntil) return;
+if (!sb.classList.contains('sidebar-expanded')) {
+expandSidebar();
+}
+}
+function collapseSidebar(fromTabSwitch = false) {
+const sb = document.getElementById('sidebar');
+if (!sb || window.innerWidth < 768) return;
+if (fromTabSwitch) sidebarCollapseLockUntil = Date.now() + 350;
+sb.classList.remove('sidebar-expanded');
+sb.classList.add('sidebar-collapsed');
+}
 function toggleMobileSidebar() {
 const sb = document.getElementById('sidebar');
 const backdrop = document.getElementById('mobileSidebarBackdrop');
 const isHidden = sb.classList.contains('-translate-x-full');
 if (isHidden) {
 sb.classList.remove('-translate-x-full');
+sb.classList.add('sidebar-expanded');
 backdrop.classList.remove('hidden');
 } else {
 sb.classList.add('-translate-x-full');
+sb.classList.remove('sidebar-expanded');
 backdrop.classList.add('hidden');
 }
 }
@@ -4040,16 +4294,20 @@ document.querySelectorAll('.module-section').forEach(sec => sec.classList.add('h
 const targetSec = document.getElementById(`sec-${tabId}`);
 if (targetSec) targetSec.classList.remove('hidden');
 document.querySelectorAll('.nav-btn').forEach(btn => {
-btn.className = 'nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-tactical-card/60';
+btn.className = 'nav-btn w-full flex items-center justify-between px-3.5 py-3 text-sm font-medium transition-all text-slate-400 hover:text-white';
 });
 const activeBtn = document.getElementById(`nav-${tabId}`);
 if (activeBtn) {
-activeBtn.className = 'nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all bg-tactical-accent text-white keep-white shadow-md';
+activeBtn.className = 'nav-btn nav-active w-full flex items-center justify-between px-3.5 py-3 text-sm font-semibold transition-all text-white';
 }
 document.getElementById('headerModuleTitle').textContent = MODULE_NAMES[tabId] || 'Organize';
 const sb = document.getElementById('sidebar');
-if (!sb.classList.contains('-translate-x-full') && window.innerWidth < 768) {
+if (window.innerWidth < 768) {
+if (sb && !sb.classList.contains('-translate-x-full')) {
 toggleMobileSidebar();
+}
+} else {
+collapseSidebar(true);
 }
 renderActiveModule();
 }
@@ -4172,7 +4430,7 @@ if (switcher && multiProfilesStore && multiProfilesStore.profiles) {
 switcher.innerHTML = Object.keys(multiProfilesStore.profiles).map(pid => {
 const p = multiProfilesStore.profiles[pid];
 const selected = pid === multiProfilesStore.activeProfileId ? 'selected' : '';
-return `<option value="${pid}" ${selected}>🎯 ${p.targetExamName || 'Edital'}</option>`;
+return `<option value="${pid}" ${selected}>${p.targetExamName || 'Edital'}</option>`;
 }).join('');
 }
 const todayPendingGoals = appState.agenda.filter(g => g.date === today && g.status !== 'Concluído').length;
@@ -4490,8 +4748,8 @@ function renderAgendaModule() {
 <p class="text-xs text-slate-300 mt-0.5">${escapeHTML(topics)}</p>
 ${secs > 0 || g.questionsTotal > 0 ? `
 <div class="flex flex-wrap items-center gap-2 mt-1.5">
-${secs > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-[10px] font-mono theme-accent-text">⏱️ ${formatDurationSec(secs)}</span>` : ''}
-${g.questionsTotal > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-[10px] font-mono text-white">🎯 ${g.questionsCorrect}/${g.questionsTotal} acertos</span>` : ''}
+${secs > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-[10px] font-mono theme-accent-text">${formatDurationSec(secs)}</span>` : ''}
+${g.questionsTotal > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-[10px] font-mono text-white">${g.questionsCorrect}/${g.questionsTotal} acertos</span>` : ''}
 </div>
 ` : ''}
 ${g.notes ? `<p class="text-[11px] text-slate-400 mt-1 italic">"${escapeHTML(g.notes)}"</p>` : ''}
@@ -4539,8 +4797,8 @@ function renderAgendaPreviousDaysHistory() {
 <i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${formatDateBR(dateStr)} ${dateStr === getTodayISO() ? '(Hoje)' : ''}
 </button>
 <div class="flex items-center gap-2 text-[11px] font-mono">
-${totalSec > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-white">⏱️ ${formatDurationSec(totalSec)}</span>` : ''}
-${totalQ > 0 ? `<span class="px-2 py-0.5 rounded theme-accent-soft-bg font-bold">🎯 ${totalQ} questões (${pctQ}%)</span>` : ''}
+${totalSec > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-white">${formatDurationSec(totalSec)}</span>` : ''}
+${totalQ > 0 ? `<span class="px-2 py-0.5 rounded theme-accent-soft-bg font-bold">${totalQ} questões (${pctQ}%)</span>` : ''}
 </div>
 </div>
 <div class="space-y-2">
@@ -4619,6 +4877,7 @@ function handleAddAgendaGoal(e) {
     });
     document.getElementById('agendaFilterDate').value = date;
     saveAppState();
+    closeAllSubtopicDropdowns();
     renderActiveModule();
     renderAgendaSubtopicChecklist(true);
     if (isDone) {
@@ -5084,11 +5343,11 @@ const btnSimulado = document.getElementById('modBtn-Simulado');
 const subjBox = document.getElementById('timerSubjectTopicBox');
 if (timerModality === 'Teoria/Questões') {
 if (btnTeoria) btnTeoria.className = 'modality-btn px-3 py-2.5 rounded-xl border border-tactical-accent bg-tactical-accent text-white keep-white text-xs font-semibold flex items-center justify-center gap-2 transition';
-if (btnSimulado) btnSimulado.className = 'modality-btn px-3 py-2.5 rounded-xl border border-tactical-border text-xs font-semibold flex items-center justify-center gap-2 transition text-slate-300';
+if (btnSimulado) btnSimulado.className = 'modality-btn px-3 py-2.5 rounded-xl bg-tactical-card hover:bg-tactical-bg border border-tactical-border text-xs font-semibold flex items-center justify-center gap-2 transition text-slate-300';
 if (subjBox) subjBox.classList.remove('hidden');
 } else {
 if (btnSimulado) btnSimulado.className = 'modality-btn px-3 py-2.5 rounded-xl border border-tactical-accent bg-tactical-accent text-white keep-white text-xs font-semibold flex items-center justify-center gap-2 transition';
-if (btnTeoria) btnTeoria.className = 'modality-btn px-3 py-2.5 rounded-xl border border-tactical-border text-xs font-semibold flex items-center justify-center gap-2 transition text-slate-300';
+if (btnTeoria) btnTeoria.className = 'modality-btn px-3 py-2.5 rounded-xl bg-tactical-card hover:bg-tactical-bg border border-tactical-border text-xs font-semibold flex items-center justify-center gap-2 transition text-slate-300';
 if (subjBox) subjBox.classList.add('hidden');
 }
 syncTimerContext();
@@ -5363,25 +5622,29 @@ ${iconBtn('trash-2', 'Excluir tópico e seus assuntos', `deleteEditalTopic('${su
         if (!filteredTopicsHTML) {
             filteredTopicsHTML = `<div class="text-[11px] text-slate-400 font-mono">Esta matéria ainda não tem tópicos. Use "Novo Assunto" para adicionar.</div>`;
         }
+        const isCollapsed = noFilters && window.collapsedEditalSubjects && window.collapsedEditalSubjects.has(subj.id);
         container.innerHTML += `
-<div class="bg-tactical-surface border border-tactical-border rounded-2xl overflow-hidden shadow-sm">
-<div class="p-4 bg-tactical-card/50 border-b border-tactical-border flex flex-wrap items-center justify-between gap-3">
+<div class="bg-tactical-surface rounded overflow-hidden">
+<div class="px-4 py-3 theme-accent-bg flex flex-wrap items-center justify-between gap-3 cursor-pointer select-none" onclick="toggleEditalSubjectCollapse('${subj.id}')">
+<div class="flex items-center gap-2.5 min-w-0">
+<i data-lucide="${isCollapsed ? 'chevron-right' : 'chevron-down'}" class="w-4 h-4 text-white keep-white shrink-0"></i>
 <div class="min-w-0">
-<h4 class="text-sm sm:text-base font-bold text-white">${escapeHTML(subj.name)}</h4>
-<span class="text-xs font-mono text-slate-400">${doneSub}/${totalSub} (${subjPct}%)</span>
+<h4 class="text-sm sm:text-base font-bold text-white keep-white">${escapeHTML(subj.name)}</h4>
+<span class="text-xs font-mono text-white/80 keep-white">${doneSub}/${totalSub} concluídos (${subjPct}%)</span>
 </div>
-<div class="flex items-center gap-2">
+</div>
+<div class="flex items-center gap-2" onclick="event.stopPropagation()">
 <div class="flex items-center gap-0.5">
 ${moveBtns('subject', subj.id, '', '', subjIdx, appState.edital.length)}
-${iconBtn('pencil', 'Renomear matéria', `openEditEditalItem('subject','${subj.id}','','')`)}
-${iconBtn('trash-2', 'Excluir matéria inteira', `deleteEditalSubject('${subj.id}')`)}
+${iconBtn('pencil', 'Renomear matéria', `openEditEditalItem('subject','${subj.id}','','')`, 'text-white/80 hover:text-white keep-white')}
+${iconBtn('trash-2', 'Excluir matéria inteira', `deleteEditalSubject('${subj.id}')`, 'text-white/80 hover:text-white keep-white')}
 </div>
-<div class="w-32 h-2 bg-tactical-bg rounded-full overflow-hidden">
-<div class="h-full bg-tactical-accent" style="width: ${subjPct}%"></div>
+<div class="w-28 h-2 bg-black/30 rounded-full overflow-hidden">
+<div class="h-full bg-white/90" style="width: ${subjPct}%"></div>
 </div>
 </div>
 </div>
-<div class="p-4 space-y-4">${filteredTopicsHTML}</div>
+<div class="p-4 space-y-4 ${isCollapsed ? 'hidden' : ''}">${filteredTopicsHTML}</div>
 </div>
 `;
     });
@@ -5389,6 +5652,16 @@ ${iconBtn('trash-2', 'Excluir matéria inteira', `deleteEditalSubject('${subj.id
         container.insertAdjacentHTML('afterbegin', `<div class="text-[11px] font-mono text-slate-400 px-1">Filtros ativos: limpe a busca e os filtros para reordenar matérias, tópicos e assuntos.</div>`);
     }
     lucide.createIcons();
+}
+window.collapsedEditalSubjects = new Set();
+function toggleEditalSubjectCollapse(subjId) {
+    if (!window.collapsedEditalSubjects) window.collapsedEditalSubjects = new Set();
+    if (window.collapsedEditalSubjects.has(subjId)) {
+        window.collapsedEditalSubjects.delete(subjId);
+    } else {
+        window.collapsedEditalSubjects.add(subjId);
+    }
+    renderEditalModule();
 }
 function toggleSubtopicCompletion(subjId, topId, subId, isChecked) {
     const subj = appState.edital.find(s => s.id === subjId);
@@ -6043,14 +6316,15 @@ showToast('Dados limpos!', 'info');
             if (navMod8 && !document.getElementById('nav-mod9')) {
                 const btn9 = document.createElement('button');
                 btn9.id = 'nav-mod9';
+                btn9.title = 'Anki';
                 btn9.setAttribute('onclick', "switchTab('mod9')");
-                btn9.className = 'nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-tactical-card/60';
+                btn9.className = 'nav-btn w-full flex items-center justify-between px-3.5 py-3 text-sm font-medium transition-all text-slate-400 hover:text-white';
                 btn9.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="layers" class="w-4 h-4"></i>
-                        <span>Anki</span>
+                    <div class="nav-item-inner flex items-center gap-3 min-w-0">
+                        <i data-lucide="layers" class="w-5 h-5 shrink-0"></i>
+                        <span class="sidebar-hide-collapsed truncate">Anki</span>
                     </div>
-                    <span id="badge-mod9" class="text-[11px] font-mono px-2 py-0.5 rounded-md theme-accent-soft-bg font-semibold">0</span>
+                    <span id="badge-mod9" class="sidebar-hide-collapsed text-[10px] font-mono px-1.5 py-0.5 rounded theme-accent-soft-bg font-semibold">0</span>
                 `;
                 navMod8.parentNode.insertBefore(btn9, navMod8.nextSibling);
             }
