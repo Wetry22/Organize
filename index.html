@@ -49,6 +49,7 @@ accentSoft: 'var(--accent-soft)',
 /* 1. ESCURO TÁTICO (INSPIRADO NO DESIGN CAVEIRA / EAGLECODE) */
 :root,
 [data-theme="dark"] {
+color-scheme: dark;
 --bg-main: #121314;
 --bg-surface: #1b1d1f;
 --bg-card: #232629;
@@ -69,6 +70,7 @@ accentSoft: 'var(--accent-soft)',
 }
 /* 2. ROSA BEBÊ COM BRANCO */
 [data-theme="pink"] {
+color-scheme: light;
 --bg-main: #fff5f8;
 --bg-surface: #ffffff;
 --bg-card: #ffe4ed;
@@ -89,6 +91,7 @@ accentSoft: 'var(--accent-soft)',
 }
 /* 3. AZUL BEBÊ COM BRANCO */
 [data-theme="blue"] {
+color-scheme: light;
 --bg-main: #f0f8ff;
 --bg-surface: #ffffff;
 --bg-card: #e0f2fe;
@@ -109,6 +112,7 @@ accentSoft: 'var(--accent-soft)',
 }
 /* 4. VERDE MILITAR E PRETO */
 [data-theme="military"] {
+color-scheme: dark;
 --bg-main: #0c0e0b;
 --bg-surface: #141812;
 --bg-card: #1c2219;
@@ -129,6 +133,7 @@ accentSoft: 'var(--accent-soft)',
 }
 /* 5. FLAMENGO (VERMELHO E PRETO) */
 [data-theme="flamengo"] {
+color-scheme: dark;
 --bg-main: #0d090a;
 --bg-surface: #161012;
 --bg-card: #201619;
@@ -146,6 +151,100 @@ accentSoft: 'var(--accent-soft)',
 --grid-dot: rgba(225, 29, 72, 0.06);
 --scroll-track: #0d090a;
 --scroll-thumb: #331418;
+}
+/* 6. DRACULA DARK */
+[data-theme="dracula"],
+[data-theme="dracula-dark"] {
+color-scheme: dark;
+--bg-main: #1e1f29;
+--bg-surface: #282a36;
+--bg-card: #343746;
+--bg-input-focus: #44475a;
+--border-primary: transparent;
+--border-subtle: rgba(189, 147, 249, 0.08);
+--border-input: rgba(189, 147, 249, 0.16);
+--text-main: #f8f8f2;
+--text-muted: #9ea8c7;
+--accent-main: #7c3aed;
+--accent-hover: #8b5cf6;
+--accent-soft: rgba(189, 147, 249, 0.16);
+--accent-text: #bd93f9;
+--banner-grad: transparent;
+--grid-dot: rgba(189, 147, 249, 0.06);
+--scroll-track: #1e1f29;
+--scroll-thumb: #44475a;
+}
+/* 7. TOKYO NIGHT DARK */
+[data-theme="tokyo-night"],
+[data-theme="tokyonight"],
+[data-theme="tokyo-night-dark"],
+[data-theme="tokyo-nigth"],
+[data-theme="tokyo-nigth-dark"],
+[data-theme="tokyonigth"] {
+color-scheme: dark;
+--bg-main: #16161e;
+--bg-surface: #1a1b26;
+--bg-card: #24283b;
+--bg-input-focus: #292e42;
+--border-primary: transparent;
+--border-subtle: rgba(122, 162, 247, 0.08);
+--border-input: rgba(122, 162, 247, 0.16);
+--text-main: #c0caf5;
+--text-muted: #787c99;
+--accent-main: #3d59a1;
+--accent-hover: #4d6ec2;
+--accent-soft: rgba(122, 162, 247, 0.16);
+--accent-text: #7aa2f7;
+--banner-grad: transparent;
+--grid-dot: rgba(122, 162, 247, 0.06);
+--scroll-track: #16161e;
+--scroll-thumb: #292e42;
+}
+/* 8. AZUL ESCURO TÁTICO */
+[data-theme="tactical-blue"],
+[data-theme="azul-tatico"],
+[data-theme="azul-escuro-tatico"] {
+color-scheme: dark;
+--bg-main: #090d14;
+--bg-surface: #111722;
+--bg-card: #172030;
+--bg-input-focus: #1e293b;
+--border-primary: transparent;
+--border-subtle: rgba(56, 189, 248, 0.07);
+--border-input: rgba(56, 189, 248, 0.14);
+--text-main: #f8fafc;
+--text-muted: #94a3b8;
+--accent-main: #0b61f5;
+--accent-hover: #2574f7;
+--accent-soft: rgba(11, 97, 245, 0.16);
+--accent-text: #60a5fa;
+--banner-grad: transparent;
+--grid-dot: rgba(11, 97, 245, 0.07);
+--scroll-track: #090d14;
+--scroll-thumb: #232f46;
+}
+/* 9. TEMA DO GITHUB (GITHUB DARK) */
+[data-theme="github"],
+[data-theme="github-dark"],
+[data-theme="tema-do-github"] {
+color-scheme: dark;
+--bg-main: #0d1117;
+--bg-surface: #161b22;
+--bg-card: #21262d;
+--bg-input-focus: #30363d;
+--border-primary: transparent;
+--border-subtle: rgba(240, 246, 252, 0.06);
+--border-input: rgba(240, 246, 252, 0.12);
+--text-main: #e6edf3;
+--text-muted: #8b949e;
+--accent-main: #1f6feb;
+--accent-hover: #388bfd;
+--accent-soft: rgba(56, 139, 253, 0.15);
+--accent-text: #58a6ff;
+--banner-grad: transparent;
+--grid-dot: rgba(240, 246, 252, 0.04);
+--scroll-track: #0d1117;
+--scroll-thumb: #30363d;
 }
 /* Remoção global de bordas e aspectos de IA */
 *, ::before, ::after {
@@ -383,10 +482,28 @@ input[type="checkbox"] {
 accent-color: var(--accent-main);
 }
 [data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="tactical-blue"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="azul-tatico"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="azul-escuro-tatico"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="dracula"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="dracula-dark"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="tokyo-night"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="tokyonight"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="tokyo-night-dark"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="tokyo-nigth"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="tokyo-nigth-dark"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="tokyonigth"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="github"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="github-dark"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="tema-do-github"] input[type="date"]::-webkit-calendar-picker-indicator,
 [data-theme="military"] input[type="date"]::-webkit-calendar-picker-indicator,
 [data-theme="flamengo"] input[type="date"]::-webkit-calendar-picker-indicator {
 filter: invert(0.75);
 cursor: pointer;
+}
+select option {
+background-color: var(--bg-surface);
+color: var(--text-main);
 }
 input:not([type="checkbox"]):not([type="file"]):not([type="color"]),
 select,
@@ -477,74 +594,105 @@ background: transparent;
 cursor: default;
 }
 /* ==========================================
-VINHETA NETFLIX (TUDUM) & TELA DE PERFIS
+VINHETA TÁTICA ORGANIZE (ESTILO CAVEIRA) & TELA DE PERFIS NETFLIX
 ========================================== */
 #netflixIntroOverlay {
-background: radial-gradient(circle at center, #140507 0%, #000000 75%);
+background: transparent;
 }
-.netflix-n-ribbon {
-position: relative;
-display: inline-flex;
+.organize-vignette-skeleton {
+position: absolute;
+inset: 0;
+background-color: var(--bg-main);
+z-index: 1;
+animation: organizeSkeletonPhase 1.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes organizeSkeletonPhase {
+0%, 58% { opacity: 1; }
+82%, 100% { opacity: 0; }
+}
+.organize-vignette-veil {
+position: absolute;
+inset: 0;
+background-color: rgba(10, 11, 13, 0.78);
+backdrop-filter: blur(1.5px);
+z-index: 2;
+display: flex;
 align-items: center;
 justify-content: center;
-font-weight: 900;
-letter-spacing: -0.05em;
-color: #e50914;
-text-shadow: 0 0 35px rgba(229, 9, 20, 0.85), 0 0 80px rgba(229, 9, 20, 0.45);
-animation: netflixLogoCinema 3.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+animation: organizeVeilPhase 1.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
-@keyframes netflixLogoCinema {
-0% {
+@keyframes organizeVeilPhase {
+0%, 14% { opacity: 0; }
+26%, 84% { opacity: 1; }
+100% { opacity: 0; }
+}
+.organize-vignette-emblem {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+animation: organizeEmblemPhase 1.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes organizeEmblemPhase {
+0%, 14% {
 opacity: 0;
-transform: scale(0.45);
-filter: brightness(0.5) blur(6px);
+transform: scale(0.92);
 }
-22% {
+28%, 82% {
 opacity: 1;
-transform: scale(1.06);
-filter: brightness(1.35) blur(0px);
-}
-68% {
-opacity: 1;
-transform: scale(1.18);
-letter-spacing: 0.14em;
-filter: brightness(1.15);
+transform: scale(1);
 }
 100% {
 opacity: 0;
-transform: scale(3.6);
-filter: brightness(2) blur(12px);
+transform: scale(1.04);
 }
 }
-.netflix-spectrum-bars {
-position: absolute;
-inset: 0;
-background: repeating-linear-gradient(
-90deg,
-transparent 0%,
-rgba(229, 9, 20, 0.08) 4%,
-rgba(255, 77, 87, 0.24) 6%,
-rgba(11, 97, 245, 0.14) 8%,
-transparent 12%
-);
-opacity: 0;
-transform: scaleX(0.4);
-animation: netflixSpectrumBurst 3.2s ease-out forwards;
-pointer-events: none;
+.organize-vignette-bar-fill {
+animation: organizeBarFill 1.25s ease-out forwards;
 }
-@keyframes netflixSpectrumBurst {
-0%, 40% { opacity: 0; transform: scaleX(0.3); }
-68% { opacity: 0.9; transform: scaleX(1.3); }
-100% { opacity: 0; transform: scaleX(2.2); }
+@keyframes organizeBarFill {
+0% { width: 0%; }
+20% { width: 15%; }
+75% { width: 100%; }
+100% { width: 100%; }
 }
 .netflix-profile-card {
 transition: transform 0.2s ease;
 }
 .netflix-profile-card:hover .netflix-avatar-box {
 transform: scale(1.04);
+background-color: var(--bg-card);
 }
 .netflix-profile-card:hover .netflix-profile-name {
-color: #ffffff !important;
+color: var(--text-main) !important;
+}
+.netflix-avatar-default-grad {
+opacity: 0.32;
+transition: opacity 0.2s ease;
+}
+.netflix-profile-card:hover .netflix-avatar-default-grad {
+opacity: 0.48;
+}
+[data-theme="pink"] .netflix-avatar-default-grad,
+[data-theme="blue"] .netflix-avatar-default-grad {
+opacity: 0.82;
+}
+[data-theme="pink"] .netflix-profile-card:hover .netflix-avatar-default-grad,
+[data-theme="blue"] .netflix-profile-card:hover .netflix-avatar-default-grad {
+opacity: 0.92;
+}
+.netflix-avatar-action-btn {
+opacity: 0;
+transition: opacity 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+}
+.netflix-profile-card:hover .netflix-avatar-action-btn,
+.netflix-avatar-action-btn:focus-visible {
+opacity: 1;
+}
+@media (hover: none) {
+.netflix-avatar-action-btn {
+opacity: 0.92;
+}
 }
 .timer-active-glow {
 background-color: var(--bg-card);
@@ -552,155 +700,326 @@ background-color: var(--bg-card);
 </style>
 </head>
 <body class="min-h-screen flex flex-col md:flex-row bg-tactical-bg bg-tactical-grid selection:bg-tactical-accent selection:text-white">
-<div id="netflixIntroOverlay" onclick="playTudumSound()" class="fixed inset-0 z-[200] flex flex-col items-center justify-center overflow-hidden select-none">
-<div class="netflix-spectrum-bars"></div>
-<div class="relative z-10 flex flex-col items-center">
-<div class="netflix-n-ribbon text-6xl sm:text-8xl md:text-9xl font-black tracking-tighter">
+<div id="netflixIntroOverlay" class="fixed inset-0 z-[200] flex flex-col items-center justify-center overflow-hidden select-none">
+<!-- Camada 1: Skeleton Tático do App fiel ao vídeo anexado, com ORGANIZE onde ficava a caveira -->
+<div class="organize-vignette-skeleton flex flex-col md:flex-row pointer-events-none">
+<!-- Sidebar Skeleton (ORGANIZE no topo no lugar da caveira + ícones verticais) -->
+<div class="hidden md:flex w-16 h-full bg-tactical-surface flex-col items-center py-3.5 gap-3 shrink-0">
+<div class="w-12 h-9 rounded bg-tactical-card flex flex-col items-center justify-center px-1">
+<span class="text-[7px] font-mono font-black tracking-tighter text-white keep-white leading-none">ORGANIZE</span>
+<span class="mt-0.5 w-6 h-0.5 theme-accent-bg"></span>
+</div>
+<div class="w-8 h-px bg-tactical-card"></div>
+<div class="w-full flex items-center justify-center relative py-1">
+<span class="absolute left-0 top-1 bottom-1 w-1 theme-accent-bg rounded-r"></span>
+<div class="w-7 h-7 rounded bg-tactical-card flex items-center justify-center">
+<div class="w-3.5 h-3.5 rounded-sm bg-slate-300/80"></div>
+</div>
+</div>
+<div class="flex flex-col items-center gap-3 mt-1 opacity-60">
+<div class="w-4 h-4 rounded-sm bg-tactical-card"></div>
+<div class="w-4 h-4 rounded-sm bg-tactical-card"></div>
+<div class="w-4 h-4 rounded-sm bg-tactical-card"></div>
+<div class="w-4 h-4 rounded-sm bg-tactical-card"></div>
+<div class="w-4 h-4 rounded-sm bg-tactical-card"></div>
+<div class="w-4 h-4 rounded-sm bg-tactical-card"></div>
+<div class="w-4 h-4 rounded-sm bg-tactical-card"></div>
+<div class="w-4 h-4 rounded-sm bg-tactical-card"></div>
+</div>
+</div>
+<!-- Conteúdo Skeleton -->
+<div class="flex-1 flex flex-col min-w-0 h-full">
+<!-- Topbar Skeleton -->
+<div class="h-12 bg-tactical-surface px-6 flex items-center justify-between shrink-0">
+<span class="text-xs font-medium text-slate-400">Home</span>
+<div class="flex items-center gap-3">
+<div class="hidden sm:flex items-center gap-2 opacity-60">
+<div class="w-3.5 h-3.5 rounded-full bg-tactical-card"></div>
+<div class="w-3.5 h-3.5 rounded-sm bg-tactical-card"></div>
+</div>
+<span class="font-mono text-sm font-semibold text-slate-300">00:00:00</span>
+<div class="w-6 h-6 rounded bg-tactical-card"></div>
+</div>
+</div>
+<!-- Grid Skeleton (3 linhas idênticas ao vídeo: KPIs/Frase/Conquistas, Minhas Turmas/Central QTC, Calendário/Flashcards) -->
+<div class="flex-1 p-4 sm:p-6 max-w-[1500px] w-full mx-auto flex flex-col gap-3.5 overflow-hidden">
+<!-- Linha 1 -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 shrink-0">
+<div class="md:col-span-4 h-36 rounded bg-tactical-surface p-4 flex flex-col justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-6 rounded-t-full bg-tactical-card flex items-end justify-center pb-0.5">
+<span class="font-mono text-[10px] font-bold text-slate-300">--%</span>
+</div>
+<div>
+<div class="text-xs font-bold text-slate-300 font-mono">--%</div>
+<div class="text-[9px] font-mono uppercase tracking-wider text-slate-500">Aproveitamento Geral</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3 pt-2">
+<div>
+<div class="text-xs font-mono font-bold text-slate-300">NAN</div>
+<div class="text-[9px] font-mono uppercase text-slate-500">Melhor Nota</div>
+</div>
+<div>
+<div class="text-xs font-mono font-bold text-slate-300">NAN</div>
+<div class="text-[9px] font-mono uppercase text-slate-500">Pior Nota</div>
+</div>
+</div>
+</div>
+<div class="md:col-span-4 h-36 rounded bg-tactical-surface p-4 flex flex-col justify-between">
+<span class="text-xs font-bold text-slate-200">Frase do dia</span>
+<div class="flex-1 mt-2 rounded bg-tactical-bg p-2.5 flex flex-col justify-center gap-2">
+<div class="w-4/5 h-2 rounded bg-tactical-card/70"></div>
+<div class="w-3/5 h-2 rounded bg-tactical-card/50"></div>
+</div>
+</div>
+<div class="md:col-span-4 h-36 rounded bg-tactical-surface p-4 flex flex-col justify-between">
+<span class="text-xs font-bold text-slate-200">Minhas Conquistas</span>
+<div class="grid grid-cols-5 gap-2 my-auto">
+<div class="h-12 rounded bg-tactical-bg/80"></div>
+<div class="h-12 rounded bg-tactical-bg/80"></div>
+<div class="h-12 rounded bg-tactical-bg/80"></div>
+<div class="h-12 rounded bg-tactical-bg/80"></div>
+<div class="h-12 rounded bg-tactical-bg/80"></div>
+</div>
+</div>
+</div>
+<!-- Linha 2 -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 flex-1 min-h-[180px]">
+<div class="md:col-span-8 rounded bg-tactical-surface p-5 flex flex-col justify-between relative">
+<div class="flex items-center justify-between">
+<span class="text-sm font-bold text-slate-200">Minhas Turmas</span>
+<div class="w-44 h-7 rounded bg-tactical-bg px-3 flex items-center text-[10px] text-slate-500">Pesquisar turmas</div>
+</div>
+<!-- Marca d'água sutil ORGANIZE no centro (onde ficava a caveira cinza no vídeo) -->
+<div class="my-auto flex flex-col items-center justify-center opacity-25 select-none">
+<span class="font-black text-2xl sm:text-3xl tracking-[0.22em] text-slate-300 uppercase">ORGANIZE</span>
+</div>
+<div class="h-1"></div>
+</div>
+<div class="md:col-span-4 rounded bg-tactical-surface p-5 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-sm font-bold text-slate-200">Central QTC</span>
+<span class="text-[10px] text-slate-500">Ver todas ›</span>
+</div>
+<div class="space-y-2.5 my-auto">
+<div class="h-9 rounded bg-tactical-card/40"></div>
+<div class="h-9 rounded bg-tactical-card/40"></div>
+<div class="h-9 rounded bg-tactical-card/40"></div>
+</div>
+</div>
+</div>
+<!-- Linha 3 (Calendário & Flashcards como no vídeo) -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 h-28 shrink-0">
+<div class="md:col-span-8 rounded bg-tactical-surface p-4 flex flex-col justify-between">
+<span class="text-sm font-bold text-slate-200">Calendário</span>
+<div class="h-10 rounded bg-tactical-bg/60"></div>
+</div>
+<div class="md:col-span-4 rounded bg-tactical-surface p-4 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-sm font-bold text-slate-200">Flashcards</span>
+<span class="text-[10px] text-slate-500">Acessar ›</span>
+</div>
+<div class="my-auto flex items-center justify-center">
+<div class="w-9 h-11 rounded bg-tactical-card flex items-center justify-center text-xs font-mono font-bold text-slate-400">⚡</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Camada 2: Véu Escuro Translúcido com "ORGANIZE" centralizado em destaque (onde aparecia a caveira branca no vídeo) -->
+<div class="organize-vignette-veil">
+<div class="organize-vignette-emblem text-center px-6">
+<div class="text-3xl sm:text-5xl md:text-6xl font-black tracking-[0.2em] text-white keep-white uppercase">
 ORGANIZE
 </div>
+<div class="mt-3 w-28 sm:w-36 h-1 bg-white/15 rounded overflow-hidden">
+<div class="h-full bg-white keep-white organize-vignette-bar-fill"></div>
 </div>
-<button type="button" onclick="event.stopPropagation(); finishNetflixIntro()" class="absolute bottom-7 right-7 z-20 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-xs font-mono text-slate-300 hover:text-white keep-white transition">
+<span class="mt-2 text-[10px] font-mono uppercase tracking-[0.28em] text-slate-300 keep-white opacity-80">
+Plataforma Tática
+</span>
+</div>
+</div>
+<button type="button" onclick="event.stopPropagation(); finishNetflixIntro()" class="absolute bottom-6 right-6 z-20 px-3.5 py-1.5 rounded bg-tactical-surface hover:bg-tactical-card text-xs font-mono text-slate-300 hover:text-white transition">
 Pular Vinheta ›
 </button>
 </div>
-<section id="netflixProfilesOverlay" class="fixed inset-0 z-[150] bg-[#07090f] hidden flex-col justify-between p-6 sm:p-10 overflow-y-auto select-none">
-<!-- Glow de fundo estilo cinema -->
-<div class="fixed top-0 left-1/2 -translate-x-1/2 w-[700px] h-[320px] bg-red-600/15 blur-[140px] pointer-events-none rounded-full"></div>
-<!-- Topo da Tela Netflix -->
-<div class="relative z-10 flex flex-wrap items-center justify-between gap-4 max-w-6xl w-full mx-auto">
+<!-- Input de Arquivo Oculto para Upload de Foto/Ícone nos Perfis de Entrada Estilo Netflix -->
+<input type="file" id="netflixProfileAvatarFileInput" accept="image/*" class="hidden" onchange="handleNetflixProfileAvatarFileChange(event)">
+<section id="netflixProfilesOverlay" class="fixed inset-0 z-[150] bg-tactical-bg bg-tactical-grid flex flex-col justify-between p-4 sm:p-6 overflow-y-auto select-none">
+<!-- Topo da Tela de Login no mesmo estilo tático do App -->
+<div class="relative z-10 flex flex-wrap items-center justify-between gap-3 max-w-6xl w-full mx-auto bg-tactical-surface px-4 sm:px-6 py-3 rounded">
 <div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-xl bg-[#e50914] flex items-center justify-center shadow-lg shadow-red-600/30">
-<i data-lucide="book-open" class="w-5 h-5 text-white keep-white"></i>
+<div class="w-9 h-9 rounded theme-accent-bg flex items-center justify-center shrink-0">
+<i data-lucide="shield" class="w-5 h-5 text-white keep-white"></i>
 </div>
 <div>
-<span class="font-black text-xl tracking-tight text-white keep-white">ORGANIZE</span>
-<span class="text-[10px] font-mono uppercase tracking-widest text-[#e50914] block">Plataforma de Estudos</span>
+<span class="font-extrabold text-base sm:text-lg tracking-wide text-white block leading-none">ORGANIZE</span>
+<span class="text-[10px] font-mono uppercase tracking-wider theme-accent-text block mt-0.5">Plataforma Tática</span>
 </div>
 </div>
-<div class="flex flex-wrap items-center gap-2.5">
-<span id="netflixAdminStatusBadge" class="hidden px-3 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-mono items-center gap-1.5">
+<div class="flex flex-wrap items-center gap-2">
+<span id="netflixAdminStatusBadge" class="hidden px-3 py-1.5 rounded bg-tactical-card theme-accent-text text-xs font-mono items-center gap-1.5">
 <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Gabriel (Admin Drive Ativo)
 </span>
-<button type="button" onclick="replayNetflixIntro()" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-300 hover:text-white keep-white flex items-center gap-1.5 transition">
-<i data-lucide="film" class="w-3.5 h-3.5 text-[#e50914]"></i> Repetir Vinheta
+<select id="loginThemeSelectDropdown" onchange="applyTheme(this.value)" title="Tema do App" class="px-2.5 py-2 rounded bg-tactical-card text-xs font-medium text-slate-200 cursor-pointer">
+<option value="dark">Escuro Tático</option>
+<option value="dracula">Dracula Dark</option>
+<option value="tokyo-night">Tokyo Night Dark</option>
+<option value="tactical-blue">Azul Escuro Tático</option>
+<option value="github">Tema do GitHub</option>
+<option value="military">Verde Militar</option>
+<option value="flamengo">Rubro-Negro</option>
+<option value="pink">Rosa & Branco</option>
+<option value="blue">Azul & Branco</option>
+</select>
+<button type="button" onclick="replayNetflixIntro()" class="px-3.5 py-2 rounded bg-tactical-card hover:bg-tactical-bg text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5 transition">
+<i data-lucide="film" class="w-3.5 h-3.5 theme-accent-text"></i> Repetir Vinheta
 </button>
-<button type="button" onclick="handleToggleManageProfiles()" id="btnManageNetflixProfiles" class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 text-xs font-bold text-white keep-white flex items-center gap-1.5 transition">
-<i data-lucide="settings-2" class="w-3.5 h-3.5 text-[#e50914]"></i>
+<button type="button" onclick="handleToggleManageProfiles()" id="btnManageNetflixProfiles" class="px-4 py-2 rounded bg-tactical-card hover:bg-tactical-bg text-xs font-bold text-white flex items-center gap-1.5 transition">
+<i data-lucide="settings-2" class="w-3.5 h-3.5 theme-accent-text"></i>
 <span id="btnManageNetflixProfilesTxt">Gerenciar Perfis (Gabriel)</span>
 </button>
 </div>
 </div>
-<!-- Centro: Grade de Perfis -->
-<div class="relative z-10 max-w-5xl w-full mx-auto my-auto py-10 text-center space-y-10">
-<div class="space-y-2">
-<h1 class="text-3xl sm:text-5xl font-extrabold text-white keep-white tracking-tight">Quem está estudando?</h1>
-<p id="netflixProfilesSubtitle" class="text-xs sm:text-sm text-slate-400">
-Selecione seu perfil e conecte seu Google Drive para acessar seus estudos e aulas
+<!-- Centro: Grade de Perfis Estilo Netflix integrada ao Design Tático do App -->
+<div class="relative z-10 max-w-6xl w-full mx-auto my-auto py-4 text-center space-y-5">
+<div class="space-y-1.5">
+<span class="inline-block text-[10px] font-mono uppercase tracking-[0.22em] theme-accent-text font-semibold">
+BEM-VINDO(A) • SELECIONE SEU ACESSO
+</span>
+<h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight">Quem está estudando?</h1>
+<p id="netflixProfilesSubtitle" class="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto">
+Selecione seu perfil para entrar ou clique no ícone de câmera no perfil para colocar uma imagem personalizada
 </p>
 </div>
-<div id="netflixProfilesGrid" class="flex flex-wrap items-center justify-center gap-6 sm:gap-8 px-2">
+<div id="netflixProfilesGrid" class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 px-2">
 <!-- Preenchido dinamicamente com Gabriel, Babii, Rafael, Mila, Caio, Yuri, Camile -->
 </div>
-<div id="manageProfilesHintBar" class="hidden max-w-lg mx-auto p-3.5 rounded-2xl bg-red-500/10 border border-red-500/30 text-xs text-red-200 flex items-center justify-center gap-2">
-<i data-lucide="shield-alert" class="w-4 h-4 text-[#e50914] shrink-0"></i>
-<span>Modo Administrador (Gabriel): você pode criar novos perfis ou excluir perfis existentes.</span>
+<div id="manageProfilesHintBar" class="hidden max-w-lg mx-auto p-3 rounded bg-tactical-surface text-xs text-slate-200 flex items-center justify-center gap-2">
+<i data-lucide="shield-alert" class="w-4 h-4 theme-accent-text shrink-0"></i>
+<span>Modo Administrador (Gabriel): você pode criar novos perfis, trocar fotos ou excluir perfis existentes.</span>
 </div>
 </div>
-<!-- Rodapé da Tela Netflix -->
+<!-- Rodapé da Tela Inicial -->
 <div class="relative z-10 text-center text-[11px] font-mono text-slate-500">
-ORGANIZE • SINCRONIZADO COM GOOGLE DRIVE
+ORGANIZE • PLATAFORMA TÁTICA DE ESTUDOS
 </div>
 </section>
-<div id="modalProfileDriveGate" class="fixed inset-0 bg-black/85 z-[170] hidden items-center justify-center p-4 backdrop-blur-md">
-<div class="bg-[#111622] border border-white/15 rounded-3xl max-w-md w-full p-6 sm:p-7 space-y-5 shadow-2xl">
-<div class="flex items-center justify-between border-b border-white/10 pb-4">
+<div id="modalProfileDriveGate" class="fixed inset-0 bg-black/80 z-[170] hidden items-center justify-center p-4 backdrop-blur-sm">
+<div class="bg-tactical-surface rounded max-w-md w-full p-6 sm:p-7 space-y-5">
+<div class="flex items-center justify-between pb-3">
 <div class="flex items-center gap-3.5">
-<div id="gateSelectedAvatar" class="w-12 h-12 rounded-2xl flex items-center justify-center text-white keep-white font-black text-xl shadow-lg">
+<div class="relative group cursor-pointer shrink-0" onclick="triggerNetflixProfileAvatarUpload(pendingNetflixProfileToEnter ? pendingNetflixProfileToEnter.id : '')" title="Clique para colocar ou alterar a imagem deste perfil">
+<div id="gateSelectedAvatar" class="w-14 h-14 rounded bg-tactical-card flex items-center justify-center text-white font-black text-xl overflow-hidden">
 G
 </div>
+<div class="absolute -bottom-1 -right-1 w-6 h-6 rounded theme-accent-bg flex items-center justify-center text-white keep-white">
+<i data-lucide="camera" class="w-3 h-3"></i>
+</div>
+</div>
 <div>
-<span id="gateSelectedRoleBadge" class="text-[10px] font-mono uppercase tracking-wider text-[#e50914] block font-bold">Autenticação Google Drive</span>
-<h3 id="gateSelectedProfileName" class="text-lg font-extrabold text-white keep-white">Olá, Gabriel</h3>
+<span id="gateSelectedRoleBadge" class="text-[10px] font-mono uppercase tracking-wider theme-accent-text block font-bold">BEM-VINDO(A) • FAÇA SEU LOGIN</span>
+<h3 id="gateSelectedProfileName" class="text-lg font-extrabold text-white">Olá, Gabriel</h3>
+<div class="mt-0.5 flex flex-wrap items-center gap-2.5">
+<button type="button" onclick="triggerNetflixProfileAvatarUpload(pendingNetflixProfileToEnter ? pendingNetflixProfileToEnter.id : '')" class="text-[11px] font-mono theme-accent-text hover:underline flex items-center gap-1">
+<i data-lucide="image-plus" class="w-3 h-3"></i> Colocar / trocar foto do ícone
+</button>
+<button type="button" id="btnGateRemoveAvatar" onclick="if (pendingNetflixProfileToEnter) removeNetflixProfileAvatar(pendingNetflixProfileToEnter.id)" class="hidden text-[11px] font-mono text-red-400 hover:underline items-center gap-1">
+<i data-lucide="trash-2" class="w-3 h-3"></i> Remover foto
+</button>
 </div>
 </div>
-<button type="button" onclick="closeModal('modalProfileDriveGate')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white keep-white">
+</div>
+<button type="button" onclick="closeModal('modalProfileDriveGate')" class="p-2 rounded bg-tactical-card hover:bg-tactical-bg text-slate-400 hover:text-white">
 <i data-lucide="x" class="w-4 h-4"></i>
 </button>
 </div>
 <div class="space-y-3">
 <p id="gateInstructionsText" class="text-xs text-slate-300 leading-relaxed">
-Para entrar no perfil de <strong id="gateProfileNameInline" class="text-white keep-white">Gabriel</strong>, autorize o acesso com sua conta do <strong>Google Drive</strong>.
+Para entrar no perfil de <strong id="gateProfileNameInline" class="text-white">Gabriel</strong>, conecte sua conta do <strong>Google Drive</strong> ou acesse o ambiente de estudos.
 </p>
-<!-- Botão Principal OAuth Google Drive -->
-<button type="button" onclick="authenticateProfileWithGoogleDrive()" id="btnGateConnectDrive" class="w-full py-3.5 px-5 rounded-2xl bg-[#e50914] hover:bg-[#f6121d] text-white keep-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2.5 shadow-lg shadow-red-600/30 transition">
-<i data-lucide="cloud" class="w-4 h-4"></i>
+<!-- Botão Principal OAuth Google Drive (Estilo Tático do App) -->
+<button type="button" onclick="authenticateProfileWithGoogleDrive()" id="btnGateConnectDrive" class="w-full py-3.5 px-5 rounded theme-accent-bg hover:opacity-95 text-white keep-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2.5 transition">
+<i data-lucide="log-in" class="w-4 h-4"></i>
 <span>Conectar Google Drive & Entrar</span>
 </button>
 <!-- Configuração Rápida de Chaves OAuth / API Key (se necessário) -->
-<div class="pt-2">
-<button type="button" onclick="toggleGateCredentialsBox()" class="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-[11px] font-mono text-slate-300 flex items-center justify-between transition">
-<span class="flex items-center gap-1.5"><i data-lucide="key-round" class="w-3.5 h-3.5 text-[#e50914]"></i> Configurar Client ID / API Key do Drive</span>
+<div class="pt-1">
+<button type="button" onclick="toggleGateCredentialsBox()" class="w-full py-2 px-3 rounded bg-tactical-card hover:bg-tactical-bg text-[11px] font-mono text-slate-300 flex items-center justify-between transition">
+<span class="flex items-center gap-1.5"><i data-lucide="key-round" class="w-3.5 h-3.5 theme-accent-text"></i> Configurar Client ID / API Key do Drive</span>
 <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
 </button>
-<div id="gateCredentialsCollapse" class="hidden mt-2.5 p-3.5 rounded-2xl bg-black/50 border border-white/10 space-y-3">
+<div id="gateCredentialsCollapse" class="hidden mt-2.5 p-3.5 rounded bg-tactical-bg space-y-3">
 <div>
 <label class="block text-[10px] font-mono uppercase text-slate-400 mb-1">Client ID (Google OAuth 2.0)</label>
-<input type="text" id="gateClientIdInput" placeholder="123456789-xxx.apps.googleusercontent.com" class="w-full px-3 py-2 rounded-xl text-xs font-mono">
+<input type="text" id="gateClientIdInput" placeholder="123456789-xxx.apps.googleusercontent.com" class="w-full px-3 py-2 rounded text-xs font-mono">
 </div>
 <div>
 <label class="block text-[10px] font-mono uppercase text-slate-400 mb-1">API Key (Google Drive)</label>
-<input type="password" id="gateApiKeyInput" placeholder="AIzaSy..." class="w-full px-3 py-2 rounded-xl text-xs font-mono">
+<input type="password" id="gateApiKeyInput" placeholder="AIzaSy..." class="w-full px-3 py-2 rounded text-xs font-mono">
 </div>
 <div class="flex justify-end gap-2">
-<button type="button" onclick="saveGateCredentialsAndEnter()" class="px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white keep-white text-xs font-semibold transition">
+<button type="button" onclick="saveGateCredentialsAndEnter()" class="px-3.5 py-1.5 rounded bg-tactical-card hover:bg-tactical-surface text-white text-xs font-semibold transition">
 Salvar Chaves
 </button>
 </div>
 </div>
 </div>
 </div>
-<div class="flex items-center justify-between pt-2 border-t border-white/10">
-<button type="button" onclick="closeModal('modalProfileDriveGate')" class="text-xs text-slate-400 hover:text-white keep-white font-semibold">
+<div class="flex items-center justify-between pt-2">
+<button type="button" onclick="closeModal('modalProfileDriveGate')" class="text-xs text-slate-400 hover:text-white font-semibold">
 ‹ Escolher outro perfil
 </button>
-<span class="text-[10px] font-mono text-slate-500">Acesso protegido via Google Drive</span>
+<span class="text-[10px] font-mono text-slate-500">Acesso sincronizado via Google Drive</span>
 </div>
 </div>
 </div>
-<div id="modalCreateNetflixProfile" class="fixed inset-0 bg-black/85 z-[180] hidden items-center justify-center p-4 backdrop-blur-md">
-<div class="bg-[#111622] border border-white/15 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-<div class="flex items-center justify-between border-b border-white/10 pb-3">
-<h3 class="text-base font-bold text-white keep-white flex items-center gap-2">
-<i data-lucide="user-plus" class="w-5 h-5 text-[#e50914]"></i> Adicionar Novo Perfil
+<div id="modalCreateNetflixProfile" class="fixed inset-0 bg-black/80 z-[180] hidden items-center justify-center p-4 backdrop-blur-sm">
+<div class="bg-tactical-surface rounded max-w-md w-full p-6 space-y-4">
+<div class="flex items-center justify-between pb-3">
+<h3 class="text-base font-bold text-white flex items-center gap-2">
+<i data-lucide="user-plus" class="w-5 h-5 theme-accent-text"></i> Adicionar Novo Perfil
 </h3>
-<button type="button" onclick="closeModal('modalCreateNetflixProfile')" class="text-slate-400 hover:text-white keep-white">
+<button type="button" onclick="closeModal('modalCreateNetflixProfile')" class="text-slate-400 hover:text-white">
 <i data-lucide="x" class="w-5 h-5"></i>
 </button>
 </div>
 <form onsubmit="handleCreateNetflixProfile(event)" class="space-y-4">
 <div>
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Nome do Perfil</label>
-<input type="text" id="newNetflixProfileName" required placeholder="Ex: Lucas, Ana..." class="w-full px-3.5 py-2.5 rounded-xl text-sm">
+<input type="text" id="newNetflixProfileName" required placeholder="Ex: Lucas, Ana..." class="w-full px-3.5 py-2.5 rounded text-sm">
 </div>
 <div>
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">E-mail do Google Drive do Aluno (Opcional)</label>
-<input type="email" id="newNetflixProfileEmail" placeholder="email@gmail.com (libera acesso automático)" class="w-full px-3.5 py-2.5 rounded-xl text-xs font-mono">
+<input type="email" id="newNetflixProfileEmail" placeholder="email@gmail.com (libera acesso automático)" class="w-full px-3.5 py-2.5 rounded text-xs font-mono">
 </div>
 <div>
-<label class="block text-xs font-mono uppercase text-slate-400 mb-1">Cor do Avatar</label>
-<select id="newNetflixProfileGradient" class="w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold">
-<option value="from-red-600 to-rose-900">🔴 Vermelho Netflix</option>
+<label class="block text-xs font-mono uppercase text-slate-400 mb-1">Imagem do Ícone do Perfil (Opcional)</label>
+<div class="flex items-center gap-3">
+<div id="newNetflixProfileAvatarPreview" class="w-12 h-12 rounded bg-tactical-card flex items-center justify-center text-slate-400 overflow-hidden shrink-0">
+<i data-lucide="user" class="w-5 h-5"></i>
+</div>
+<input type="file" id="newNetflixProfileAvatarInput" accept="image/*" onchange="previewNewNetflixProfileAvatar(event)" class="w-full px-3 py-2 rounded bg-tactical-bg text-xs text-slate-300">
+</div>
+</div>
+<div>
+<label class="block text-xs font-mono uppercase text-slate-400 mb-1">Cor de Fundo Padrão (se sem foto)</label>
+<select id="newNetflixProfileGradient" class="w-full px-3.5 py-2.5 rounded text-xs font-semibold">
+<option value="from-red-600 to-rose-900">🔴 Vermelho Tático</option>
 <option value="from-pink-500 to-purple-800">🌸 Rosa & Roxo</option>
 <option value="from-blue-600 to-indigo-950">💎 Azul Royal</option>
-<option value="from-emerald-500 to-teal-900">🟢 Esmeralda</option>
+<option value="from-emerald-500 to-teal-900">🟢 Verde Militar / Esmeralda</option>
 <option value="from-amber-500 to-orange-900">🟠 Laranja & Âmbar</option>
 <option value="from-cyan-500 to-sky-900">❄️ Azul Celeste</option>
-<option value="from-violet-500 to-fuchsia-900">🟣 Violeta Neon</option>
+<option value="from-violet-500 to-fuchsia-900">🟣 Violeta Escuro</option>
 </select>
 </div>
 <div class="flex justify-end gap-2 pt-2">
-<button type="button" onclick="closeModal('modalCreateNetflixProfile')" class="px-4 py-2 rounded-xl bg-white/10 text-slate-300 text-xs font-semibold">Cancelar</button>
-<button type="submit" class="px-5 py-2 rounded-xl bg-[#e50914] hover:bg-[#f6121d] text-white keep-white text-xs font-bold">Criar Perfil</button>
+<button type="button" onclick="closeModal('modalCreateNetflixProfile')" class="px-4 py-2 rounded bg-tactical-card text-slate-300 text-xs font-semibold">Cancelar</button>
+<button type="submit" class="px-5 py-2 rounded theme-accent-bg text-white keep-white text-xs font-bold">Criar Perfil</button>
 </div>
 </form>
 </div>
@@ -853,7 +1172,7 @@ Conectar
 </div>
 </aside>
 <!-- WRAPPER CONTEÚDO -->
-<div id="mainContentWrapper" class="flex-1 flex flex-col min-w-0">
+<div id="mainContentWrapper" class="relative z-10 flex-1 flex flex-col min-w-0">
 <!-- CABEÇALHO INSPIRADO NAS IMAGENS DE DESIGN -->
 <header class="sticky top-0 z-30 bg-tactical-surface px-4 lg:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3">
 <div class="flex items-center gap-3">
@@ -891,6 +1210,10 @@ Conectar
 <div class="flex items-center gap-1.5">
 <select id="themeSelectDropdown" onchange="applyTheme(this.value)" class="px-2.5 py-1.5 rounded bg-tactical-card text-xs font-medium text-slate-200 cursor-pointer">
 <option value="dark">Escuro Tático</option>
+<option value="dracula">Dracula Dark</option>
+<option value="tokyo-night">Tokyo Night Dark</option>
+<option value="tactical-blue">Azul Escuro Tático</option>
+<option value="github">Tema do GitHub</option>
 <option value="military">Verde Militar</option>
 <option value="flamengo">Rubro-Negro</option>
 <option value="pink">Rosa & Branco</option>
@@ -905,7 +1228,7 @@ Conectar
 </div>
 <!-- Botão Trocar Perfil -->
 <button type="button" onclick="openNetflixProfileSwitcher()" title="Trocar de Perfil (Quem está estudando?)" class="pl-1.5 pr-2.5 py-1 rounded bg-tactical-card hover:bg-tactical-surface text-xs font-semibold text-white flex items-center gap-2 transition">
-<div id="headerNetflixAvatar" class="w-6 h-6 rounded bg-gradient-to-br from-red-600 to-rose-900 flex items-center justify-center text-white keep-white font-black text-[11px]">
+<div id="headerNetflixAvatar" class="w-6 h-6 rounded theme-accent-bg flex items-center justify-center text-white keep-white font-black text-[11px] overflow-hidden shrink-0">
 G
 </div>
 <span id="headerNetflixName" class="hidden sm:inline truncate max-w-[90px]">Gabriel</span>
@@ -2193,56 +2516,46 @@ let activeDriveCourseId = null;
 let activeDriveLessonId = null;
 let isCoursePdfSplitOpen = false;
 let collapsedDriveModules = new Set();
-// EFEITO SONORO "TUDUM" DA VINHETA (WEB AUDIO API)
+// VINHETA SILENCIOSA ESTILO CAVEIRA COM "ORGANIZE" (SOM REMOVIDO CONFORME SOLICITADO)
+let netflixIntroTimer = null;
+let pendingAvatarUploadProfileId = null;
+let tempNewNetflixProfileAvatarBase64 = '';
+const PROFILE_AVATAR_STORAGE_PREFIX = 'ORGANIZE_PROFILE_AVATAR_';
+
 function playTudumSound() {
-try {
-const AudioCtx = window.AudioContext || window.webkitAudioContext;
-if (!AudioCtx) return;
-const ctx = new AudioCtx();
-const now = ctx.currentTime;
-// 1º Impacto ("TU")
-const osc1 = ctx.createOscillator();
-const gain1 = ctx.createGain();
-osc1.type = 'sine';
-osc1.frequency.setValueAtTime(110, now);
-osc1.frequency.exponentialRampToValueAtTime(42, now + 0.22);
-gain1.gain.setValueAtTime(0.85, now);
-gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
-osc1.connect(gain1);
-gain1.connect(ctx.destination);
-osc1.start(now);
-osc1.stop(now + 0.27);
-// 2º Impacto Grave + Acorde Metálico ("DUMMM...")
-const hit2 = now + 0.26;
-const osc2 = ctx.createOscillator();
-const gain2 = ctx.createGain();
-osc2.type = 'triangle';
-osc2.frequency.setValueAtTime(146.83, hit2); // D3
-osc2.frequency.exponentialRampToValueAtTime(55, hit2 + 1.8);
-gain2.gain.setValueAtTime(0.95, hit2);
-gain2.gain.exponentialRampToValueAtTime(0.0008, hit2 + 2.1);
-osc2.connect(gain2);
-gain2.connect(ctx.destination);
-osc2.start(hit2);
-osc2.stop(hit2 + 2.15);
-// Harmônicos brilhantes da vinheta
-[293.66, 440, 587.33, 739.99].forEach((freq) => {
-const hOsc = ctx.createOscillator();
-const hGain = ctx.createGain();
-hOsc.type = 'sawtooth';
-hOsc.frequency.setValueAtTime(freq, hit2 + 0.03);
-hGain.gain.setValueAtTime(0.12, hit2 + 0.03);
-hGain.gain.exponentialRampToValueAtTime(0.0005, hit2 + 2.3);
-hOsc.connect(hGain);
-hGain.connect(ctx.destination);
-hOsc.start(hit2 + 0.03);
-hOsc.stop(hit2 + 2.35);
+// Som da vinheta desativado conforme solicitado pelo usuário
+}
+
+function playOrganizeLoginVignette(durationMs = 1650) {
+const intro = document.getElementById('netflixIntroOverlay');
+const profilesScreen = document.getElementById('netflixProfilesOverlay');
+if (!intro) return;
+if (netflixIntroTimer) {
+clearTimeout(netflixIntroTimer);
+netflixIntroTimer = null;
+}
+if (profilesScreen && !activeNetflixProfile) {
+profilesScreen.classList.remove('hidden');
+profilesScreen.classList.add('flex');
+}
+intro.classList.remove('hidden');
+// Reinicia as animações CSS da vinheta de forma limpa
+const animatedNodes = intro.querySelectorAll('.organize-vignette-skeleton, .organize-vignette-veil, .organize-vignette-emblem, .organize-vignette-bar-fill');
+animatedNodes.forEach(node => {
+node.style.animation = 'none';
+void node.offsetWidth;
+node.style.animation = '';
 });
-} catch (e) {
-// Ignora bloqueio de autoplay do navegador até o primeiro clique
+netflixIntroTimer = setTimeout(() => {
+finishNetflixIntro();
+}, durationMs);
 }
-}
+
 function finishNetflixIntro() {
+if (netflixIntroTimer) {
+clearTimeout(netflixIntroTimer);
+netflixIntroTimer = null;
+}
 const intro = document.getElementById('netflixIntroOverlay');
 const profilesScreen = document.getElementById('netflixProfilesOverlay');
 if (intro) intro.classList.add('hidden');
@@ -2252,18 +2565,66 @@ profilesScreen.classList.add('flex');
 }
 renderNetflixProfilesGrid();
 }
+
 function replayNetflixIntro() {
-const intro = document.getElementById('netflixIntroOverlay');
-if (!intro) return;
-intro.classList.remove('hidden');
-const clone = intro.cloneNode(true);
-intro.parentNode.replaceChild(clone, intro);
-playTudumSound();
-setTimeout(() => {
-finishNetflixIntro();
-}, 3100);
+playOrganizeLoginVignette(1650);
 }
-// SISTEMA DE PERFIS ESTILO NETFLIX + CONTROLE DO GABRIEL
+
+// SISTEMA DE PERFIS ESTILO NETFLIX + UPLOAD DE IMAGEM NO ÍCONE + CONTROLE DO GABRIEL
+function hydrateNetflixProfileAvatars(preferRemote = false) {
+if (!Array.isArray(netflixProfilesList)) return;
+netflixProfilesList.forEach(p => {
+if (!p) return;
+try {
+const savedAvatar = localStorage.getItem(PROFILE_AVATAR_STORAGE_PREFIX + p.id);
+if (preferRemote && p.avatar) {
+localStorage.setItem(PROFILE_AVATAR_STORAGE_PREFIX + p.id, p.avatar);
+} else if (savedAvatar && !p.avatar) {
+p.avatar = savedAvatar;
+} else if (p.avatar && !savedAvatar) {
+localStorage.setItem(PROFILE_AVATAR_STORAGE_PREFIX + p.id, p.avatar);
+}
+} catch (e) {}
+});
+}
+
+function syncProfilePhotoToStoredAppState(profId, photoDataUrl) {
+if (!profId) return;
+const normalizedPhoto = photoDataUrl || '';
+if (activeNetflixProfile && activeNetflixProfile.id === profId && appState) {
+if (!appState.userProfile) appState.userProfile = {};
+appState.userProfile.photoBase64 = normalizedPhoto;
+saveAppState(false);
+renderDashboardModule();
+}
+const storageKey = (profId === 'user-gabriel') ? MULTI_PROFILES_KEY : `${MULTI_PROFILES_KEY}_${profId}`;
+try {
+const rawMulti = localStorage.getItem(storageKey);
+if (rawMulti) {
+const parsedMulti = JSON.parse(rawMulti);
+if (parsedMulti && parsedMulti.profiles && typeof parsedMulti.profiles === 'object') {
+Object.keys(parsedMulti.profiles).forEach(pid => {
+if (!parsedMulti.profiles[pid].userProfile) parsedMulti.profiles[pid].userProfile = {};
+parsedMulti.profiles[pid].userProfile.photoBase64 = normalizedPhoto;
+});
+localStorage.setItem(storageKey, JSON.stringify(parsedMulti));
+}
+}
+} catch (e) {}
+}
+
+function updateGateRemoveAvatarBtnVisibility(prof) {
+const rmBtn = document.getElementById('btnGateRemoveAvatar');
+if (!rmBtn) return;
+if (prof && prof.avatar) {
+rmBtn.classList.remove('hidden');
+rmBtn.classList.add('inline-flex');
+} else {
+rmBtn.classList.add('hidden');
+rmBtn.classList.remove('inline-flex');
+}
+}
+
 function loadNetflixProfilesList() {
 try {
 const raw = localStorage.getItem(NETFLIX_USERS_KEY);
@@ -2274,22 +2635,119 @@ netflixProfilesList = parsed;
 // Garante que todos os 7 perfis solicitados existam
 DEFAULT_NETFLIX_PROFILES.forEach(def => {
 if (!netflixProfilesList.some(p => p.name.toLowerCase() === def.name.toLowerCase())) {
-netflixProfilesList.push(def);
+netflixProfilesList.push({ ...def });
 }
 });
+hydrateNetflixProfileAvatars(false);
 saveNetflixProfilesList();
 return;
 }
 }
 } catch (e) {}
-netflixProfilesList = [...DEFAULT_NETFLIX_PROFILES];
+netflixProfilesList = DEFAULT_NETFLIX_PROFILES.map(d => ({ ...d }));
+hydrateNetflixProfileAvatars(false);
 saveNetflixProfilesList();
 }
+
 function saveNetflixProfilesList() {
 try {
 localStorage.setItem(NETFLIX_USERS_KEY, JSON.stringify(netflixProfilesList));
 } catch (e) {}
 }
+
+function renderAvatarElementContent(el, prof, fallbackClass, textClass) {
+if (!el || !prof) return;
+if (prof.avatar) {
+el.className = `${fallbackClass} overflow-hidden`;
+el.innerHTML = `<img src="${escapeHTML(prof.avatar)}" alt="${escapeHTML(prof.name)}" class="w-full h-full object-cover">`;
+} else {
+el.className = `${fallbackClass} ${textClass}`;
+el.textContent = prof.initial || prof.name.charAt(0).toUpperCase();
+}
+}
+
+function triggerNetflixProfileAvatarUpload(profileId) {
+const targetId = profileId || (pendingNetflixProfileToEnter ? pendingNetflixProfileToEnter.id : (activeNetflixProfile ? activeNetflixProfile.id : ''));
+if (!targetId) return;
+pendingAvatarUploadProfileId = targetId;
+const fileInput = document.getElementById('netflixProfileAvatarFileInput');
+if (fileInput) {
+fileInput.value = '';
+fileInput.click();
+}
+}
+
+function handleNetflixProfileAvatarFileChange(event) {
+const file = event.target?.files?.[0];
+if (!file || !pendingAvatarUploadProfileId) return;
+const targetId = pendingAvatarUploadProfileId;
+compressImageFileToBase64(file, 320, 0.84, function(dataUrl) {
+const prof = netflixProfilesList.find(p => p.id === targetId);
+if (!prof) return;
+prof.avatar = dataUrl;
+try {
+localStorage.setItem(PROFILE_AVATAR_STORAGE_PREFIX + prof.id, dataUrl);
+} catch (e) {}
+saveNetflixProfilesList();
+if (pendingNetflixProfileToEnter && pendingNetflixProfileToEnter.id === prof.id) {
+pendingNetflixProfileToEnter.avatar = dataUrl;
+const gateAvatar = document.getElementById('gateSelectedAvatar');
+renderAvatarElementContent(gateAvatar, prof, 'w-14 h-14 rounded bg-tactical-card flex items-center justify-center shrink-0', 'text-white font-black text-xl');
+updateGateRemoveAvatarBtnVisibility(prof);
+}
+if (activeNetflixProfile && activeNetflixProfile.id === prof.id) {
+activeNetflixProfile.avatar = dataUrl;
+const headerAvatar = document.getElementById('headerNetflixAvatar');
+renderAvatarElementContent(headerAvatar, prof, 'w-6 h-6 rounded theme-accent-bg flex items-center justify-center shrink-0', 'text-white keep-white font-black text-[11px]');
+}
+syncProfilePhotoToStoredAppState(prof.id, dataUrl);
+renderNetflixProfilesGrid();
+if (isGabrielDriveAdminAuthenticated()) {
+syncSharedPlatformsAndProfilesToDrive();
+}
+showToast(`Imagem do perfil de ${prof.name} atualizada!`, 'success');
+});
+}
+
+function removeNetflixProfileAvatar(profileId) {
+const prof = netflixProfilesList.find(p => p.id === profileId);
+if (!prof) return;
+prof.avatar = '';
+try {
+localStorage.removeItem(PROFILE_AVATAR_STORAGE_PREFIX + prof.id);
+} catch (e) {}
+saveNetflixProfilesList();
+if (pendingNetflixProfileToEnter && pendingNetflixProfileToEnter.id === prof.id) {
+pendingNetflixProfileToEnter.avatar = '';
+const gateAvatar = document.getElementById('gateSelectedAvatar');
+renderAvatarElementContent(gateAvatar, prof, 'w-14 h-14 rounded bg-tactical-card flex items-center justify-center shrink-0', 'text-white font-black text-xl');
+updateGateRemoveAvatarBtnVisibility(prof);
+}
+if (activeNetflixProfile && activeNetflixProfile.id === prof.id) {
+activeNetflixProfile.avatar = '';
+const headerAvatar = document.getElementById('headerNetflixAvatar');
+renderAvatarElementContent(headerAvatar, prof, 'w-6 h-6 rounded theme-accent-bg flex items-center justify-center shrink-0', 'text-white keep-white font-black text-[11px]');
+}
+syncProfilePhotoToStoredAppState(prof.id, '');
+renderNetflixProfilesGrid();
+if (isGabrielDriveAdminAuthenticated()) {
+syncSharedPlatformsAndProfilesToDrive();
+}
+showToast(`Imagem personalizada de ${prof.name} removida.`, 'info');
+}
+
+function previewNewNetflixProfileAvatar(event) {
+const file = event.target?.files?.[0];
+if (!file) return;
+compressImageFileToBase64(file, 320, 0.84, function(dataUrl) {
+tempNewNetflixProfileAvatarBase64 = dataUrl;
+const preview = document.getElementById('newNetflixProfileAvatarPreview');
+if (preview) {
+preview.innerHTML = `<img src="${dataUrl}" alt="Preview" class="w-full h-full object-cover">`;
+}
+});
+}
+
 let driveSyncDebounceTimer = null;
 let isDriveSyncInProgress = false;
 let sharedPlatformsDriveFileId = null;
@@ -2341,35 +2799,54 @@ manageBtnTxt.textContent = (isManagingNetflixProfiles && isGabrielAdmin)
 }
 let html = netflixProfilesList.map(prof => {
 const canDelete = isManagingNetflixProfiles && isGabrielAdmin && !prof.isOwner;
+const hasAvatar = Boolean(prof.avatar);
 return `
-<div onclick="handleSelectNetflixProfile('${prof.id}')" class="netflix-profile-card group relative cursor-pointer flex flex-col items-center space-y-3 w-28 sm:w-36">
-<div class="netflix-avatar-box relative w-24 h-24 sm:w-32 sm:h-32 rounded-2xl bg-gradient-to-br ${prof.gradient} border-2 border-white/15 flex flex-col items-center justify-center shadow-2xl transition-all duration-300 overflow-hidden">
+<div onclick="handleSelectNetflixProfile('${prof.id}')" class="netflix-profile-card group relative cursor-pointer flex flex-col items-center space-y-2 w-24 sm:w-28 md:w-32">
+<div class="netflix-avatar-box relative w-24 h-24 sm:w-28 sm:h-28 rounded bg-tactical-surface flex flex-col items-center justify-center transition-all duration-200 overflow-hidden">
+<div class="absolute top-0 inset-x-0 h-1 theme-accent-bg opacity-85 z-10"></div>
+${hasAvatar ? `
+<img src="${escapeHTML(prof.avatar)}" alt="${escapeHTML(prof.name)}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+` : `
+<div class="netflix-avatar-default-grad absolute inset-0 bg-gradient-to-br ${prof.gradient}"></div>
+<div class="relative z-10 flex flex-col items-center justify-center">
 <div class="flex items-center gap-5 mb-1 opacity-90">
-<span class="w-2.5 h-2.5 rounded-full bg-white keep-white shadow"></span>
-<span class="w-2.5 h-2.5 rounded-full bg-white keep-white shadow"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-white keep-white"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-white keep-white"></span>
 </div>
 <div class="w-10 h-4 border-b-[3px] border-white rounded-b-full opacity-90"></div>
-<span class="absolute bottom-1.5 right-2.5 text-[11px] font-mono font-black text-white/75 keep-white uppercase">${prof.initial}</span>
-${prof.isOwner ? `<span class="absolute top-1.5 left-2 px-1.5 py-0.5 rounded bg-black/50 text-[9px] font-mono text-amber-300 font-bold">ADMIN</span>` : ''}
 </div>
-${canDelete ? `
-<button type="button" onclick="event.stopPropagation(); handleDeleteNetflixProfile('${prof.id}')" title="Excluir Perfil de ${prof.name}" class="absolute -top-2 -right-1 w-8 h-8 rounded-full bg-[#e50914] hover:bg-red-700 text-white keep-white shadow-lg flex items-center justify-center border-2 border-black transition transform hover:scale-110 z-20">
-<i data-lucide="trash-2" class="w-4 h-4"></i>
+`}
+<span class="absolute bottom-1.5 right-2 z-10 text-[11px] font-mono font-black text-white/90 keep-white uppercase">${escapeHTML(prof.initial)}</span>
+${prof.isOwner ? `<span class="absolute top-2 left-2 z-10 px-1.5 py-0.5 rounded theme-accent-bg text-[9px] font-mono text-white keep-white font-bold">ADMIN</span>` : ''}
+<!-- Botão para colocar/alterar imagem no ícone do perfil de entrada -->
+<button type="button" onclick="event.stopPropagation(); triggerNetflixProfileAvatarUpload('${prof.id}')" title="Colocar / alterar imagem no perfil de ${escapeHTML(prof.name)}" class="netflix-avatar-action-btn absolute bottom-1.5 left-1.5 z-20 w-7 h-7 rounded bg-black/75 hover:bg-tactical-accent text-white keep-white flex items-center justify-center">
+<i data-lucide="camera" class="w-3.5 h-3.5"></i>
+</button>
+${hasAvatar ? `
+<button type="button" onclick="event.stopPropagation(); removeNetflixProfileAvatar('${prof.id}')" title="Remover imagem personalizada de ${escapeHTML(prof.name)}" class="netflix-avatar-action-btn absolute top-2 right-1.5 z-20 w-6 h-6 rounded bg-black/75 hover:bg-red-600 text-slate-200 hover:text-white keep-white flex items-center justify-center">
+<i data-lucide="x" class="w-3 h-3"></i>
 </button>
 ` : ''}
-<span class="netflix-profile-name text-sm sm:text-base font-bold text-slate-300 transition-colors truncate max-w-full">
-${prof.name}
+</div>
+${canDelete ? `
+<button type="button" onclick="event.stopPropagation(); handleDeleteNetflixProfile('${prof.id}')" title="Excluir Perfil de ${escapeHTML(prof.name)}" class="absolute -top-2 -right-1 w-7 h-7 rounded bg-red-600 hover:bg-red-700 text-white keep-white flex items-center justify-center transition transform hover:scale-105 z-30">
+<i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+</button>
+` : ''}
+<span class="netflix-profile-name text-xs sm:text-sm font-bold text-slate-300 transition-colors truncate max-w-full">
+${escapeHTML(prof.name)}
 </span>
 </div>
 `;
 }).join('');
 if (isGabrielAdmin) {
 html += `
-<div onclick="openModal('modalCreateNetflixProfile')" class="netflix-profile-card group cursor-pointer flex flex-col items-center space-y-3 w-28 sm:w-36">
-<div class="netflix-avatar-box w-24 h-24 sm:w-32 sm:h-32 rounded-2xl bg-white/5 hover:bg-white/10 border-2 border-dashed border-white/25 flex items-center justify-center shadow-xl transition-all duration-300">
-<i data-lucide="plus" class="w-10 h-10 text-slate-300 group-hover:text-white keep-white"></i>
+<div onclick="openModal('modalCreateNetflixProfile')" class="netflix-profile-card group cursor-pointer flex flex-col items-center space-y-2 w-24 sm:w-28 md:w-32">
+<div class="netflix-avatar-box w-24 h-24 sm:w-28 sm:h-28 rounded bg-tactical-surface hover:bg-tactical-card flex items-center justify-center transition-all duration-200">
+<i data-lucide="plus" class="w-9 h-9 text-slate-400 group-hover:theme-accent-text"></i>
 </div>
-<span class="netflix-profile-name text-sm sm:text-base font-bold text-slate-400">Adicionar Perfil</span>
+<span class="netflix-profile-name text-xs sm:text-sm font-bold text-slate-400">Adicionar Perfil</span>
 </div>
 `;
 }
@@ -2396,6 +2873,7 @@ return;
 const nameInput = document.getElementById('newNetflixProfileName');
 const emailInput = document.getElementById('newNetflixProfileEmail');
 const gradInput = document.getElementById('newNetflixProfileGradient');
+const avatarInput = document.getElementById('newNetflixProfileAvatarInput');
 const name = (nameInput?.value || '').trim();
 const email = (emailInput?.value || '').toLowerCase().trim();
 const gradient = gradInput?.value || 'from-blue-600 to-indigo-950';
@@ -2406,8 +2884,14 @@ name,
 initial: name.charAt(0).toUpperCase(),
 gradient,
 isOwner: false,
-email
+email,
+avatar: tempNewNetflixProfileAvatarBase64 || ''
 };
+if (newProf.avatar) {
+try {
+localStorage.setItem(PROFILE_AVATAR_STORAGE_PREFIX + newProf.id, newProf.avatar);
+} catch (err) {}
+}
 netflixProfilesList.push(newProf);
 saveNetflixProfilesList();
 if (email && appState) {
@@ -2418,6 +2902,12 @@ appState.authorizedEmails.push(email);
 }
 if (nameInput) nameInput.value = '';
 if (emailInput) emailInput.value = '';
+if (avatarInput) avatarInput.value = '';
+tempNewNetflixProfileAvatarBase64 = '';
+const preview = document.getElementById('newNetflixProfileAvatarPreview');
+if (preview) {
+preview.innerHTML = '<i data-lucide="user" class="w-5 h-5"></i>';
+}
 closeModal('modalCreateNetflixProfile');
 renderNetflixProfilesGrid();
 saveAppState(true);
@@ -2437,6 +2927,7 @@ return;
 netflixProfilesList = netflixProfilesList.filter(p => p.id !== profileId);
 saveNetflixProfilesList();
 localStorage.removeItem(`${MULTI_PROFILES_KEY}_${profileId}`);
+localStorage.removeItem(`${PROFILE_AVATAR_STORAGE_PREFIX}${profileId}`);
 renderNetflixProfilesGrid();
 await syncSharedPlatformsAndProfilesToDrive();
 showToast(`Perfil "${target.name}" excluído.`, 'info');
@@ -2444,7 +2935,6 @@ showToast(`Perfil "${target.name}" excluído.`, 'info');
 function handleSelectNetflixProfile(profileId) {
 const prof = netflixProfilesList.find(p => p.id === profileId);
 if (!prof) return;
-playTudumSound();
 pendingAdminManageAction = false;
 openProfileDriveGateModal(prof, false);
 }
@@ -2454,16 +2944,14 @@ const avatarEl = document.getElementById('gateSelectedAvatar');
 const nameEl = document.getElementById('gateSelectedProfileName');
 const inlineName = document.getElementById('gateProfileNameInline');
 const roleBadge = document.getElementById('gateSelectedRoleBadge');
-if (avatarEl) {
-avatarEl.className = `w-12 h-12 rounded-2xl bg-gradient-to-br ${prof.gradient} flex items-center justify-center text-white keep-white font-black text-xl shadow-lg`;
-avatarEl.textContent = prof.initial;
-}
+renderAvatarElementContent(avatarEl, prof, 'w-14 h-14 rounded bg-tactical-card flex items-center justify-center shrink-0', 'text-white font-black text-xl');
+updateGateRemoveAvatarBtnVisibility(prof);
 if (nameEl) nameEl.textContent = `Olá, ${prof.name}`;
 if (inlineName) inlineName.textContent = prof.name;
 if (roleBadge) {
 roleBadge.textContent = isForAdminManage
 ? `Exclusivo Admin (${MASTER_ADMIN_EMAIL})`
-: (prof.isOwner ? 'Perfil Administrador • Google Drive' : 'Acesso do Aluno • Google Drive');
+: (prof.isOwner ? 'BEM-VINDO(A) • PERFIL ADMINISTRADOR' : 'BEM-VINDO(A) • FAÇA SEU LOGIN');
 }
 const creds = getDriveCredentials();
 const cIdInput = document.getElementById('gateClientIdInput');
@@ -2568,12 +3056,25 @@ localStorage.setItem(ACTIVE_NETFLIX_USER_KEY, prof.id);
 // Admin SÓ fica ativo se o perfil atual for Gabriel E o e-mail logado for o MASTER_ADMIN_EMAIL
 isMasterAdminUnlocked = Boolean(prof.isOwner && isMasterEmail);
 loadAppStateForNetflixUser(prof);
+if (appState) {
+if (!appState.userProfile) appState.userProfile = {};
+if (prof.avatar) {
+appState.userProfile.photoBase64 = prof.avatar;
+} else if (appState.userProfile.photoBase64) {
+// Se o usuário já tinha foto no perfil interno e nunca teve no card Netflix, sincroniza; caso contrário limpa
+const savedCardAvatar = localStorage.getItem(PROFILE_AVATAR_STORAGE_PREFIX + prof.id);
+if (savedCardAvatar) {
+prof.avatar = savedCardAvatar;
+appState.userProfile.photoBase64 = savedCardAvatar;
+} else {
+appState.userProfile.photoBase64 = '';
+}
+}
+saveAppState(false);
+}
 const headerAvatar = document.getElementById('headerNetflixAvatar');
 const headerName = document.getElementById('headerNetflixName');
-if (headerAvatar) {
-headerAvatar.className = `w-6 h-6 rounded-lg bg-gradient-to-br ${prof.gradient} flex items-center justify-center text-white keep-white font-black text-[11px]`;
-headerAvatar.textContent = prof.initial;
-}
+renderAvatarElementContent(headerAvatar, prof, 'w-6 h-6 rounded theme-accent-bg flex items-center justify-center shrink-0', 'text-white keep-white font-black text-[11px]');
 if (headerName) headerName.textContent = prof.name;
 closeModal('modalProfileDriveGate');
 const overlay = document.getElementById('netflixProfilesOverlay');
@@ -2584,6 +3085,8 @@ overlay.classList.remove('flex');
 updateDriveStatusUI(isRealOAuthToken());
 updateCourseAdminVisibility();
 renderActiveModule();
+// Reproduz a vinheta tática silenciosa "ORGANIZE" (estilo vídeo Caveira anexado) ao logar no app
+playOrganizeLoginVignette(1650);
 showToast(`Bem-vindo(a), ${prof.name}!`, 'success');
 }
 function openNetflixProfileSwitcher() {
@@ -2642,24 +3145,46 @@ if (currentTheme === 'pink') localStorage.removeItem('ORGANIZE_NEZUKO_CUSTOM_BG_
 loadThemeCustomBg(currentTheme);
 showToast('Imagem de fundo personalizada removida!', 'info');
 }
+const VALID_THEMES = ['dark', 'dracula', 'tokyo-night', 'tactical-blue', 'github', 'military', 'flamengo', 'pink', 'blue'];
+const THEME_ALIASES = {
+'dracula-dark': 'dracula',
+'tokyonight': 'tokyo-night',
+'tokyo-night-dark': 'tokyo-night',
+'tokyo-nigth': 'tokyo-night',
+'tokyo-nigth-dark': 'tokyo-night',
+'tokyonigth': 'tokyo-night',
+'github-dark': 'github',
+'tema-do-github': 'github',
+'azul-tatico': 'tactical-blue',
+'azul-escuro-tatico': 'tactical-blue'
+};
+function normalizeThemeKey(theme) {
+if (!theme || typeof theme !== 'string') return 'dark';
+const cleaned = theme.trim().toLowerCase();
+const mapped = THEME_ALIASES[cleaned] || cleaned;
+return VALID_THEMES.includes(mapped) ? mapped : 'dark';
+}
 function loadThemePreference() {
 const saved = localStorage.getItem(THEME_STORAGE_KEY);
-currentTheme = ['dark', 'pink', 'blue', 'military', 'flamengo'].includes(saved) ? saved : 'dark';
+currentTheme = normalizeThemeKey(saved);
 applyTheme(currentTheme, false);
 }
 function applyTheme(theme, notify = true) {
-currentTheme = theme;
-localStorage.setItem(THEME_STORAGE_KEY, theme);
+const normalized = normalizeThemeKey(theme);
+currentTheme = normalized;
+localStorage.setItem(THEME_STORAGE_KEY, normalized);
 const root = document.documentElement;
-root.setAttribute('data-theme', theme);
-if (['dark', 'military', 'flamengo'].includes(theme)) {
+root.setAttribute('data-theme', normalized);
+if (!['pink', 'blue'].includes(normalized)) {
 root.classList.add('dark');
 } else {
 root.classList.remove('dark');
 }
 const sel = document.getElementById('themeSelectDropdown');
-if (sel) sel.value = theme;
-loadThemeCustomBg(theme);
+if (sel) sel.value = normalized;
+const loginSel = document.getElementById('loginThemeSelectDropdown');
+if (loginSel) loginSel.value = normalized;
+loadThemeCustomBg(normalized);
 lucide.createIcons();
 updatePipCanvas();
 if (notify) showToast('Tema atualizado!', 'info');
@@ -4468,7 +4993,25 @@ e.preventDefault();
 const name = document.getElementById('userInputName').value.trim();
 if (!appState.userProfile) appState.userProfile = {};
 appState.userProfile.name = name || 'Nome do Aluno';
-if (tempBase64Photo) appState.userProfile.photoBase64 = tempBase64Photo;
+if (tempBase64Photo) {
+appState.userProfile.photoBase64 = tempBase64Photo;
+if (activeNetflixProfile) {
+activeNetflixProfile.avatar = tempBase64Photo;
+const profInList = netflixProfilesList.find(p => p.id === activeNetflixProfile.id);
+if (profInList) profInList.avatar = tempBase64Photo;
+try {
+localStorage.setItem(PROFILE_AVATAR_STORAGE_PREFIX + activeNetflixProfile.id, tempBase64Photo);
+} catch (err) {}
+saveNetflixProfilesList();
+const headerAvatar = document.getElementById('headerNetflixAvatar');
+renderAvatarElementContent(headerAvatar, activeNetflixProfile, 'w-6 h-6 rounded theme-accent-bg flex items-center justify-center shrink-0', 'text-white keep-white font-black text-[11px]');
+renderNetflixProfilesGrid();
+if (isGabrielDriveAdminAuthenticated()) {
+syncSharedPlatformsAndProfilesToDrive();
+}
+}
+tempBase64Photo = null;
+}
 saveAppState();
 closeModal('modalEditUserProfile');
 renderDashboardModule();
@@ -4486,22 +5029,26 @@ if (!pipCanvasCtx) return;
 const canvas = document.getElementById('pipCanvas');
 const w = canvas.width;
 const h = canvas.height;
-pipCanvasCtx.fillStyle = '#0f141c';
-pipCanvasCtx.fillRect(0, 0, w, h);
 const computedStyle = getComputedStyle(document.documentElement);
+const bgSurface = computedStyle.getPropertyValue('--bg-surface').trim() || '#0f141c';
+const textMain = computedStyle.getPropertyValue('--text-main').trim() || '#ffffff';
+const textMuted = computedStyle.getPropertyValue('--text-muted').trim() || '#94a3b8';
 const accentColor = computedStyle.getPropertyValue('--accent-main').trim() || '#0b61f5';
+const accentText = computedStyle.getPropertyValue('--accent-text').trim() || accentColor;
+pipCanvasCtx.fillStyle = bgSurface;
+pipCanvasCtx.fillRect(0, 0, w, h);
 pipCanvasCtx.strokeStyle = accentColor;
 pipCanvasCtx.lineWidth = 4;
 pipCanvasCtx.strokeRect(2, 2, w - 4, h - 4);
-pipCanvasCtx.fillStyle = '#94a3b8';
+pipCanvasCtx.fillStyle = textMuted;
 pipCanvasCtx.font = '12px Inter, sans-serif';
 pipCanvasCtx.textAlign = 'center';
 const subj = document.getElementById('timerSubjectSelect')?.value || 'Estudos';
 pipCanvasCtx.fillText(`${subj} • ${timerModality}`.toUpperCase(), w / 2, 45);
-pipCanvasCtx.fillStyle = '#ffffff';
+pipCanvasCtx.fillStyle = textMain;
 pipCanvasCtx.font = 'bold 44px JetBrains Mono, monospace';
 pipCanvasCtx.fillText(formatSecondsToHHMMSS(timerSeconds), w / 2, 115);
-pipCanvasCtx.fillStyle = timerRunning ? accentColor : '#94a3b8';
+pipCanvasCtx.fillStyle = timerRunning ? accentText : textMuted;
 pipCanvasCtx.font = '12px Inter, sans-serif';
 pipCanvasCtx.fillText(timerRunning ? '● EM ANDAMENTO' : 'PAUSADO', w / 2, 160);
 }
@@ -5916,6 +6463,21 @@ const kInput = document.getElementById('gdriveApiKeyInput');
 if (cInput) cInput.value = creds.clientId || '';
 if (kInput) kInput.value = creds.apiKey || '';
 }
+if (id === 'modalCreateNetflixProfile') {
+tempNewNetflixProfileAvatarBase64 = '';
+const avatarInput = document.getElementById('newNetflixProfileAvatarInput');
+if (avatarInput) avatarInput.value = '';
+const preview = document.getElementById('newNetflixProfileAvatarPreview');
+if (preview) {
+preview.innerHTML = '<i data-lucide="user" class="w-5 h-5"></i>';
+lucide.createIcons();
+}
+}
+if (id === 'modalEditUserProfile') {
+tempBase64Photo = null;
+const photoInput = document.getElementById('userInputPhotoFile');
+if (photoInput) photoInput.value = '';
+}
 }
 }
 // MÓDULO 8: CARDS DE PLATAFORMAS (SINCRONIZADO PARA TODOS OS PERFIS E ALUNOS)
@@ -6055,7 +6617,21 @@ savePlatformCardsList(sharedData.platformCards, false);
 }
 if (Array.isArray(sharedData.netflixProfilesList) && sharedData.netflixProfilesList.length > 0) {
 netflixProfilesList = sharedData.netflixProfilesList;
+DEFAULT_NETFLIX_PROFILES.forEach(def => {
+if (!netflixProfilesList.some(p => p.name.toLowerCase() === def.name.toLowerCase())) {
+netflixProfilesList.push({ ...def });
+}
+});
+hydrateNetflixProfileAvatars(true);
 saveNetflixProfilesList();
+if (activeNetflixProfile) {
+const updatedActive = netflixProfilesList.find(p => p.id === activeNetflixProfile.id);
+if (updatedActive) {
+activeNetflixProfile = updatedActive;
+const headerAvatar = document.getElementById('headerNetflixAvatar');
+renderAvatarElementContent(headerAvatar, activeNetflixProfile, 'w-6 h-6 rounded theme-accent-bg flex items-center justify-center shrink-0', 'text-white keep-white font-black text-[11px]');
+}
+}
 renderNetflixProfilesGrid();
 }
 }
@@ -6066,22 +6642,33 @@ console.warn('Catálogo global de plataformas ainda não disponível:', err);
 }
 function compressImageFileToBase64(file, maxWidth = 600, quality = 0.78, callback) {
 if (!file) return;
+const mimeType = String(file.type || '').toLowerCase();
+const mayHaveTransparency = mimeType.includes('png') || mimeType.includes('webp') || mimeType.includes('svg') || mimeType.includes('gif');
 const reader = new FileReader();
 reader.onload = function(e) {
 const img = new Image();
 img.onload = function() {
 const canvas = document.createElement('canvas');
-let w = img.width;
-let h = img.height;
-if (w > maxWidth) {
-h = Math.round((h * maxWidth) / w);
-w = maxWidth;
+let w = Math.max(1, img.width || maxWidth);
+let h = Math.max(1, img.height || maxWidth);
+if (w > maxWidth || h > maxWidth) {
+const scale = maxWidth / Math.max(w, h);
+w = Math.max(1, Math.round(w * scale));
+h = Math.max(1, Math.round(h * scale));
 }
 canvas.width = w;
 canvas.height = h;
 const ctx = canvas.getContext('2d');
 ctx.drawImage(img, 0, 0, w, h);
-const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+let compressedDataUrl = '';
+if (mayHaveTransparency) {
+compressedDataUrl = canvas.toDataURL('image/webp', quality);
+if (!compressedDataUrl || !compressedDataUrl.startsWith('data:image/webp')) {
+compressedDataUrl = canvas.toDataURL('image/png');
+}
+} else {
+compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+}
 callback(compressedDataUrl);
 };
 img.onerror = function() {
@@ -6209,6 +6796,21 @@ function closeModal(id) {
     }
     if (id === 'modalStudyRegister') {
         studyRegCtx = null;
+    }
+    if (id === 'modalCreateNetflixProfile') {
+        tempNewNetflixProfileAvatarBase64 = '';
+        const avatarInput = document.getElementById('newNetflixProfileAvatarInput');
+        if (avatarInput) avatarInput.value = '';
+        const preview = document.getElementById('newNetflixProfileAvatarPreview');
+        if (preview) {
+            preview.innerHTML = '<i data-lucide="user" class="w-5 h-5"></i>';
+            lucide.createIcons();
+        }
+    }
+    if (id === 'modalEditUserProfile') {
+        tempBase64Photo = null;
+        const photoInput = document.getElementById('userInputPhotoFile');
+        if (photoInput) photoInput.value = '';
     }
 }
 function exportDataJSON() {
@@ -7235,17 +7837,17 @@ showToast('Dados limpos!', 'info');
             initPipCanvas();
             loadThemePreference();
             loadAppState();
+            const defaultProf = netflixProfilesList.find(p => p.isOwner) || netflixProfilesList[0];
+            if (defaultProf) {
+                const headerAvatar = document.getElementById('headerNetflixAvatar');
+                renderAvatarElementContent(headerAvatar, defaultProf, 'w-6 h-6 rounded theme-accent-bg flex items-center justify-center shrink-0', 'text-white keep-white font-black text-[11px]');
+            }
             renderNetflixProfilesGrid();
             switchTab('mod7');
             lucide.createIcons();
             setTimeout(initGoogleDriveClients, 800);
 
-            setTimeout(() => {
-                playTudumSound();
-            }, 250);
-            setTimeout(() => {
-                finishNetflixIntro();
-            }, 3200);
+            playOrganizeLoginVignette(1650);
         };
     </script>
 </body>
