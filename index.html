@@ -287,12 +287,21 @@ border-radius: 4px !important;
 .shadow-inner {
 box-shadow: none !important;
 }
+html, body {
+max-width: 100vw;
+overflow-x: hidden;
+}
 body {
 background-color: var(--bg-main);
 color: var(--text-main);
 font-family: 'Inter', sans-serif;
 overflow-x: hidden;
+width: 100%;
 transition: background-color 0.2s ease, color 0.2s ease;
+}
+aside#sidebar {
+height: 100vh;
+height: 100dvh;
 }
 .theme-accent-bg {
 background-color: var(--accent-main) !important;
@@ -848,9 +857,9 @@ Pular Vinheta ›
 </div>
 <!-- Input de Arquivo Oculto para Upload de Foto/Ícone nos Perfis de Entrada Estilo Netflix -->
 <input type="file" id="netflixProfileAvatarFileInput" accept="image/*" class="hidden" onchange="handleNetflixProfileAvatarFileChange(event)">
-<section id="netflixProfilesOverlay" class="fixed inset-0 z-[150] bg-tactical-bg bg-tactical-grid flex flex-col justify-between p-4 sm:p-6 overflow-y-auto select-none">
+<section id="netflixProfilesOverlay" class="fixed inset-0 z-[150] bg-tactical-bg bg-tactical-grid flex flex-col justify-between p-3.5 sm:p-6 overflow-y-auto overflow-x-hidden select-none">
 <!-- Topo da Tela de Login no mesmo estilo tático do App -->
-<div class="relative z-10 flex flex-wrap items-center justify-between gap-3 max-w-6xl w-full mx-auto bg-tactical-surface px-4 sm:px-6 py-3 rounded">
+<div class="relative z-10 flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 max-w-6xl w-full mx-auto bg-tactical-surface px-3.5 sm:px-6 py-3 rounded shrink-0">
 <div class="flex items-center gap-3">
 <div class="w-9 h-9 rounded theme-accent-bg flex items-center justify-center shrink-0">
 <i data-lucide="shield" class="w-5 h-5 text-white keep-white"></i>
@@ -860,11 +869,11 @@ Pular Vinheta ›
 <span class="text-[10px] font-mono uppercase tracking-wider theme-accent-text block mt-0.5">Plataforma Tática</span>
 </div>
 </div>
-<div class="flex flex-wrap items-center gap-2">
+<div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
 <span id="netflixAdminStatusBadge" class="hidden px-3 py-1.5 rounded bg-tactical-card theme-accent-text text-xs font-mono items-center gap-1.5">
 <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Gabriel (Admin Drive Ativo)
 </span>
-<select id="loginThemeSelectDropdown" onchange="applyTheme(this.value)" title="Tema do App" class="px-2.5 py-2 rounded bg-tactical-card text-xs font-medium text-slate-200 cursor-pointer">
+<select id="loginThemeSelectDropdown" onchange="applyTheme(this.value)" title="Tema do App" class="px-2 sm:px-2.5 py-1.5 sm:py-2 rounded bg-tactical-card text-xs font-medium text-slate-200 cursor-pointer">
 <option value="dark">Escuro Tático</option>
 <option value="dracula">Dracula Dark</option>
 <option value="tokyo-night">Tokyo Night Dark</option>
@@ -875,10 +884,13 @@ Pular Vinheta ›
 <option value="pink">Rosa & Branco</option>
 <option value="blue">Azul & Branco</option>
 </select>
-<button type="button" onclick="replayNetflixIntro()" class="px-3.5 py-2 rounded bg-tactical-card hover:bg-tactical-bg text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5 transition">
+<button type="button" onclick="triggerImportFile()" title="Importar arquivo de backup (.json) feito no PC ou celular" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded bg-tactical-card hover:bg-tactical-bg text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5 transition">
+<i data-lucide="upload" class="w-3.5 h-3.5 theme-accent-text"></i> Importar Backup
+</button>
+<button type="button" onclick="replayNetflixIntro()" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded bg-tactical-card hover:bg-tactical-bg text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5 transition">
 <i data-lucide="film" class="w-3.5 h-3.5 theme-accent-text"></i> Repetir Vinheta
 </button>
-<button type="button" onclick="handleToggleManageProfiles()" id="btnManageNetflixProfiles" class="px-4 py-2 rounded bg-tactical-card hover:bg-tactical-bg text-xs font-bold text-white flex items-center gap-1.5 transition">
+<button type="button" onclick="handleToggleManageProfiles()" id="btnManageNetflixProfiles" class="px-3 sm:px-4 py-1.5 sm:py-2 rounded bg-tactical-card hover:bg-tactical-bg text-xs font-bold text-white flex items-center gap-1.5 transition">
 <i data-lucide="settings-2" class="w-3.5 h-3.5 theme-accent-text"></i>
 <span id="btnManageNetflixProfilesTxt">Gerenciar Perfis (Gabriel)</span>
 </button>
@@ -886,8 +898,8 @@ Pular Vinheta ›
 </div>
 <!-- Centro: Grade de Perfis Estilo Netflix integrada ao Design Tático do App -->
 <div class="relative z-10 max-w-6xl w-full mx-auto my-auto py-4 text-center space-y-5">
-<div class="space-y-1.5">
-<span class="inline-block text-[10px] font-mono uppercase tracking-[0.22em] theme-accent-text font-semibold">
+<div class="space-y-1.5 px-2">
+<span class="inline-block text-[10px] font-mono uppercase tracking-[0.18em] sm:tracking-[0.22em] theme-accent-text font-semibold">
 BEM-VINDO(A) • SELECIONE SEU ACESSO
 </span>
 <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight">Quem está estudando?</h1>
@@ -895,7 +907,7 @@ BEM-VINDO(A) • SELECIONE SEU ACESSO
 Selecione seu perfil para entrar ou clique no ícone de câmera no perfil para colocar uma imagem personalizada
 </p>
 </div>
-<div id="netflixProfilesGrid" class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 px-2">
+<div id="netflixProfilesGrid" class="flex flex-wrap items-center justify-center gap-3.5 sm:gap-6 px-2">
 <!-- Preenchido dinamicamente com Gabriel, Babii, Rafael, Mila, Caio, Yuri, Camile -->
 </div>
 <div id="manageProfilesHintBar" class="hidden max-w-lg mx-auto p-3 rounded bg-tactical-surface text-xs text-slate-200 flex items-center justify-center gap-2">
@@ -904,12 +916,12 @@ Selecione seu perfil para entrar ou clique no ícone de câmera no perfil para c
 </div>
 </div>
 <!-- Rodapé da Tela Inicial -->
-<div class="relative z-10 text-center text-[11px] font-mono text-slate-500">
+<div class="relative z-10 text-center text-[11px] font-mono text-slate-500 shrink-0 pb-1">
 ORGANIZE • PLATAFORMA TÁTICA DE ESTUDOS
 </div>
 </section>
-<div id="modalProfileDriveGate" class="fixed inset-0 bg-black/80 z-[170] hidden items-center justify-center p-4 backdrop-blur-sm">
-<div class="bg-tactical-surface rounded max-w-md w-full p-6 sm:p-7 space-y-5">
+<div id="modalProfileDriveGate" class="fixed inset-0 bg-black/80 z-[170] hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+<div class="bg-tactical-surface rounded max-w-md w-full p-5 sm:p-7 space-y-4 sm:space-y-5 my-auto max-h-[92dvh] overflow-y-auto">
 <div class="flex items-center justify-between pb-3">
 <div class="flex items-center gap-3.5">
 <div class="relative group cursor-pointer shrink-0" onclick="triggerNetflixProfileAvatarUpload(pendingNetflixProfileToEnter ? pendingNetflixProfileToEnter.id : '')" title="Clique para colocar ou alterar a imagem deste perfil">
@@ -937,15 +949,25 @@ G
 <i data-lucide="x" class="w-4 h-4"></i>
 </button>
 </div>
-<div class="space-y-3">
+<div class="space-y-2.5">
 <p id="gateInstructionsText" class="text-xs text-slate-300 leading-relaxed">
-Para entrar no perfil de <strong id="gateProfileNameInline" class="text-white">Gabriel</strong>, conecte sua conta do <strong>Google Drive</strong> ou acesse o ambiente de estudos.
+Para entrar no perfil de <strong id="gateProfileNameInline" class="text-white">Gabriel</strong>, conecte sua conta do <strong>Google Drive</strong> (puxa automaticamente seu backup salvo no PC) ou importe um arquivo de backup.
 </p>
 <!-- Botão Principal OAuth Google Drive (Estilo Tático do App) -->
 <button type="button" onclick="authenticateProfileWithGoogleDrive()" id="btnGateConnectDrive" class="w-full py-3.5 px-5 rounded theme-accent-bg hover:opacity-95 text-white keep-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2.5 transition">
 <i data-lucide="log-in" class="w-4 h-4"></i>
-<span>Conectar Google Drive & Entrar</span>
+<span>Conectar Google Drive & Puxar Backup</span>
 </button>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+<button type="button" onclick="triggerImportFile()" class="w-full py-2 px-3 rounded bg-tactical-card hover:bg-tactical-bg text-xs font-semibold text-slate-200 hover:text-white flex items-center justify-center gap-1.5 transition">
+<i data-lucide="upload" class="w-3.5 h-3.5 theme-accent-text"></i>
+<span>Importar Backup (.json)</span>
+</button>
+<button type="button" id="btnGateEnterLocal" onclick="enterProfileOfflineMode()" class="w-full py-2 px-3 rounded bg-tactical-card hover:bg-tactical-bg text-xs font-semibold text-slate-300 hover:text-white flex items-center justify-center gap-1.5 transition">
+<i data-lucide="smartphone" class="w-3.5 h-3.5 theme-accent-text"></i>
+<span>Entrar no Modo Local</span>
+</button>
+</div>
 <!-- Configuração Rápida de Chaves OAuth / API Key (se necessário) -->
 <div class="pt-1">
 <button type="button" onclick="toggleGateCredentialsBox()" class="w-full py-2 px-3 rounded bg-tactical-card hover:bg-tactical-bg text-[11px] font-mono text-slate-300 flex items-center justify-between transition">
@@ -963,7 +985,7 @@ Para entrar no perfil de <strong id="gateProfileNameInline" class="text-white">G
 </div>
 <div class="flex justify-end gap-2">
 <button type="button" onclick="saveGateCredentialsAndEnter()" class="px-3.5 py-1.5 rounded bg-tactical-card hover:bg-tactical-surface text-white text-xs font-semibold transition">
-Salvar Chaves
+Salvar Chaves & Conectar
 </button>
 </div>
 </div>
@@ -977,8 +999,8 @@ Salvar Chaves
 </div>
 </div>
 </div>
-<div id="modalCreateNetflixProfile" class="fixed inset-0 bg-black/80 z-[180] hidden items-center justify-center p-4 backdrop-blur-sm">
-<div class="bg-tactical-surface rounded max-w-md w-full p-6 space-y-4">
+<div id="modalCreateNetflixProfile" class="fixed inset-0 bg-black/80 z-[180] hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+<div class="bg-tactical-surface rounded max-w-md w-full p-6 space-y-4 my-auto max-h-[90dvh] overflow-y-auto">
 <div class="flex items-center justify-between pb-3">
 <h3 class="text-base font-bold text-white flex items-center gap-2">
 <i data-lucide="user-plus" class="w-5 h-5 theme-accent-text"></i> Adicionar Novo Perfil
@@ -1034,7 +1056,7 @@ Salvar Chaves
 <!-- SIDEBAR BACKDROP MOBILE -->
 <div id="mobileSidebarBackdrop" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-black/70 z-40 hidden md:hidden backdrop-blur-sm"></div>
 <!-- SIDEBAR AUTO-RETRÁTIL -->
-<aside id="sidebar" onmouseenter="expandSidebar()" onmousemove="onSidebarMouseMove()" onmouseleave="collapseSidebar()" class="sidebar-collapsed fixed md:fixed top-0 left-0 z-50 h-screen w-72 md:w-16 bg-tactical-surface flex flex-col transition-all duration-200 -translate-x-full md:translate-x-0 shrink-0">
+<aside id="sidebar" onmouseenter="expandSidebar()" onmousemove="onSidebarMouseMove()" onmouseleave="collapseSidebar()" class="sidebar-collapsed fixed md:fixed top-0 left-0 z-50 h-screen w-72 max-w-[85vw] md:w-16 bg-tactical-surface flex flex-col transition-all duration-200 -translate-x-full md:translate-x-0 shrink-0 overflow-y-auto">
 <!-- Brand Header -->
 <div id="sidebarBrandHeader" class="brand-header-banner px-4 py-4 flex items-center justify-between">
 <div class="flex items-center gap-3 min-w-0">
@@ -1153,7 +1175,7 @@ Conectar
 <i data-lucide="database" class="w-4 h-4"></i>
 </div>
 <!-- Sidebar Backup Footer (Visível quando expandido) -->
-<div class="sidebar-hide-collapsed p-3 bg-tactical-bg/50 space-y-2">
+<div class="sidebar-hide-collapsed p-3 bg-tactical-bg/50 space-y-2 shrink-0">
 <div class="grid grid-cols-2 gap-2">
 <button type="button" onclick="exportDataJSON()" class="flex items-center justify-center gap-1.5 px-3 py-2 rounded bg-tactical-card hover:bg-tactical-surface text-xs font-medium text-slate-300 transition cursor-pointer">
 <i data-lucide="download" class="w-3.5 h-3.5 theme-accent-text"></i> Exportar
@@ -1161,54 +1183,59 @@ Conectar
 <button type="button" onclick="triggerImportFile()" class="flex items-center justify-center gap-1.5 px-3 py-2 rounded bg-tactical-card hover:bg-tactical-surface text-xs font-medium text-slate-300 transition cursor-pointer">
 <i data-lucide="upload" class="w-3.5 h-3.5 theme-accent-text"></i> Importar
 </button>
-<input type="file" id="importJsonInput" accept=".json,application/json" class="hidden" onchange="importDataJSON(event)">
+<input type="file" id="importJsonInput" accept=".json,application/json,text/plain,*/*" class="hidden" onchange="importDataJSON(event)">
 </div>
-<button type="button" onclick="syncDriveNow(false)" class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded theme-accent-soft-bg text-xs font-semibold transition">
-<i data-lucide="cloud-upload" class="w-3.5 h-3.5"></i> Sincronizar Google Drive
+<div class="grid grid-cols-2 gap-2">
+<button type="button" onclick="pullDriveBackupManual()" title="Puxar backup salvo no Google Drive (ex: feito no PC)" class="flex items-center justify-center gap-1.5 px-2.5 py-2 rounded theme-accent-soft-bg text-[11px] font-semibold transition">
+<i data-lucide="cloud-download" class="w-3.5 h-3.5 shrink-0"></i> Puxar Drive
 </button>
+<button type="button" onclick="syncDriveNow(false)" title="Salvar dados atuais no Google Drive" class="flex items-center justify-center gap-1.5 px-2.5 py-2 rounded theme-accent-soft-bg text-[11px] font-semibold transition">
+<i data-lucide="cloud-upload" class="w-3.5 h-3.5 shrink-0"></i> Salvar Drive
+</button>
+</div>
 <button type="button" onclick="openResetModal()" class="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded hover:bg-tactical-card text-[11px] font-mono text-slate-400 hover:text-white transition">
 <i data-lucide="refresh-cw" class="w-3 h-3"></i> Restaurar Dados
 </button>
 </div>
 </aside>
 <!-- WRAPPER CONTEÚDO -->
-<div id="mainContentWrapper" class="relative z-10 flex-1 flex flex-col min-w-0">
+<div id="mainContentWrapper" class="relative z-10 flex-1 flex flex-col min-w-0 w-full max-w-full overflow-x-hidden">
 <!-- CABEÇALHO INSPIRADO NAS IMAGENS DE DESIGN -->
-<header class="sticky top-0 z-30 bg-tactical-surface px-4 lg:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3">
-<div class="flex items-center gap-3">
-<button onclick="toggleMobileSidebar()" class="md:hidden p-2 rounded bg-tactical-card text-slate-300 hover:text-white">
+<header class="sticky top-0 z-30 bg-tactical-surface px-3 sm:px-4 lg:px-8 py-2.5 flex flex-wrap items-center justify-between gap-2 sm:gap-3 w-full max-w-full">
+<div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+<button onclick="toggleMobileSidebar()" class="md:hidden p-2 rounded bg-tactical-card text-slate-300 hover:text-white shrink-0">
 <i data-lucide="menu" class="w-5 h-5"></i>
 </button>
-<div>
-<h2 id="headerModuleTitle" class="text-sm sm:text-base font-medium text-slate-200 tracking-wide">Dashboard</h2>
+<div class="min-w-0">
+<h2 id="headerModuleTitle" class="text-sm sm:text-base font-medium text-slate-200 tracking-wide truncate">Dashboard</h2>
 </div>
 </div>
-<div class="flex items-center gap-2 sm:gap-3 ml-auto">
+<div class="flex flex-wrap items-center justify-end gap-1 sm:gap-2.5 ml-auto min-w-0 max-w-full">
 <!-- Mini Widget do Cronômetro estilo Barra Superior Tática -->
-<div id="miniTimerWidget" class="flex items-center gap-2.5 px-2.5 py-1 transition-all">
+<div id="miniTimerWidget" class="flex items-center gap-1 sm:gap-2 px-1 sm:px-2.5 py-1 transition-all shrink-0">
 <div class="hidden lg:block text-right pr-1">
 <div id="miniTimerLabel" class="text-[10px] font-mono text-slate-400 max-w-[110px] truncate">Cronômetro</div>
 <div id="miniTimerModality" class="text-[9px] uppercase tracking-wider theme-accent-text font-semibold">Teoria/Questões</div>
 </div>
-<button onclick="toggleGlobalTimer()" id="miniTimerPlayBtn" title="Iniciar / Pausar" class="p-1.5 rounded text-slate-300 hover:text-white hover:bg-tactical-card transition">
+<button onclick="toggleGlobalTimer()" id="miniTimerPlayBtn" title="Iniciar / Pausar" class="p-1 sm:p-1.5 rounded text-slate-300 hover:text-white hover:bg-tactical-card transition">
 <i data-lucide="play" class="w-4 h-4"></i>
 </button>
 <button onclick="resetGlobalTimer()" title="Zerar Cronômetro" class="p-1.5 rounded text-slate-400 hover:text-white hover:bg-tactical-card transition hidden sm:inline-flex">
 <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
 </button>
-<div id="miniTimerDisplay" class="font-mono text-sm sm:text-base font-semibold text-white tracking-wider px-1.5">
+<div id="miniTimerDisplay" class="font-mono text-xs sm:text-base font-semibold text-white tracking-wider px-0.5 sm:px-1.5">
 00:00:00
 </div>
-<button onclick="togglePictureInPicture()" title="Picture-in-Picture (Janela Flutuante)" class="p-1.5 rounded text-slate-400 hover:text-white hover:bg-tactical-card transition">
+<button onclick="togglePictureInPicture()" title="Picture-in-Picture (Janela Flutuante)" class="p-1.5 rounded text-slate-400 hover:text-white hover:bg-tactical-card transition hidden sm:inline-flex">
 <i data-lucide="picture-in-picture-2" class="w-3.5 h-3.5"></i>
 </button>
-<button onclick="switchTab('mod6')" title="Abrir Cronômetro" class="p-1.5 rounded text-slate-400 hover:text-white hover:bg-tactical-card transition">
+<button onclick="switchTab('mod6')" title="Abrir Cronômetro" class="p-1 sm:p-1.5 rounded text-slate-400 hover:text-white hover:bg-tactical-card transition">
 <i data-lucide="maximize" class="w-3.5 h-3.5"></i>
 </button>
 </div>
 <!-- Seletor de Temas + Imagem de Fundo -->
-<div class="flex items-center gap-1.5">
-<select id="themeSelectDropdown" onchange="applyTheme(this.value)" class="px-2.5 py-1.5 rounded bg-tactical-card text-xs font-medium text-slate-200 cursor-pointer">
+<div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
+<select id="themeSelectDropdown" onchange="applyTheme(this.value)" class="max-w-[88px] sm:max-w-none truncate px-1.5 sm:px-2.5 py-1.5 rounded bg-tactical-card text-xs font-medium text-slate-200 cursor-pointer">
 <option value="dark">Escuro Tático</option>
 <option value="dracula">Dracula Dark</option>
 <option value="tokyo-night">Tokyo Night Dark</option>
@@ -1227,21 +1254,21 @@ Conectar
 </button>
 </div>
 <!-- Botão Trocar Perfil -->
-<button type="button" onclick="openNetflixProfileSwitcher()" title="Trocar de Perfil (Quem está estudando?)" class="pl-1.5 pr-2.5 py-1 rounded bg-tactical-card hover:bg-tactical-surface text-xs font-semibold text-white flex items-center gap-2 transition">
+<button type="button" onclick="openNetflixProfileSwitcher()" title="Trocar de Perfil (Quem está estudando?)" class="px-1.5 sm:pl-1.5 sm:pr-2.5 py-1 rounded bg-tactical-card hover:bg-tactical-surface text-xs font-semibold text-white flex items-center gap-1.5 sm:gap-2 transition shrink-0">
 <div id="headerNetflixAvatar" class="w-6 h-6 rounded theme-accent-bg flex items-center justify-center text-white keep-white font-black text-[11px] overflow-hidden shrink-0">
 G
 </div>
 <span id="headerNetflixName" class="hidden sm:inline truncate max-w-[90px]">Gabriel</span>
 </button>
 <!-- Botão Rápido Google Drive -->
-<button type="button" onclick="handleDriveAuthClick()" id="headerDriveBtn" class="px-2.5 py-1.5 rounded bg-tactical-card hover:bg-tactical-surface text-xs font-medium text-slate-200 flex items-center gap-1.5 transition">
+<button type="button" onclick="handleDriveAuthClick()" id="headerDriveBtn" class="px-1.5 sm:px-2.5 py-1.5 rounded bg-tactical-card hover:bg-tactical-surface text-xs font-medium text-slate-200 flex items-center gap-1.5 transition shrink-0">
 <i data-lucide="cloud" class="w-4 h-4 theme-accent-text"></i>
 <span id="headerDriveBtnText" class="hidden sm:inline">Drive</span>
 </button>
 </div>
 </header>
 <!-- ÁREA PRINCIPAL -->
-<main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1600px] w-full mx-auto space-y-6">
+<main class="flex-1 p-3.5 sm:p-6 lg:p-8 max-w-[1600px] w-full min-w-0 overflow-x-hidden mx-auto space-y-6">
 <section id="sec-mod1" class="module-section hidden space-y-5">
 <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
 <h3 class="text-lg font-bold text-white flex items-center gap-2">
@@ -1282,7 +1309,7 @@ Edital Verticalizado
 </section>
 <section id="sec-mod2" class="module-section hidden space-y-6">
 <!-- Abas da Agenda: Diária vs Grade de Segunda a Domingo -->
-<div class="flex items-center gap-2 border-b border-tactical-border pb-3">
+<div class="flex flex-wrap items-center gap-2 border-b border-tactical-border pb-3">
 <button onclick="setAgendaSubTab('DAILY')" id="subTabAgendaDaily" class="px-4 py-2 rounded-xl text-xs font-semibold transition theme-accent-bg">
 Metas do Dia
 </button>
@@ -1293,7 +1320,7 @@ Grade Semanal (Segunda a Domingo)
 <!-- SUB-ABA 1: METAS DO DIA -->
 <div id="agendaViewDaily" class="space-y-6">
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-<div class="lg:col-span-4 bg-tactical-surface border border-tactical-border rounded-2xl p-5 h-fit space-y-4 shadow-sm">
+<div class="lg:col-span-4 min-w-0 bg-tactical-surface border border-tactical-border rounded-2xl p-5 h-fit space-y-4 shadow-sm">
 <h3 class="text-base font-bold text-white border-b border-tactical-border pb-3 flex items-center gap-2">
 <i data-lucide="calendar-plus" class="w-5 h-5 theme-accent-text"></i> Agendar ou Registrar Estudo
 </h3>
@@ -1303,7 +1330,7 @@ Grade Semanal (Segunda a Domingo)
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Data</label>
 <input type="date" id="agendaInputDate" required class="w-full px-3.5 py-2 rounded-xl text-sm">
 </div>
-<div>
+<div id="agendaSubjectWrap">
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Disciplina</label>
 <select id="agendaInputSubject" onchange="renderAgendaSubtopicChecklist(true)" required class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
 </div>
@@ -1331,7 +1358,7 @@ Grade Semanal (Segunda a Domingo)
 <div class="grid grid-cols-2 gap-2.5">
 <div>
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Modalidade</label>
-<select id="agendaInputType" class="w-full px-3 py-2 rounded-xl text-xs sm:text-sm">
+<select id="agendaInputType" onchange="onAgendaTypeChange()" class="w-full px-3 py-2 rounded-xl text-xs sm:text-sm">
 <option value="Teoria/Questões">Teoria/Questões</option>
 <option value="Simulado">Simulado</option>
 </select>
@@ -1339,6 +1366,38 @@ Grade Semanal (Segunda a Domingo)
 <div>
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Banca (se fez questões)</label>
 <select id="agendaInputBanca" class="w-full px-3 py-2 rounded-xl text-xs sm:text-sm"></select>
+</div>
+</div>
+<!-- Opções de Redação quando Modalidade = Simulado na Agenda do Dia -->
+<div id="agendaSimuladoEssayBox" class="hidden p-3 rounded-xl bg-tactical-bg border border-tactical-border space-y-2.5">
+<div class="text-[10px] font-mono uppercase theme-accent-text font-bold flex items-center gap-1">
+<i data-lucide="pen-line" class="w-3.5 h-3.5"></i> Opções de Redação do Simulado
+</div>
+<div class="space-y-1.5">
+<label class="flex items-center gap-2 text-xs font-semibold text-white cursor-pointer">
+<input type="checkbox" id="agendaOnlyEssayCheck" onchange="toggleAgendaOnlyEssayMode()" class="w-4 h-4 rounded">
+<span>Fazer somente a Redação (sem questões objetivas)</span>
+</label>
+<label class="flex items-center gap-2 text-xs font-medium text-slate-300 cursor-pointer">
+<input type="checkbox" id="agendaEssayCheck" onchange="toggleAgendaEssayFields()" class="w-4 h-4 rounded">
+<span>Fiz Redação neste simulado</span>
+</label>
+</div>
+<div id="agendaEssayFields" class="hidden space-y-2 pt-1">
+<div>
+<label class="block text-[10px] font-mono uppercase text-slate-400 mb-0.5">Tema da Redação (opcional)</label>
+<input type="text" id="agendaEssayTheme" placeholder="Ex: Segurança pública" class="w-full px-2.5 py-1.5 rounded-lg text-xs">
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div>
+<label class="block text-[10px] font-mono uppercase text-slate-300 mb-0.5">Nota</label>
+<input type="number" id="agendaEssayScore" step="0.01" min="0" placeholder="0" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
+</div>
+<div>
+<label class="block text-[10px] font-mono uppercase text-slate-300 mb-0.5">Nota máxima</label>
+<input type="number" id="agendaEssayMax" step="0.01" min="0.01" value="10" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
+</div>
+</div>
 </div>
 </div>
 <!-- Bloco de Tempo Estudado e Questões Respondidas -->
@@ -1363,7 +1422,7 @@ Grade Semanal (Segunda a Domingo)
 </div>
 </div>
 </div>
-<div class="grid grid-cols-2 gap-2">
+<div id="agendaQuestionsGridWrap" class="grid grid-cols-2 gap-2">
 <div>
 <label class="block text-[10px] font-mono uppercase text-slate-400 mb-1">Q. Certas</label>
 <input type="number" id="agendaInputQCorrect" min="0" placeholder="0" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
@@ -1377,7 +1436,7 @@ Grade Semanal (Segunda a Domingo)
 <label class="block text-[10px] font-mono uppercase text-slate-400 mb-1">Questões referentes a</label>
 <select id="agendaInputQSubtopic" class="w-full px-2.5 py-1.5 rounded-lg text-xs"></select>
 </div>
-<label class="flex items-center gap-2 text-[11px] text-slate-300 cursor-pointer">
+<label id="agendaMarkSeenWrap" class="flex items-center gap-2 text-[11px] text-slate-300 cursor-pointer">
 <input type="checkbox" id="agendaMarkSeen" checked class="w-4 h-4 rounded"> Marcar assuntos como vistos no Edital (ao registrar como concluído)
 </label>
 </div>
@@ -1395,7 +1454,7 @@ Grade Semanal (Segunda a Domingo)
 </div>
 </form>
 </div>
-<div class="lg:col-span-8 space-y-4">
+<div class="lg:col-span-8 min-w-0 space-y-4">
 <div class="flex flex-wrap items-center justify-between gap-3 bg-tactical-surface border border-tactical-border rounded-2xl p-4 shadow-sm">
 <div class="flex flex-wrap items-center gap-2 sm:gap-3">
 <label class="text-xs font-mono uppercase text-slate-400">Data:</label>
@@ -1484,7 +1543,7 @@ Concluídas <span id="revCountCompleted" class="px-1.5 py-0.5 rounded bg-black/2
 </section>
 <section id="sec-mod4" class="module-section hidden space-y-6">
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-<div class="lg:col-span-4 bg-tactical-surface border border-tactical-border rounded-2xl p-5 h-fit space-y-4 shadow-sm">
+<div class="lg:col-span-4 min-w-0 bg-tactical-surface border border-tactical-border rounded-2xl p-5 h-fit space-y-4 shadow-sm">
 <h3 class="text-base font-bold text-white border-b border-tactical-border pb-3 flex items-center gap-2">
 <i data-lucide="crosshair" class="w-5 h-5 theme-accent-text"></i> Registrar Questões
 </h3>
@@ -1500,8 +1559,8 @@ Concluídas <span id="revCountCompleted" class="px-1.5 py-0.5 rounded bg-black/2
 <div>
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Banca</label>
 <div class="flex gap-2">
-<select id="qInputBanca" required class="flex-1 px-3.5 py-2 rounded-xl text-sm"></select>
-<button type="button" onclick="openAddBancaPrompt()" title="Nova Banca" class="px-3 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-slate-300">
+<select id="qInputBanca" required class="flex-1 min-w-0 px-3.5 py-2 rounded-xl text-sm"></select>
+<button type="button" onclick="openAddBancaPrompt()" title="Nova Banca" class="px-3 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-slate-300 shrink-0">
 <i data-lucide="plus" class="w-4 h-4"></i>
 </button>
 </div>
@@ -1531,17 +1590,17 @@ Concluídas <span id="revCountCompleted" class="px-1.5 py-0.5 rounded bg-black/2
 </button>
 </form>
 </div>
-<div class="lg:col-span-8 space-y-6">
+<div class="lg:col-span-8 min-w-0 space-y-6">
 <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 space-y-4 shadow-sm">
 <div class="flex flex-wrap items-center justify-between gap-3">
 <h3 class="text-base font-bold text-white flex items-center gap-2">
 <i data-lucide="building-2" class="w-5 h-5 theme-accent-text"></i> Desempenho por Banca
 </h3>
-<div class="flex items-center gap-2">
-<select id="qFilterBanca" onchange="renderQuestionsModule()" class="px-3 py-1.5 rounded-xl text-xs font-mono">
+<div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+<select id="qFilterBanca" onchange="renderQuestionsModule()" class="flex-1 sm:flex-none min-w-0 max-w-full px-3 py-1.5 rounded-xl text-xs font-mono">
 <option value="ALL">Todas as Bancas</option>
 </select>
-<select id="qFilterSubject" onchange="renderQuestionsModule()" class="px-3 py-1.5 rounded-xl text-xs font-mono">
+<select id="qFilterSubject" onchange="renderQuestionsModule()" class="flex-1 sm:flex-none min-w-0 max-w-full px-3 py-1.5 rounded-xl text-xs font-mono">
 <option value="ALL">Todas as Matérias</option>
 </select>
 </div>
@@ -1683,7 +1742,7 @@ Dominado
 </section>
 <section id="sec-mod6" class="module-section hidden space-y-6">
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-<div class="lg:col-span-5 bg-tactical-surface border border-tactical-border rounded-2xl p-6 space-y-5 shadow-sm">
+<div class="lg:col-span-5 min-w-0 bg-tactical-surface border border-tactical-border rounded-2xl p-5 sm:p-6 space-y-5 shadow-sm">
 <div class="flex items-center justify-between border-b border-tactical-border pb-4">
 <h3 class="text-base font-bold text-white flex items-center gap-2">
 <i data-lucide="timer" class="w-5 h-5 theme-accent-text"></i> Cronômetro
@@ -1702,8 +1761,8 @@ Dominado
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Assunto</label>
 <select id="timerSubtopicSelect" onchange="onTimerSelectionChanged(false)" class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
 </div>
-<div id="timerLinkedGoalInfo" class="hidden text-[11px] font-mono theme-accent-text px-1"></div>
 </div>
+<div id="timerLinkedGoalInfo" class="hidden text-[11px] font-mono theme-accent-text px-1"></div>
 <div>
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Modalidade</label>
 <!-- Teoria/Questões e Simulado -->
@@ -1718,9 +1777,9 @@ Dominado
 </div>
 </div>
 <div class="space-y-4 pt-1">
-<div class="p-6 rounded-2xl bg-tactical-bg border border-tactical-border text-center">
+<div class="p-4 sm:p-6 rounded-2xl bg-tactical-bg border border-tactical-border text-center">
 <div id="mainTimerStatusLabel" class="text-[10px] font-mono uppercase tracking-widest theme-accent-text">PRONTO</div>
-<div id="mainTimerDisplay" class="text-5xl font-mono font-extrabold text-white tracking-wider my-2">
+<div id="mainTimerDisplay" class="text-4xl sm:text-5xl font-mono font-extrabold text-white tracking-wider my-2">
 00:00:00
 </div>
 </div>
@@ -1737,7 +1796,7 @@ Dominado
 </button>
 </div>
 </div>
-<div class="lg:col-span-7 space-y-6">
+<div class="lg:col-span-7 min-w-0 space-y-6">
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
 <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-4 shadow-sm">
 <span class="text-[11px] font-mono uppercase text-slate-400">Total Geral</span>
@@ -1845,7 +1904,7 @@ Edital Alvo: Definir Edital Alvo
 </div>
 <!-- Desempenho e Cobertura -->
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-<div class="lg:col-span-7 bg-tactical-surface border border-tactical-border rounded-2xl p-5 shadow-sm">
+<div class="lg:col-span-7 min-w-0 bg-tactical-surface border border-tactical-border rounded-2xl p-5 shadow-sm">
 <div class="flex items-center justify-between mb-4">
 <h3 class="text-base font-bold text-white flex items-center gap-2">
 <i data-lucide="bar-chart-2" class="w-5 h-5 theme-accent-text"></i>
@@ -1855,7 +1914,7 @@ Desempenho por Disciplina
 </div>
 <div id="dashboardSubjectMetricsList" class="space-y-3"></div>
 </div>
-<div class="lg:col-span-5 bg-tactical-surface border border-tactical-border rounded-2xl p-5 shadow-sm">
+<div class="lg:col-span-5 min-w-0 bg-tactical-surface border border-tactical-border rounded-2xl p-5 shadow-sm">
 <div class="flex items-center justify-between mb-4">
 <h3 class="text-base font-bold text-white flex items-center gap-2">
 <i data-lucide="layers" class="w-5 h-5 theme-accent-text"></i>
@@ -1903,8 +1962,8 @@ Evolução da Redação
 </main>
 </div>
 <!-- MODAL: CADASTRAR/EDITAR ITEM DA GRADE SEMANAL (SEGUNDA A DOMINGO) -->
-<div id="modalAddWeeklyPlanItem" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+<div id="modalAddWeeklyPlanItem" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-5 sm:p-6 space-y-4 shadow-2xl my-auto max-h-[92dvh] overflow-y-auto">
 <div class="flex items-center justify-between border-b border-tactical-border pb-3">
 <h3 class="text-base font-bold text-white" id="weeklyPlanModalTitle">Adicionar à Grade Semanal</h3>
 <button onclick="closeModal('modalAddWeeklyPlanItem')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -1951,9 +2010,9 @@ Evolução da Redação
 </form>
 </div>
 </div>
-<!-- MODAL: CONTABILIZAR QUESTÕES APÓS CRONÔMETRO (TEORIA/QUESTÕES) -->
+<!-- MODAL: CONTABILIZAR QUESTÕES APÓS CRONÔMETRO / AGENDA -->
 <div id="modalStudyRegister" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
-<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl my-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-lg w-full p-5 sm:p-6 space-y-4 shadow-2xl my-auto max-h-[92dvh] overflow-y-auto">
 <div class="flex items-center justify-between border-b border-tactical-border pb-3">
 <h3 class="text-base font-bold text-white flex items-center gap-2">
 <i data-lucide="crosshair" class="w-5 h-5 theme-accent-text"></i> <span id="studyRegTitle">Registrar estudo</span>
@@ -1962,7 +2021,39 @@ Evolução da Redação
 </div>
 <div id="studyRegContextLine" class="text-xs text-slate-300 space-y-1 bg-tactical-bg p-3 rounded-xl border border-tactical-border"></div>
 <form onsubmit="confirmStudyRegister(event)" class="space-y-3.5">
+<!-- Opções de Redação (quando finalizar Simulado pela Agenda do Dia) -->
+<div id="studyRegSimuladoEssayBox" class="hidden p-3 rounded-xl bg-tactical-bg border border-tactical-border space-y-2.5">
+<div class="text-[10px] font-mono uppercase theme-accent-text font-bold flex items-center gap-1">
+<i data-lucide="pen-line" class="w-3.5 h-3.5"></i> Opções de Redação do Simulado
+</div>
+<div class="space-y-1.5">
+<label class="flex items-center gap-2 text-xs font-semibold text-white cursor-pointer">
+<input type="checkbox" id="studyRegOnlyEssayCheck" onchange="toggleStudyRegOnlyEssayMode()" class="w-4 h-4 rounded">
+<span>Fazer somente a Redação (sem questões objetivas)</span>
+</label>
+<label class="flex items-center gap-2 text-xs font-medium text-slate-300 cursor-pointer">
+<input type="checkbox" id="studyRegEssayCheck" onchange="toggleStudyRegEssayFields()" class="w-4 h-4 rounded">
+<span>Fiz Redação neste simulado</span>
+</label>
+</div>
+<div id="studyRegEssayFields" class="hidden space-y-2 pt-1">
 <div>
+<label class="block text-[10px] font-mono uppercase text-slate-400 mb-0.5">Tema da Redação (opcional)</label>
+<input type="text" id="studyRegEssayTheme" placeholder="Ex: Segurança pública" class="w-full px-2.5 py-1.5 rounded-lg text-xs">
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div>
+<label class="block text-[10px] font-mono uppercase text-slate-300 mb-0.5">Nota</label>
+<input type="number" id="studyRegEssayScore" step="0.01" min="0" placeholder="0" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
+</div>
+<div>
+<label class="block text-[10px] font-mono uppercase text-slate-300 mb-0.5">Nota máxima</label>
+<input type="number" id="studyRegEssayMax" step="0.01" min="0.01" value="10" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
+</div>
+</div>
+</div>
+</div>
+<div id="studyRegSubjectWrap">
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Disciplina</label>
 <select id="studyRegSubject" onchange="onStudyRegSubjectChange()" class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
 </div>
@@ -2008,6 +2099,7 @@ Evolução da Redação
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Banca Utilizada</label>
 <select id="studyRegBanca" class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
 </div>
+<div id="studyRegQuestionsBlock" class="space-y-3.5">
 <div class="grid grid-cols-2 gap-3">
 <div>
 <label class="block text-xs font-mono uppercase text-slate-300 mb-1">Questões Certas</label>
@@ -2026,6 +2118,7 @@ Evolução da Redação
 <span class="text-slate-400">Total de Questões Feitas:</span>
 <span id="studyRegTotalPreview" class="font-bold theme-accent-text">0 questões</span>
 </div>
+</div>
 <label id="studyRegMarkSeenWrap" class="flex items-center gap-2 text-[11px] text-slate-300 cursor-pointer">
 <input type="checkbox" id="studyRegMarkSeen" checked class="w-4 h-4 rounded"> Marcar os assuntos selecionados como vistos no Edital
 </label>
@@ -2038,7 +2131,7 @@ Evolução da Redação
 </div>
 <!-- MODAL: FINALIZAR SIMULADO POR MATÉRIA -->
 <div id="modalPostTimerSimulado" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
-<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl my-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-2xl w-full p-5 sm:p-6 space-y-4 shadow-2xl my-auto max-h-[92dvh] overflow-y-auto">
 <div class="flex items-center justify-between border-b border-tactical-border pb-3">
 <div>
 <h3 class="text-base font-bold text-white flex items-center gap-2">
@@ -2050,21 +2143,29 @@ Evolução da Redação
 </div>
 <form onsubmit="confirmPostTimerSimulado(event)" class="space-y-4">
 <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-<div class="flex-1">
+<div class="flex-1 min-w-0">
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Banca Utilizada no Simulado</label>
 <select id="simuladoBancaSelect" required class="w-full px-3.5 py-2 rounded-xl text-sm"></select>
 </div>
-<button type="button" onclick="addSimuladoSubjectRow()" class="px-3.5 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold theme-accent-text flex items-center gap-1.5 shrink-0">
+<button type="button" id="btnSimuladoAddSubjectRow" onclick="addSimuladoSubjectRow()" class="px-3.5 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold theme-accent-text flex items-center gap-1.5 shrink-0">
 <i data-lucide="plus" class="w-4 h-4"></i> Outra Matéria
 </button>
 </div>
-<div class="space-y-2 max-h-72 overflow-y-auto pr-1" id="simuladoSubjectsRowsContainer"></div>
 <div class="p-3 rounded-xl bg-tactical-bg border border-tactical-border space-y-2.5">
+<div class="text-[10px] font-mono uppercase theme-accent-text font-bold flex items-center gap-1">
+<i data-lucide="pen-line" class="w-3.5 h-3.5"></i> Opções de Redação do Simulado
+</div>
+<div class="flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-4">
 <label class="flex items-center gap-2 text-xs font-semibold text-white cursor-pointer">
-<input type="checkbox" id="simuladoEssayCheck" onchange="toggleSimuladoEssayFields()" class="w-4 h-4 rounded">
-<i data-lucide="pen-line" class="w-4 h-4 theme-accent-text"></i> Fiz Redação neste simulado
+<input type="checkbox" id="simuladoOnlyEssayCheck" onchange="toggleSimuladoOnlyEssayMode()" class="w-4 h-4 rounded">
+<span>Fazer somente a Redação (sem questões)</span>
 </label>
-<div id="simuladoEssayFields" class="hidden">
+<label class="flex items-center gap-2 text-xs font-medium text-slate-300 cursor-pointer">
+<input type="checkbox" id="simuladoEssayCheck" onchange="toggleSimuladoEssayFields()" class="w-4 h-4 rounded">
+<span>Fiz Redação neste simulado</span>
+</label>
+</div>
+<div id="simuladoEssayFields" class="hidden pt-1">
 <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
 <div class="sm:col-span-6">
 <label class="block text-[10px] font-mono uppercase text-slate-400 mb-0.5">Tema (opcional)</label>
@@ -2072,20 +2173,21 @@ Evolução da Redação
 </div>
 <div class="sm:col-span-3">
 <label class="block text-[10px] font-mono uppercase text-slate-300 mb-0.5">Nota</label>
-<input type="number" id="simuladoEssayScore" step="0.01" min="0" placeholder="0" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
+<input type="number" id="simuladoEssayScore" oninput="updateSimuladoLiveSummary()" step="0.01" min="0" placeholder="0" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
 </div>
 <div class="sm:col-span-3">
 <label class="block text-[10px] font-mono uppercase text-slate-300 mb-0.5">Nota máxima</label>
-<input type="number" id="simuladoEssayMax" step="0.01" min="0.01" value="10" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
+<input type="number" id="simuladoEssayMax" oninput="updateSimuladoLiveSummary()" step="0.01" min="0.01" value="10" class="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold">
 </div>
 </div>
 </div>
 </div>
+<div class="space-y-2 max-h-72 overflow-y-auto pr-1" id="simuladoSubjectsRowsContainer"></div>
 <div class="p-3 rounded-xl bg-tactical-bg border border-tactical-border flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
 <span class="text-slate-400">Resumo do Simulado:</span>
 <span id="simuladoLiveSummary" class="font-bold theme-accent-text">0 feitas • 0 certas • 0 erradas (0.0%)</span>
 </div>
-<div class="flex justify-end gap-2 pt-2">
+<div class="flex flex-wrap justify-end gap-2 pt-2">
 <button type="button" onclick="saveSimuladoTimeOnly()" class="px-4 py-2 rounded-xl bg-tactical-card text-slate-300 text-xs font-semibold">Apenas Salvar Tempo</button>
 <button type="submit" class="px-5 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold">Contabilizar Simulado</button>
 </div>
@@ -2093,8 +2195,8 @@ Evolução da Redação
 </div>
 </div>
 <!-- MODAL: GERENCIAR / CRIAR NOVO EDITAL ALVO (MÚLTIPLOS PERFIS ISOLADOS) -->
-<div id="modalEditTargetExam" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
+<div id="modalEditTargetExam" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-lg w-full p-5 sm:p-6 space-y-5 shadow-2xl my-auto max-h-[92dvh] overflow-y-auto">
 <div class="flex items-center justify-between border-b border-tactical-border pb-3">
 <div>
 <h3 class="text-base font-bold text-white flex items-center gap-2">
@@ -2108,16 +2210,16 @@ Evolução da Redação
 <form onsubmit="handleSaveTargetExam(event)" class="space-y-2 pb-4 border-b border-tactical-border">
 <label class="block text-xs font-mono uppercase text-slate-400">Renomear Edital Ativo Atual</label>
 <div class="flex gap-2">
-<input type="text" id="targetExamInputName" required placeholder="Nome do edital ativo..." class="flex-1 px-3.5 py-2 rounded-xl text-sm">
-<button type="submit" class="px-4 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-white">Renomear</button>
+<input type="text" id="targetExamInputName" required placeholder="Nome do edital ativo..." class="flex-1 min-w-0 px-3.5 py-2 rounded-xl text-sm">
+<button type="submit" class="px-3.5 sm:px-4 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-white shrink-0">Renomear</button>
 </div>
 </form>
 <!-- Criar Novo Edital Separado -->
 <form onsubmit="handleCreateNewExamProfile(event)" class="space-y-2 pb-4 border-b border-tactical-border">
 <label class="block text-xs font-mono uppercase theme-accent-text font-bold">+ Criar Novo Edital Independente</label>
 <div class="flex gap-2">
-<input type="text" id="newExamProfileNameInput" required placeholder="Ex: Polícia Federal, TJ-SP, INSS..." class="flex-1 px-3.5 py-2 rounded-xl text-sm">
-<button type="submit" class="px-4 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold shrink-0">Criar Perfil</button>
+<input type="text" id="newExamProfileNameInput" required placeholder="Ex: Polícia Federal, TJ-SP, INSS..." class="flex-1 min-w-0 px-3.5 py-2 rounded-xl text-sm">
+<button type="submit" class="px-3.5 sm:px-4 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold shrink-0">Criar Perfil</button>
 </div>
 </form>
 <!-- Lista de Todos os Editais Cadastrados -->
@@ -2131,8 +2233,8 @@ Evolução da Redação
 </div>
 </div>
 <!-- MODAL: PERFIL DO ALUNO -->
-<div id="modalEditUserProfile" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+<div id="modalEditUserProfile" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-5 sm:p-6 space-y-4 shadow-2xl my-auto max-h-[92dvh] overflow-y-auto">
 <div class="flex items-center justify-between border-b border-tactical-border pb-3">
 <h3 class="text-base font-bold text-white">Perfil do Aluno</h3>
 <button onclick="closeModal('modalEditUserProfile')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -2154,8 +2256,8 @@ Evolução da Redação
 </div>
 </div>
 <!-- MODAL: NOVO ASSUNTO NO EDITAL -->
-<div id="modalAddEditalItem" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+<div id="modalAddEditalItem" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-lg w-full p-5 sm:p-6 space-y-4 shadow-2xl my-auto max-h-[92dvh] overflow-y-auto">
 <div class="flex items-center justify-between border-b border-tactical-border pb-3">
 <h3 class="text-base font-bold text-white">Novo Assunto</h3>
 <button onclick="closeModal('modalAddEditalItem')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -2190,8 +2292,8 @@ Evolução da Redação
 </div>
 </div>
 <!-- MODAL: EDITAR NOME / PRIORIDADE DO EDITAL -->
-<div id="modalEditEditalItem" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+<div id="modalEditEditalItem" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-5 sm:p-6 space-y-4 shadow-2xl my-auto max-h-[92dvh] overflow-y-auto">
 <div class="flex items-center justify-between border-b border-tactical-border pb-3">
 <h3 class="text-base font-bold text-white" id="editalEditTitle">Editar</h3>
 <button onclick="closeModal('modalEditEditalItem')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -2221,14 +2323,14 @@ Evolução da Redação
 </div>
 </div>
 <!-- MODAL: IMPORTAR EDITAL EM LOTE -->
-<div id="modalBulkImportEdital" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-xl w-full p-6 space-y-4 shadow-2xl">
+<div id="modalBulkImportEdital" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-xl w-full p-5 sm:p-6 space-y-4 shadow-2xl my-auto max-h-[92dvh] overflow-y-auto">
 <div class="flex items-center justify-between border-b border-tactical-border pb-3">
 <h3 class="text-base font-bold text-white">Importação em Lote</h3>
 <button onclick="closeModal('modalBulkImportEdital')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
 </div>
 <form onsubmit="handleBulkImportEdital(event)" class="space-y-3.5">
-<div class="grid grid-cols-2 gap-3">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
 <div>
 <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Disciplina</label>
 <input type="text" id="bulkEditalSubject" list="existingSubjectsDatalist" required placeholder="Ex: Português" class="w-full px-3.5 py-2 rounded-xl text-sm">
@@ -2254,8 +2356,8 @@ Evolução da Redação
 </div>
 </div>
 <!-- MODAL: AGENDAR REVISÃO -->
-<div id="modalAddManualReview" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+<div id="modalAddManualReview" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-lg w-full p-5 sm:p-6 space-y-4 shadow-2xl my-auto max-h-[92dvh] overflow-y-auto">
 <div class="flex items-center justify-between border-b border-tactical-border pb-3">
 <h3 class="text-base font-bold text-white">Agendar Revisão</h3>
 <button onclick="closeModal('modalAddManualReview')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -2282,7 +2384,7 @@ Evolução da Redação
 </div>
 <!-- MODAL: NOVO / EDITAR CADERNO DE ERROS / FLASHCARD -->
 <div id="modalAddErrorCard" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
-<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl my-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-2xl w-full p-5 sm:p-6 space-y-4 shadow-2xl my-auto max-h-[92dvh] overflow-y-auto">
 <div class="flex items-center justify-between border-b border-tactical-border pb-3">
 <h3 class="text-base font-bold text-white" id="modalErrorCardTitle">Novo Card de Erro</h3>
 <button onclick="closeModal('modalAddErrorCard')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -2343,8 +2445,8 @@ Limpar
 </div>
 </div>
 <!-- MODAL: NOVA BANCA -->
-<div id="modalAddBanca" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-sm w-full p-5 space-y-4">
+<div id="modalAddBanca" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-sm w-full p-5 space-y-4 my-auto max-h-[92dvh] overflow-y-auto">
 <h3 class="text-sm font-bold text-white">Nova Banca</h3>
 <input type="text" id="newBancaNameInput" placeholder="Ex: Cebraspe, FCC, FGV..." class="w-full px-3.5 py-2 rounded-xl text-sm">
 <div class="flex justify-end gap-2">
@@ -2354,8 +2456,8 @@ Limpar
 </div>
 </div>
 <!-- MODAL: RESTAURAR DADOS -->
-<div id="modalResetData" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-6 space-y-4">
+<div id="modalResetData" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-5 sm:p-6 space-y-4 my-auto max-h-[92dvh] overflow-y-auto">
 <h3 class="text-base font-bold text-white">Restaurar Plataforma</h3>
 <p class="text-xs text-slate-300 leading-relaxed">
 Escolha limpar todos os dados para começar do zero ou carregar exemplos prontos de demonstração.
@@ -2374,8 +2476,8 @@ Fechar
 </div>
 </div>
 <!-- MODAL: CONFIGURAÇÃO GOOGLE DRIVE -->
-<div id="modalGDriveConfig" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+<div id="modalGDriveConfig" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-lg w-full p-5 sm:p-6 space-y-4 shadow-2xl my-auto max-h-[92dvh] overflow-y-auto">
 <div class="flex items-center justify-between border-b border-tactical-border pb-3">
 <h3 class="text-base font-bold text-white flex items-center gap-2">
 <i data-lucide="cloud" class="w-5 h-5 theme-accent-text"></i> Configurar Google Drive Sync
@@ -2383,7 +2485,7 @@ Fechar
 <button type="button" onclick="closeModal('modalGDriveConfig')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
 </div>
 <p class="text-xs text-slate-300 leading-relaxed">
-Insira o <strong>Client ID</strong> e a <strong>API Key</strong> gerados no Google Cloud Console. Seus dados serão salvos automaticamente no arquivo <code>organize_backup.json</code> no seu Google Drive.
+Insira o <strong>Client ID</strong> (e opcionalmente a <strong>API Key</strong>) gerados no Google Cloud Console. Seus dados serão salvos automaticamente no arquivo <code>organize_backup.json</code> no seu Google Drive.
 </p>
 <form onsubmit="saveDriveCredentials(event)" class="space-y-3.5">
 <div>
@@ -2391,19 +2493,19 @@ Insira o <strong>Client ID</strong> e a <strong>API Key</strong> gerados no Goog
 <input type="text" id="gdriveClientIdInput" required placeholder="123456789-xxx.apps.googleusercontent.com" class="w-full px-3.5 py-2 rounded-xl text-xs font-mono">
 </div>
 <div>
-<label class="block text-xs font-mono uppercase text-slate-400 mb-1">API Key</label>
-<input type="text" id="gdriveApiKeyInput" required placeholder="AIzaSy..." class="w-full px-3.5 py-2 rounded-xl text-xs font-mono">
+<label class="block text-xs font-mono uppercase text-slate-400 mb-1">API Key (Opcional)</label>
+<input type="text" id="gdriveApiKeyInput" placeholder="AIzaSy..." class="w-full px-3.5 py-2 rounded-xl text-xs font-mono">
 </div>
 <div class="flex justify-end gap-2 pt-2">
 <button type="button" onclick="closeModal('modalGDriveConfig')" class="px-4 py-2 rounded-xl bg-tactical-card text-slate-300 text-xs font-semibold">Cancelar</button>
-<button type="submit" class="px-5 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold">Salvar Credenciais</button>
+<button type="submit" class="px-5 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold">Salvar & Conectar</button>
 </div>
 </form>
 </div>
 </div>
 <!-- MODAL EXCLUSIVO DO ADMINISTRADOR: ADICIONAR PLATAFORMA EM CARD -->
-<div id="modalAddPlatformCard" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+<div id="modalAddPlatformCard" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-5 sm:p-6 space-y-4 shadow-2xl my-auto max-h-[92dvh] overflow-y-auto">
 <div class="flex items-center justify-between border-b border-tactical-border pb-3">
 <h3 class="text-base font-bold text-white flex items-center gap-2">
 <i data-lucide="layout-grid" class="w-5 h-5 theme-accent-text"></i> <span id="modalPlatformTitle">Adicionar Plataforma</span>
@@ -2440,8 +2542,8 @@ Insira o <strong>Client ID</strong> e a <strong>API Key</strong> gerados no Goog
 </div>
 </div>
 <!-- MODAL DE DESBLOQUEIO ADMIN LOCAL (DUPLO CLIQUE NO TÍTULO) -->
-<div id="modalMasterAdminAuth" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
+<div id="modalMasterAdminAuth" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl my-auto max-h-[92dvh] overflow-y-auto">
 <div class="flex items-center justify-between border-b border-tactical-border pb-2.5">
 <h3 class="text-sm font-bold text-white flex items-center gap-2">
 <i data-lucide="key-round" class="w-4 h-4 theme-accent-text"></i> Desbloqueio do Administrador
@@ -2458,8 +2560,11 @@ Insira o <strong>Client ID</strong> e a <strong>API Key</strong> gerados no Goog
 </div>
 </div>
 <!-- TOAST NOTIFICATION CONTAINER -->
-<div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+<div id="toastContainer" class="fixed bottom-4 sm:bottom-5 inset-x-3 sm:left-auto sm:right-5 z-[220] flex flex-col gap-2 sm:max-w-sm sm:w-full pointer-events-none"></div>
 <script>
+if (typeof window.lucide === 'undefined') {
+window.lucide = { createIcons: function() {} };
+}
 const STORAGE_KEY = 'ORGANIZE_APP_DATA_V2';
 const MULTI_PROFILES_KEY = 'ORGANIZE_MULTI_PROFILES_V1';
 const NETFLIX_USERS_KEY = 'ORGANIZE_NETFLIX_USERS_LIST_V1';
@@ -2499,8 +2604,11 @@ let timerInterval = null;
 let timerSeconds = 0;
 let timerRunning = false;
 let timerModality = 'Teoria/Questões';
+let timerLinkedGoalId = null;
 let pendingSessionForQuestions = null;
 let pendingSimuladoMinutes = 0;
+let pendingSimuladoSeconds = 0;
+let studyRegCtx = null;
 let pipCanvasCtx = null;
 let pipStream = null;
 let tokenClient = null;
@@ -2944,6 +3052,7 @@ const avatarEl = document.getElementById('gateSelectedAvatar');
 const nameEl = document.getElementById('gateSelectedProfileName');
 const inlineName = document.getElementById('gateProfileNameInline');
 const roleBadge = document.getElementById('gateSelectedRoleBadge');
+const localBtn = document.getElementById('btnGateEnterLocal');
 renderAvatarElementContent(avatarEl, prof, 'w-14 h-14 rounded bg-tactical-card flex items-center justify-center shrink-0', 'text-white font-black text-xl');
 updateGateRemoveAvatarBtnVisibility(prof);
 if (nameEl) nameEl.textContent = `Olá, ${prof.name}`;
@@ -2952,6 +3061,9 @@ if (roleBadge) {
 roleBadge.textContent = isForAdminManage
 ? `Exclusivo Admin (${MASTER_ADMIN_EMAIL})`
 : (prof.isOwner ? 'BEM-VINDO(A) • PERFIL ADMINISTRADOR' : 'BEM-VINDO(A) • FAÇA SEU LOGIN');
+}
+if (localBtn) {
+localBtn.classList.toggle('hidden', Boolean(isForAdminManage));
 }
 const creds = getDriveCredentials();
 const cIdInput = document.getElementById('gateClientIdInput');
@@ -2976,50 +3088,82 @@ if (!clientId) {
 showToast('Preencha o Client ID OAuth 2.0 do Google Drive.', 'warning');
 return;
 }
+try {
 localStorage.setItem(GDRIVE_CREDS_KEY, JSON.stringify({ clientId, apiKey }));
+} catch (e) {}
 gapiInited = false;
 gisInited = false;
 initGoogleDriveClients();
 showToast('Chaves salvas! Abrindo login do Google...', 'success');
-setTimeout(() => authenticateProfileWithGoogleDrive(), 300);
+authenticateProfileWithGoogleDrive();
 }
-function authenticateProfileWithGoogleDrive() {
+function enterProfileOfflineMode() {
 if (!pendingNetflixProfileToEnter) return;
-const creds = getDriveCredentials();
-const typedClientId = (document.getElementById('gateClientIdInput')?.value || '').trim();
-const typedApiKey = (document.getElementById('gateApiKeyInput')?.value || '').trim();
-if (typedClientId || typedApiKey) {
-localStorage.setItem(GDRIVE_CREDS_KEY, JSON.stringify({
-clientId: typedClientId || creds.clientId,
-apiKey: typedApiKey || creds.apiKey
-}));
-gapiInited = false;
-gisInited = false;
-}
-const updatedCreds = getDriveCredentials();
-if (updatedCreds.clientId && typeof google !== 'undefined' && google.accounts) {
-initGoogleDriveClients();
-if (tokenClient) {
-// Sempre solicita escolha de conta para validar o e-mail real de quem está entrando
-tokenClient.requestAccessToken({ prompt: 'select_account' });
-return;
-}
-}
-// Modo Local (sem OAuth configurado): NUNCA concede Admin por engano
-if (pendingAdminManageAction || pendingNetflixProfileToEnter.isOwner) {
-const collapse = document.getElementById('gateCredentialsCollapse');
-if (collapse) collapse.classList.remove('hidden');
-showToast(`Conecte o Google Drive com o e-mail ${MASTER_ADMIN_EMAIL} para entrar como Administrador.`, 'warning');
+if (pendingAdminManageAction) {
+showToast(`Para gerenciar perfis, conecte o Google Drive com ${MASTER_ADMIN_EMAIL}.`, 'warning');
 return;
 }
 driveAccessToken = null;
 currentLoggedUserEmail = '';
 isMasterAdminUnlocked = false;
-completeProfileEntryAfterDriveAuth();
+completeProfileEntryAfterDriveAuth(true);
 }
-function completeProfileEntryAfterDriveAuth() {
+async function authenticateProfileWithGoogleDrive() {
+if (!pendingNetflixProfileToEnter) return;
+const creds = getDriveCredentials();
+const typedClientId = (document.getElementById('gateClientIdInput')?.value || '').trim();
+const typedApiKey = (document.getElementById('gateApiKeyInput')?.value || '').trim();
+if (typedClientId || typedApiKey) {
+try {
+localStorage.setItem(GDRIVE_CREDS_KEY, JSON.stringify({
+clientId: typedClientId || creds.clientId,
+apiKey: typedApiKey || creds.apiKey
+}));
+} catch (e) {}
+gapiInited = false;
+gisInited = false;
+}
+if (isRealOAuthToken()) {
+await fetchLoggedGoogleUserProfile();
+await loadSharedPlatformsFromDrive();
+const enteredOk = completeProfileEntryAfterDriveAuth(false);
+if (!enteredOk) return;
+updateDriveStatusUI(true);
+await findOrLoadDriveBackup(true);
+renderActiveModule();
+return;
+}
+const updatedCreds = getDriveCredentials();
+if (!updatedCreds.clientId) {
+const collapse = document.getElementById('gateCredentialsCollapse');
+if (collapse) collapse.classList.remove('hidden');
+showToast('Configure o Client ID do Google Drive abaixo para puxar seu backup da nuvem, ou use "Importar Backup (.json)".', 'warning');
+return;
+}
+if (typeof google !== 'undefined' && google.accounts) {
+initGoogleDriveClients();
+if (tokenClient) {
+tokenClient.requestAccessToken({ prompt: 'select_account' });
+return;
+}
+}
+showToast('Inicializando Google Drive... aguarde 1 segundo.', 'info');
+let attempts = 0;
+const retryTimer = setInterval(() => {
+attempts++;
+if (typeof google !== 'undefined' && google.accounts) {
+clearInterval(retryTimer);
+initGoogleDriveClients();
+if (tokenClient) tokenClient.requestAccessToken({ prompt: 'select_account' });
+} else if (attempts >= 12) {
+clearInterval(retryTimer);
+showToast('Não foi possível carregar o serviço do Google. Verifique sua conexão ou use "Importar Backup (.json)".', 'warning');
+}
+}, 250);
+}
+function completeProfileEntryAfterDriveAuth(isExplicitOffline = false) {
 const prof = pendingNetflixProfileToEnter;
-if (!prof) return;
+if (!prof) return false;
 const loggedEmail = (currentLoggedUserEmail || '').toLowerCase().trim();
 const isMasterEmail = (loggedEmail === MASTER_ADMIN_EMAIL.toLowerCase().trim());
 // 1. Trava estrita para o botão "Gerenciar Perfis (Gabriel)"
@@ -3028,47 +3172,43 @@ if (!isRealOAuthToken() || !isMasterEmail) {
 pendingAdminManageAction = false;
 isMasterAdminUnlocked = false;
 showToast(`Acesso negado! Apenas o e-mail ${MASTER_ADMIN_EMAIL} pode gerenciar perfis.`, 'warning');
-return;
+return false;
 }
-activeNetflixProfile = prof;
+pendingNetflixProfileToEnter = null;
 isManagingNetflixProfiles = true;
 pendingAdminManageAction = false;
 closeModal('modalProfileDriveGate');
 renderNetflixProfilesGrid();
 showToast('Modo Administrador liberado para Gabriel!', 'success');
-return;
+return true;
 }
-// 2. Trava estrita para entrar no perfil do Gabriel (Admin)
-if (prof.isOwner && !isMasterEmail) {
-isMasterAdminUnlocked = false;
-showToast(`Acesso restrito! O perfil Gabriel exige login com ${MASTER_ADMIN_EMAIL}.`, 'warning');
-return;
-}
-// 3. Se o perfil do aluno tiver um e-mail específico vinculado, confere se é o e-mail dele (ou do Gabriel)
+// 2. Se o perfil do aluno tiver um e-mail específico vinculado, confere se é o e-mail dele (ou do Gabriel)
 if (!prof.isOwner && prof.email && loggedEmail && loggedEmail !== prof.email.toLowerCase().trim() && !isMasterEmail) {
 showToast(`Este perfil pertence ao e-mail ${prof.email}.`, 'warning');
-return;
+return false;
 }
 // Reseta o ID do arquivo remoto ao trocar de perfil para nunca sobrescrever outro perfil
 remoteDriveFileId = null;
 activeNetflixProfile = prof;
+pendingNetflixProfileToEnter = null;
+try {
 localStorage.setItem(ACTIVE_NETFLIX_USER_KEY, prof.id);
+} catch (e) {}
 // Admin SÓ fica ativo se o perfil atual for Gabriel E o e-mail logado for o MASTER_ADMIN_EMAIL
-isMasterAdminUnlocked = Boolean(prof.isOwner && isMasterEmail);
+isMasterAdminUnlocked = Boolean(prof.isOwner && isRealOAuthToken() && isMasterEmail);
 loadAppStateForNetflixUser(prof);
 if (appState) {
 if (!appState.userProfile) appState.userProfile = {};
 if (prof.avatar) {
 appState.userProfile.photoBase64 = prof.avatar;
 } else if (appState.userProfile.photoBase64) {
-// Se o usuário já tinha foto no perfil interno e nunca teve no card Netflix, sincroniza; caso contrário limpa
+try {
 const savedCardAvatar = localStorage.getItem(PROFILE_AVATAR_STORAGE_PREFIX + prof.id);
 if (savedCardAvatar) {
 prof.avatar = savedCardAvatar;
 appState.userProfile.photoBase64 = savedCardAvatar;
-} else {
-appState.userProfile.photoBase64 = '';
 }
+} catch (e) {}
 }
 saveAppState(false);
 }
@@ -3085,9 +3225,9 @@ overlay.classList.remove('flex');
 updateDriveStatusUI(isRealOAuthToken());
 updateCourseAdminVisibility();
 renderActiveModule();
-// Reproduz a vinheta tática silenciosa "ORGANIZE" (estilo vídeo Caveira anexado) ao logar no app
 playOrganizeLoginVignette(1650);
 showToast(`Bem-vindo(a), ${prof.name}!`, 'success');
+return true;
 }
 function openNetflixProfileSwitcher() {
 isManagingNetflixProfiles = false;
@@ -3107,7 +3247,10 @@ if (!sel || sel.isCollapsed) return;
 document.execCommand('hiliteColor', false, colorHex);
 }
 function loadThemeCustomBg(theme) {
-const savedBg = localStorage.getItem(THEME_CUSTOM_BG_PREFIX + theme) || (theme === 'pink' ? localStorage.getItem('ORGANIZE_NEZUKO_CUSTOM_BG_V1') : null);
+let savedBg = null;
+try {
+savedBg = localStorage.getItem(THEME_CUSTOM_BG_PREFIX + theme) || (theme === 'pink' ? localStorage.getItem('ORGANIZE_NEZUKO_CUSTOM_BG_V1') : null);
+} catch (e) {}
 const removeBtn = document.getElementById('btnRemoveCustomBg');
 if (savedBg) {
 document.documentElement.style.setProperty('--theme-custom-bg', `url('${savedBg}')`);
@@ -3140,8 +3283,10 @@ showToast('Imagem de fundo aplicada ao tema atual!', 'success');
 reader.readAsDataURL(file);
 }
 function clearCurrentThemeBg() {
+try {
 localStorage.removeItem(THEME_CUSTOM_BG_PREFIX + currentTheme);
 if (currentTheme === 'pink') localStorage.removeItem('ORGANIZE_NEZUKO_CUSTOM_BG_V1');
+} catch (e) {}
 loadThemeCustomBg(currentTheme);
 showToast('Imagem de fundo personalizada removida!', 'info');
 }
@@ -3165,14 +3310,19 @@ const mapped = THEME_ALIASES[cleaned] || cleaned;
 return VALID_THEMES.includes(mapped) ? mapped : 'dark';
 }
 function loadThemePreference() {
-const saved = localStorage.getItem(THEME_STORAGE_KEY);
+let saved = null;
+try {
+saved = localStorage.getItem(THEME_STORAGE_KEY);
+} catch (e) {}
 currentTheme = normalizeThemeKey(saved);
 applyTheme(currentTheme, false);
 }
 function applyTheme(theme, notify = true) {
 const normalized = normalizeThemeKey(theme);
 currentTheme = normalized;
+try {
 localStorage.setItem(THEME_STORAGE_KEY, normalized);
+} catch (e) {}
 const root = document.documentElement;
 root.setAttribute('data-theme', normalized);
 if (!['pink', 'blue'].includes(normalized)) {
@@ -3185,7 +3335,7 @@ if (sel) sel.value = normalized;
 const loginSel = document.getElementById('loginThemeSelectDropdown');
 if (loginSel) loginSel.value = normalized;
 loadThemeCustomBg(normalized);
-lucide.createIcons();
+if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
 updatePipCanvas();
 if (notify) showToast('Tema atualizado!', 'info');
 }
@@ -3480,6 +3630,8 @@ function removeLinkedRecords(linkId, forceDeleteGoals) {
         g.questionsCorrect = 0;
         g.questionsWrong = 0;
         g.questionsTotal = 0;
+        g.essayScore = null;
+        g.essayMax = null;
         return true;
     });
     // 4) Horas, questões e redações
@@ -3656,6 +3808,32 @@ function resolveQuestionSubtopic(checked, qSelVal, fallback) {
     }
     return { id: 'multi', name: checked.map(c => c.name).join(' + ') };
 }
+function toggleStudyRegEssayFields() {
+    const essayChk = document.getElementById('studyRegEssayCheck');
+    const onlyChk = document.getElementById('studyRegOnlyEssayCheck');
+    const on = Boolean(essayChk?.checked);
+    if (!on && onlyChk && onlyChk.checked) {
+        onlyChk.checked = false;
+        applyStudyRegOnlyEssayUI(false);
+    }
+    document.getElementById('studyRegEssayFields')?.classList.toggle('hidden', !on);
+}
+function toggleStudyRegOnlyEssayMode() {
+    const onlyOn = Boolean(document.getElementById('studyRegOnlyEssayCheck')?.checked);
+    const essayChk = document.getElementById('studyRegEssayCheck');
+    if (onlyOn && essayChk) {
+        essayChk.checked = true;
+    }
+    document.getElementById('studyRegEssayFields')?.classList.toggle('hidden', !(onlyOn || essayChk?.checked));
+    applyStudyRegOnlyEssayUI(onlyOn);
+}
+function applyStudyRegOnlyEssayUI(onlyOn) {
+    document.getElementById('studyRegSubjectWrap')?.classList.toggle('hidden', onlyOn);
+    document.getElementById('studyRegSubtopicDropdownContainer')?.classList.toggle('hidden', onlyOn);
+    document.getElementById('studyRegQuestionsBlock')?.classList.toggle('hidden', onlyOn);
+    const noMarkSeen = Boolean(studyRegCtx?.noMarkSeen) || onlyOn;
+    document.getElementById('studyRegMarkSeenWrap')?.classList.toggle('hidden', noMarkSeen);
+}
 function openStudyRegister(ctx) {
     studyRegCtx = ctx;
     const titles = { timer: 'Finalizar estudo cronometrado', goal: 'Registrar o que você viu', review: 'Concluir revisão' };
@@ -3677,7 +3855,21 @@ function openStudyRegister(ctx) {
     document.getElementById('studyRegCorrect').value = 0;
     document.getElementById('studyRegWrong').value = 0;
     document.getElementById('studyRegMarkSeen').checked = true;
-    document.getElementById('studyRegMarkSeenWrap').classList.toggle('hidden', !!ctx.noMarkSeen);
+    const essayBox = document.getElementById('studyRegSimuladoEssayBox');
+    const isSimuladoOrGoal = (ctx.modality === 'Simulado' || ctx.flow === 'goal') && ctx.flow !== 'review';
+    if (essayBox) essayBox.classList.toggle('hidden', !isSimuladoOrGoal);
+    const onlyChk = document.getElementById('studyRegOnlyEssayCheck');
+    const essayChk = document.getElementById('studyRegEssayCheck');
+    const themeEl = document.getElementById('studyRegEssayTheme');
+    const scoreEl = document.getElementById('studyRegEssayScore');
+    const maxEl = document.getElementById('studyRegEssayMax');
+    if (onlyChk) onlyChk.checked = Boolean(ctx.onlyEssay);
+    if (essayChk) essayChk.checked = Boolean(ctx.onlyEssay || ctx.didEssay);
+    if (themeEl) themeEl.value = ctx.essayTheme || '';
+    if (scoreEl) scoreEl.value = '';
+    if (maxEl) maxEl.value = 10;
+    document.getElementById('studyRegEssayFields')?.classList.toggle('hidden', !(onlyChk?.checked || essayChk?.checked));
+    applyStudyRegOnlyEssayUI(Boolean(onlyChk?.checked));
     openModal('modalStudyRegister');
     updateStudyRegPreview();
     onStudyRegSubtopicToggle();
@@ -3726,29 +3918,52 @@ function confirmStudyRegister(e) {
     e.preventDefault();
     const ctx = studyRegCtx;
     if (!ctx) { closeModal('modalStudyRegister'); return; }
-    const subjectName = document.getElementById('studyRegSubject').value || ctx.subjectName || 'Geral';
-    const checked = getCheckedSubtopics('studyRegSubtopicList');
-    const fallback = { id: ctx.fallbackSubtopicId || 'geral', name: ctx.fallbackSubtopicName || 'Assunto Geral' };
-    const subtopics = checked.length ? checked : [fallback];
-    const subtopicName = subtopics.map(s => s.name).join(' + ');
-    const seconds = readHMS('studyRegH', 'studyRegM', 'studyRegS');
-    const correct = Math.max(0, parseInt(document.getElementById('studyRegCorrect').value, 10) || 0);
-    const wrong = Math.max(0, parseInt(document.getElementById('studyRegWrong').value, 10) || 0);
+    const onlyEssay = Boolean(document.getElementById('studyRegOnlyEssayCheck')?.checked);
+    const didEssay = onlyEssay || Boolean(document.getElementById('studyRegEssayCheck')?.checked);
+    const essayTheme = (document.getElementById('studyRegEssayTheme')?.value || '').trim();
     const banca = document.getElementById('studyRegBanca').value || 'Geral';
-    const markSeen = !ctx.noMarkSeen && document.getElementById('studyRegMarkSeen').checked;
     const date = ctx.date || getTodayISO();
-    const modality = ctx.modality || 'Teoria/Questões';
-    const qSub = resolveQuestionSubtopic(checked, document.getElementById('studyRegQSub')?.value, fallback);
+    const seconds = readHMS('studyRegH', 'studyRegM', 'studyRegS');
 
     let goal = null;
     if (ctx.flow === 'goal' || ctx.flow === 'timer') {
         if (ctx.goalId) goal = appState.agenda.find(g => g.id === ctx.goalId) || null;
         if (!goal && ctx.flow === 'timer') {
-            const cands = appState.agenda.filter(g => g.date === date && g.status !== 'Concluído' && g.subjectName === subjectName);
-            goal = cands.find(g => goalSubtopics(g).some(gs => subtopics.some(s => s.id === gs.id))) || (cands.length === 1 ? cands[0] : null);
+            const cands = appState.agenda.filter(g => g.date === date && g.status !== 'Concluído');
+            goal = cands.length === 1 ? cands[0] : null;
         }
     }
     const linkId = (goal && goal.linkId) || ctx.linkId || newLinkId();
+
+    let essay = null;
+    if (didEssay) {
+        const scoreRaw = document.getElementById('studyRegEssayScore')?.value ?? '';
+        const max = parseFloat(String(document.getElementById('studyRegEssayMax')?.value || '10').replace(',', '.')) || 10;
+        if (scoreRaw !== '') {
+            const score = parseFloat(String(scoreRaw).replace(',', '.'));
+            if (isNaN(score) || score < 0 || score > max) {
+                showToast('A nota da redação deve estar entre 0 e a nota máxima.', 'warning');
+                return;
+            }
+            essay = { id: uid('es-'), linkId, date, score, max, theme: essayTheme, banca };
+        } else if (!onlyEssay) {
+            showToast('Informe a nota da redação ou desmarque a opção.', 'warning');
+            return;
+        }
+    }
+
+    const subjectName = onlyEssay ? 'Redação' : (document.getElementById('studyRegSubject').value || ctx.subjectName || 'Geral');
+    const checked = onlyEssay ? [] : getCheckedSubtopics('studyRegSubtopicList');
+    const fallback = onlyEssay
+        ? { id: 'redacao', name: essayTheme ? `Redação: ${essayTheme}` : 'Somente Redação' }
+        : { id: ctx.fallbackSubtopicId || 'geral', name: ctx.fallbackSubtopicName || 'Assunto Geral' };
+    const subtopics = checked.length ? checked : [fallback];
+    const subtopicName = subtopics.map(s => s.name).join(' + ');
+    const correct = onlyEssay ? 0 : (Math.max(0, parseInt(document.getElementById('studyRegCorrect').value, 10) || 0));
+    const wrong = onlyEssay ? 0 : (Math.max(0, parseInt(document.getElementById('studyRegWrong').value, 10) || 0));
+    const markSeen = !onlyEssay && !ctx.noMarkSeen && document.getElementById('studyRegMarkSeen').checked;
+    const modality = onlyEssay || didEssay ? 'Simulado' : (ctx.modality || 'Teoria/Questões');
+    const qSub = resolveQuestionSubtopic(checked, document.getElementById('studyRegQSub')?.value, fallback);
 
     if (seconds > 0) {
         appState.timeSessions.unshift({
@@ -3761,6 +3976,10 @@ function confirmStudyRegister(e) {
             id: uid('q-'), linkId, date, subjectName,
             subtopicId: qSub.id, subtopicName: qSub.name, banca, correct, wrong
         });
+    }
+    if (essay) {
+        appState.essayScores = appState.essayScores || [];
+        appState.essayScores.push(essay);
     }
     let seen = { completedIds: [], createdReviewIds: [] };
     if (markSeen) seen = markSubtopicsSeen(subtopics, date);
@@ -3780,6 +3999,12 @@ function confirmStudyRegister(e) {
         goal.subtopics = subtopics;
         goal.subtopicId = subtopics[0].id;
         goal.subtopicName = subtopicName;
+        goal.type = modality;
+        goal.onlyEssay = onlyEssay;
+        goal.didEssay = didEssay;
+        goal.essayTheme = essayTheme || goal.essayTheme || '';
+        goal.essayScore = essay ? essay.score : null;
+        goal.essayMax = essay ? essay.max : null;
         goal.studySeconds = seconds;
         goal.studyMinutes = seconds / 60;
         goal.questionsCorrect = correct;
@@ -3789,7 +4014,9 @@ function confirmStudyRegister(e) {
         if (ctx.flow === 'timer') goal.date = date;
     }
 
-    let msg = 'Estudo registrado! Horas, questões e assuntos contabilizados.';
+    let msg = onlyEssay
+        ? 'Simulado (Somente Redação) registrado com sucesso!'
+        : (essay ? 'Estudo e Redação registrados com sucesso!' : 'Estudo registrado! Horas, questões e assuntos contabilizados.');
     if (ctx.flow === 'review') {
         const rev = appState.reviews.find(r => r.id === ctx.reviewId);
         if (rev && !rev.completedAll) msg = finalizeReviewStage(rev, linkId);
@@ -3837,6 +4064,9 @@ function openStudyRegisterForGoal(goalId) {
         fallbackSubtopicName: subs.map(s => s.name).join(' + '),
         seconds: 0,
         modality: g.type || 'Teoria/Questões',
+        onlyEssay: Boolean(g.onlyEssay),
+        didEssay: Boolean(g.onlyEssay || g.didEssay),
+        essayTheme: g.essayTheme || '',
         contextNote: g.notes || ''
     });
 }
@@ -3864,6 +4094,12 @@ function startTimerFromGoal(goalId) {
     timerLinkedGoalId = g.id;
     const subjSel = document.getElementById('timerSubjectSelect');
     if (subjSel) {
+        if (g.subjectName && !Array.from(subjSel.options).some(o => o.value === g.subjectName)) {
+            const opt = document.createElement('option');
+            opt.value = g.subjectName;
+            opt.textContent = g.subjectName;
+            subjSel.appendChild(opt);
+        }
         subjSel.value = g.subjectName;
         populateSubtopicSelect('timerSubjectSelect', 'timerSubtopicSelect');
         const subSel = document.getElementById('timerSubtopicSelect');
@@ -3874,38 +4110,61 @@ function startTimerFromGoal(goalId) {
     updateTimerLinkedInfo();
     if (!timerRunning) toggleGlobalTimer();
 }
+function toggleSimuladoOnlyEssayMode() {
+    const onlyOn = Boolean(document.getElementById('simuladoOnlyEssayCheck')?.checked);
+    const essayChk = document.getElementById('simuladoEssayCheck');
+    if (onlyOn && essayChk) {
+        essayChk.checked = true;
+    }
+    document.getElementById('simuladoEssayFields')?.classList.toggle('hidden', !(onlyOn || essayChk?.checked));
+    document.getElementById('simuladoSubjectsRowsContainer')?.classList.toggle('hidden', onlyOn);
+    document.getElementById('btnSimuladoAddSubjectRow')?.classList.toggle('hidden', onlyOn);
+    updateSimuladoLiveSummary();
+}
 function toggleSimuladoEssayFields() {
-    const on = document.getElementById('simuladoEssayCheck')?.checked;
+    const on = Boolean(document.getElementById('simuladoEssayCheck')?.checked);
+    const onlyChk = document.getElementById('simuladoOnlyEssayCheck');
+    if (!on && onlyChk && onlyChk.checked) {
+        onlyChk.checked = false;
+        document.getElementById('simuladoSubjectsRowsContainer')?.classList.remove('hidden');
+        document.getElementById('btnSimuladoAddSubjectRow')?.classList.remove('hidden');
+    }
     document.getElementById('simuladoEssayFields')?.classList.toggle('hidden', !on);
+    updateSimuladoLiveSummary();
 }
 function finalizeSimulado(timeOnly) {
     const today = getTodayISO();
     const banca = document.getElementById('simuladoBancaSelect')?.value || 'Geral';
-    const linkId = newLinkId();
+    const linkedGoal = timerLinkedGoalId ? appState.agenda.find(g => g.id === timerLinkedGoalId) : null;
+    const linkId = (linkedGoal && linkedGoal.linkId) || newLinkId();
     const totalSec = Math.max(1, pendingSimuladoSeconds || timerSeconds || 1);
+    const onlyEssay = Boolean(document.getElementById('simuladoOnlyEssayCheck')?.checked);
+    const didEssay = onlyEssay || Boolean(document.getElementById('simuladoEssayCheck')?.checked);
+    const essayTheme = (document.getElementById('simuladoEssayTheme')?.value || '').trim();
 
-    // Redação (opcional)
+    // Redação (opcional ou somente redação)
     let essay = null;
-    if (document.getElementById('simuladoEssayCheck')?.checked) {
+    if (didEssay) {
         const scoreRaw = document.getElementById('simuladoEssayScore').value;
-        const score = parseFloat(String(scoreRaw).replace(',', '.'));
         const max = parseFloat(String(document.getElementById('simuladoEssayMax').value).replace(',', '.')) || 10;
-        if (scoreRaw === '' || isNaN(score)) {
+        if (scoreRaw !== '') {
+            const score = parseFloat(String(scoreRaw).replace(',', '.'));
+            if (isNaN(score) || score < 0 || score > max) {
+                showToast('A nota da redação deve estar entre 0 e a nota máxima.', 'warning');
+                return false;
+            }
+            essay = {
+                id: uid('es-'), linkId, date: today, score, max,
+                theme: essayTheme, banca
+            };
+        } else if (!onlyEssay && !timeOnly) {
             showToast('Informe a nota da redação ou desmarque a opção.', 'warning');
             return false;
         }
-        if (score < 0 || score > max) {
-            showToast('A nota da redação deve estar entre 0 e a nota máxima.', 'warning');
-            return false;
-        }
-        essay = {
-            id: uid('es-'), linkId, date: today, score, max,
-            theme: (document.getElementById('simuladoEssayTheme').value || '').trim(), banca
-        };
     }
 
     const validEntries = [];
-    if (!timeOnly) {
+    if (!timeOnly && !onlyEssay) {
         document.querySelectorAll('.simulado-subj-row').forEach(row => {
             const subjName = (row.querySelector('.sim-subj-name')?.value || '').trim();
             const correct = parseInt(row.querySelector('.sim-subj-correct')?.value, 10) || 0;
@@ -3914,7 +4173,13 @@ function finalizeSimulado(timeOnly) {
         });
     }
 
-    if (validEntries.length > 0) {
+    if (onlyEssay) {
+        appState.timeSessions.unshift({
+            id: uid('ts-sim-'), linkId, date: today, subjectName: 'Redação',
+            subtopicName: essayTheme ? `Redação: ${essayTheme}` : 'Somente Redação',
+            modality: 'Simulado', minutes: totalSec / 60, seconds: totalSec
+        });
+    } else if (validEntries.length > 0) {
         const base = Math.floor(totalSec / validEntries.length);
         let rest = totalSec - base * validEntries.length;
         validEntries.forEach((entry, idx) => {
@@ -3939,14 +4204,38 @@ function finalizeSimulado(timeOnly) {
         appState.essayScores = appState.essayScores || [];
         appState.essayScores.push(essay);
     }
+    if (linkedGoal) {
+        const totalC = validEntries.reduce((a, b) => a + b.correct, 0);
+        const totalW = validEntries.reduce((a, b) => a + b.wrong, 0);
+        linkedGoal.status = 'Concluído';
+        linkedGoal.linkId = linkId;
+        linkedGoal.type = 'Simulado';
+        linkedGoal.onlyEssay = onlyEssay;
+        linkedGoal.didEssay = didEssay;
+        linkedGoal.essayTheme = essayTheme || linkedGoal.essayTheme || '';
+        linkedGoal.essayScore = essay ? essay.score : null;
+        linkedGoal.essayMax = essay ? essay.max : null;
+        if (onlyEssay) {
+            linkedGoal.subjectName = 'Redação';
+            linkedGoal.subtopicName = essayTheme ? `Redação: ${essayTheme}` : 'Somente Redação';
+            linkedGoal.subtopics = [{ id: 'redacao', name: linkedGoal.subtopicName }];
+        }
+        linkedGoal.studySeconds = totalSec;
+        linkedGoal.studyMinutes = totalSec / 60;
+        linkedGoal.questionsCorrect = totalC;
+        linkedGoal.questionsWrong = totalW;
+        linkedGoal.questionsTotal = totalC + totalW;
+    }
     pendingSimuladoSeconds = 0;
     resetGlobalTimer();
     saveAppState();
     closeModal('modalPostTimerSimulado');
     renderActiveModule();
-    showToast(essay
-        ? 'Simulado, redação, horas e questões contabilizados no Dashboard!'
-        : 'Simulado, Horas Líquidas e Questões contabilizados no Dashboard e Métricas!', 'success');
+    showToast(onlyEssay
+        ? 'Simulado (Somente Redação) e horas contabilizados no Dashboard!'
+        : (essay
+            ? 'Simulado, redação, horas e questões contabilizados no Dashboard!'
+            : 'Simulado, Horas Líquidas e Questões contabilizados no Dashboard e Métricas!'), 'success');
     return true;
 }
 function saveSimuladoTimeOnly() {
@@ -3968,7 +4257,7 @@ function renderEssayEvolution() {
     if (!chartEl || !listEl) return;
     const data = (appState.essayScores || []).slice().sort((a, b) => a.date.localeCompare(b.date) || (a.id > b.id ? 1 : -1));
     if (data.length === 0) {
-        chartEl.innerHTML = `<div class="text-center py-6 text-xs text-slate-400 font-mono">Nenhuma redação registrada. Ao finalizar um simulado no Cronômetro, marque "Fiz Redação" e informe a nota.</div>`;
+        chartEl.innerHTML = `<div class="text-center py-6 text-xs text-slate-400 font-mono">Nenhuma redação registrada. Ao finalizar um simulado no Cronômetro ou na Agenda do Dia, marque "Fiz Redação" ou "Fazer somente a Redação" e informe a nota.</div>`;
         listEl.innerHTML = '';
         if (badge) badge.textContent = '';
         return;
@@ -3991,7 +4280,7 @@ function renderEssayEvolution() {
 <text x="${x(i).toFixed(1)}" y="${H - 8}" text-anchor="middle" font-size="9" fill="currentColor" fill-opacity="0.6" font-family="monospace">${d.date.slice(8, 10)}/${d.date.slice(5, 7)}</text>` : '').join('');
     chartEl.innerHTML = `
 <div class="theme-accent-text w-full overflow-x-auto">
-<svg viewBox="0 0 ${W} ${H}" class="w-full h-auto min-w-[320px]" role="img" aria-label="Evolução da nota da redação">
+<svg viewBox="0 0 ${W} ${H}" class="w-full h-auto" role="img" aria-label="Evolução da nota da redação">
 ${grid}
 ${data.length > 1 ? `<polyline points="${points}" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>` : ''}
 ${dots}
@@ -4235,7 +4524,7 @@ terca: [{ id: 'wp-2', subject: 'Direito Administrativo', focus: 'Atos Administra
 quarta: [{ id: 'wp-3', subject: 'Português', focus: 'Sintaxe e Crase', hours: '2h', modality: 'Teoria + Questões' }],
 quinta: [{ id: 'wp-4', subject: 'Direito Constitucional', focus: 'Remédios Constitucionais', hours: '2h', modality: 'Questões' }],
 sexta: [{ id: 'wp-5', subject: 'Raciocínio Lógico', focus: 'Proposições e Tabela Verdade', hours: '2h', modality: 'Teoria' }],
-sabado: [{ id: 'wp-6', subject: 'Simulado Geral', focus: '60 questões com correção', hours: '3h', modality: 'Questões' }],
+sabado: [{ id: 'wp-6', subject: 'Simulado Geral', focus: '60 questões com correção', hours: '3h', modality: 'Simulado' }],
 domingo: [{ id: 'wp-7', subject: 'Revisão Semanal', focus: 'Caderno de Erros e Flashcards', hours: '1h30', modality: 'Teoria' }]
 },
 reviews: [],
@@ -4278,9 +4567,22 @@ return;
 }
 }
 } catch (e) {}
-const initialProfile = (!prof || prof.id === 'user-gabriel') && localStorage.getItem(STORAGE_KEY)
-? normalizeImportedState(JSON.parse(localStorage.getItem(STORAGE_KEY)))
-: getInitialDemoData();
+let legacyRaw = null;
+try {
+if (!prof || prof.id === 'user-gabriel') {
+legacyRaw = localStorage.getItem(STORAGE_KEY);
+}
+} catch (e) {}
+let initialProfile = null;
+if (legacyRaw) {
+try {
+initialProfile = normalizeImportedState(JSON.parse(legacyRaw));
+} catch (e) {
+initialProfile = getInitialDemoData();
+}
+} else {
+initialProfile = getInitialDemoData();
+}
 if (prof) {
 initialProfile.userProfile.name = prof.name;
 }
@@ -4380,7 +4682,7 @@ ${ids.length > 1 ? `
 </div>
 `;
 }).join('');
-lucide.createIcons();
+if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
 }
 function normalizeImportedState(parsed) {
     const base = getEmptyFactoryState();
@@ -4435,13 +4737,15 @@ function normalizeImportedState(parsed) {
 }
 function saveAppState(triggerDrive = true) {
 try {
+if (triggerDrive) {
 const nowTs = Date.now();
+if (appState) appState.updatedAt = nowTs;
+if (multiProfilesStore) multiProfilesStore.updatedAt = nowTs;
+}
 if (appState) {
-appState.updatedAt = nowTs;
 appState.platformCards = getPlatformCardsList();
 }
 if (multiProfilesStore && multiProfilesStore.activeProfileId) {
-multiProfilesStore.updatedAt = nowTs;
 multiProfilesStore.profiles[multiProfilesStore.activeProfileId] = appState;
 localStorage.setItem(getCurrentUserMultiStorageKey(), JSON.stringify(multiProfilesStore));
 }
@@ -4463,6 +4767,44 @@ console.error(err);
 }
 }
 // GOOGLE DRIVE SYNC COMPLETO
+const GDRIVE_OAUTH_SESSION_KEY = 'ORGANIZE_GDRIVE_OAUTH_SESSION_V1';
+let pendingDriveResync = false;
+function persistDriveOAuthSession(token, expiresInSec = 3500) {
+try {
+if (!token) {
+sessionStorage.removeItem(GDRIVE_OAUTH_SESSION_KEY);
+return;
+}
+const payload = {
+accessToken: token,
+expiresAt: Date.now() + Math.max(60, (Number(expiresInSec) || 3500) - 60) * 1000,
+email: currentLoggedUserEmail || '',
+name: currentLoggedUserName || ''
+};
+sessionStorage.setItem(GDRIVE_OAUTH_SESSION_KEY, JSON.stringify(payload));
+} catch (e) {}
+}
+function restoreDriveOAuthSession() {
+try {
+const raw = sessionStorage.getItem(GDRIVE_OAUTH_SESSION_KEY);
+if (!raw) return false;
+const parsed = JSON.parse(raw);
+if (parsed && parsed.accessToken && parsed.expiresAt > Date.now()) {
+driveAccessToken = parsed.accessToken;
+currentLoggedUserEmail = parsed.email || '';
+currentLoggedUserName = parsed.name || '';
+isMasterAdminUnlocked = Boolean(
+activeNetflixProfile &&
+activeNetflixProfile.isOwner &&
+currentLoggedUserEmail &&
+currentLoggedUserEmail.toLowerCase().trim() === MASTER_ADMIN_EMAIL.toLowerCase().trim()
+);
+return true;
+}
+sessionStorage.removeItem(GDRIVE_OAUTH_SESSION_KEY);
+} catch (e) {}
+return false;
+}
 function getDriveCredentials() {
 try {
 const raw = localStorage.getItem(GDRIVE_CREDS_KEY);
@@ -4475,12 +4817,19 @@ function saveDriveCredentials(e) {
 e.preventDefault();
 const clientId = document.getElementById('gdriveClientIdInput').value.trim();
 const apiKey = document.getElementById('gdriveApiKeyInput').value.trim();
+try {
 localStorage.setItem(GDRIVE_CREDS_KEY, JSON.stringify({ clientId, apiKey }));
+} catch (err) {}
 gapiInited = false;
 gisInited = false;
 closeModal('modalGDriveConfig');
 initGoogleDriveClients();
+if (!isRealOAuthToken() && tokenClient) {
+showToast('Credenciais salvas! Conectando ao Google Drive...', 'success');
+tokenClient.requestAccessToken({ prompt: 'select_account' });
+} else {
 showToast('Credenciais do Google Drive salvas!', 'success');
+}
 }
 function updateDriveStatusUI(connected) {
 const statusTxt = document.getElementById('gdriveStatusText');
@@ -4525,13 +4874,17 @@ showToast('Falha na autenticação com Google Drive.', 'warning');
 return;
 }
 driveAccessToken = resp.access_token;
+persistDriveOAuthSession(resp.access_token, resp.expires_in);
 await fetchLoggedGoogleUserProfile();
-if (pendingNetflixProfileToEnter) {
-completeProfileEntryAfterDriveAuth();
-}
-updateDriveStatusUI(true);
+persistDriveOAuthSession(resp.access_token, resp.expires_in);
 await loadSharedPlatformsFromDrive();
-await findOrLoadDriveBackup();
+let enteredOk = true;
+if (pendingNetflixProfileToEnter) {
+enteredOk = completeProfileEntryAfterDriveAuth(false);
+}
+if (!enteredOk) return;
+updateDriveStatusUI(true);
+await findOrLoadDriveBackup(true);
 renderActiveModule();
 }
 });
@@ -4552,7 +4905,10 @@ const info = await res.json();
 currentLoggedUserEmail = (info.email || '').toLowerCase().trim();
 currentLoggedUserName = info.name || '';
 // Só destrava Admin se for exatamente o e-mail mestre do Gabriel
-isMasterAdminUnlocked = (currentLoggedUserEmail === MASTER_ADMIN_EMAIL.toLowerCase().trim());
+isMasterAdminUnlocked = Boolean(
+(!activeNetflixProfile || activeNetflixProfile.isOwner) &&
+currentLoggedUserEmail === MASTER_ADMIN_EMAIL.toLowerCase().trim()
+);
 }
 } catch (err) {
 console.warn('Erro ao verificar e-mail Google:', err);
@@ -4608,6 +4964,7 @@ remoteDriveFileId = null;
 currentLoggedUserEmail = '';
 currentLoggedUserName = '';
 isMasterAdminUnlocked = false;
+persistDriveOAuthSession(null);
 updateDriveStatusUI(false);
 if (currentTab === 'mod8') renderCoursesModule();
 renderNetflixProfilesGrid();
@@ -4626,58 +4983,266 @@ tokenClient.requestAccessToken({ prompt: 'select_account' });
 showToast('Inicializando Google Drive... Clique novamente em 1 segundo.', 'info');
 }
 }
-// 3. SINCRONIZAÇÃO COMPLETA E CONFIÁVEL DOS DADOS COM O GOOGLE DRIVE
-async function findOrLoadDriveBackup() {
-if (!isRealOAuthToken()) return;
-const backupFileName = (!activeNetflixProfile || activeNetflixProfile.id === 'user-gabriel')
-? 'organize_backup.json'
-: `organize_backup_${activeNetflixProfile.id}.json`;
+async function pullDriveBackupManual() {
+if (!isRealOAuthToken()) {
+handleDriveAuthClick();
+return;
+}
+const statusTxt = document.getElementById('gdriveStatusText');
+if (statusTxt) statusTxt.textContent = 'Buscando no Drive...';
+await loadSharedPlatformsFromDrive();
+await findOrLoadDriveBackup(true);
+renderActiveModule();
+}
+function getSingleStateRichnessScore(st) {
+if (!st || typeof st !== 'object') return 0;
+let score = 0;
+score += (Array.isArray(st.timeSessions) ? st.timeSessions.length : 0) * 10;
+score += (Array.isArray(st.questionLogs) ? st.questionLogs.length : 0) * 10;
+score += (Array.isArray(st.agenda) ? st.agenda.length : 0) * 8;
+score += (Array.isArray(st.essayScores) ? st.essayScores.length : 0) * 12;
+score += (Array.isArray(st.reviews) ? st.reviews.length : 0) * 6;
+score += (Array.isArray(st.errorCards) ? st.errorCards.length : 0) * 8;
+if (st.targetExamName && st.targetExamName !== 'Concurso Público Alvo' && st.targetExamName !== 'Definir Edital Alvo') {
+score += 15;
+}
+if (Array.isArray(st.edital)) {
+if (st.edital.length > 1) score += st.edital.length * 5;
+st.edital.forEach(subj => {
+if (subj && subj.name && subj.name !== 'Direito Constitucional') score += 5;
+(subj?.topics || []).forEach(t => {
+(t?.subtopics || []).forEach(sub => {
+if (sub?.completed) score += 4;
+if (sub?.id && !['sub-1001', 'sub-1002'].includes(sub.id)) score += 2;
+});
+});
+});
+}
+if (st.ankiProgress && typeof st.ankiProgress === 'object') {
+score += Object.keys(st.ankiProgress).length * 2;
+}
+return score;
+}
+function getBackupPayloadRichnessScore(payload) {
+if (!payload || typeof payload !== 'object') return 0;
+let score = getSingleStateRichnessScore(payload);
+if (payload.multiProfilesStore && payload.multiProfilesStore.profiles && typeof payload.multiProfilesStore.profiles === 'object') {
+const pids = Object.keys(payload.multiProfilesStore.profiles);
+if (pids.length > 1) score += (pids.length - 1) * 20;
+pids.forEach(pid => {
+score += getSingleStateRichnessScore(payload.multiProfilesStore.profiles[pid]);
+});
+}
+if (Array.isArray(payload.ankiCourses) && payload.ankiCourses.length > 0) {
+score += payload.ankiCourses.length * 15;
+}
+return score;
+}
+function applyImportedOrRemoteBackupPayload(remotePayload, preserveRemoteTs = true) {
+if (!remotePayload || typeof remotePayload !== 'object') return false;
+const remoteUpdatedAt = remotePayload.updatedAt || Date.now();
+if (remotePayload.gdriveCreds && remotePayload.gdriveCreds.clientId) {
+const existingCreds = getDriveCredentials();
+if (!existingCreds.clientId) {
 try {
-const q = encodeURIComponent(`name='${backupFileName}' and trashed=false`);
-const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime desc&fields=files(id,name,modifiedTime)`, {
-headers: { Authorization: `Bearer ${driveAccessToken}` }
+localStorage.setItem(GDRIVE_CREDS_KEY, JSON.stringify({
+clientId: remotePayload.gdriveCreds.clientId,
+apiKey: remotePayload.gdriveCreds.apiKey || existingCreds.apiKey || ''
+}));
+} catch (e) {}
+gapiInited = false;
+gisInited = false;
+initGoogleDriveClients();
+}
+}
+if (Array.isArray(remotePayload.netflixProfilesList) && remotePayload.netflixProfilesList.length > 0) {
+netflixProfilesList = remotePayload.netflixProfilesList;
+DEFAULT_NETFLIX_PROFILES.forEach(def => {
+if (!netflixProfilesList.some(p => p.name.toLowerCase() === def.name.toLowerCase())) {
+netflixProfilesList.push({ ...def });
+}
 });
-if (!res.ok) return;
-const data = await res.json();
-if (data.files && data.files.length > 0) {
-remoteDriveFileId = data.files[0].id;
-const fileRes = await fetch(`https://www.googleapis.com/drive/v3/files/${remoteDriveFileId}?alt=media`, {
-headers: { Authorization: `Bearer ${driveAccessToken}` }
-});
-if (!fileRes.ok) return;
-const remotePayload = await fileRes.json();
-if (remotePayload && typeof remotePayload === 'object') {
-const localUpdatedAt = multiProfilesStore?.updatedAt || appState?.updatedAt || 0;
-const remoteUpdatedAt = remotePayload.updatedAt || 0;
-if (remotePayload.multiProfilesStore && remotePayload.multiProfilesStore.profiles) {
-if (remoteUpdatedAt >= localUpdatedAt) {
+hydrateNetflixProfileAvatars(true);
+saveNetflixProfilesList();
+renderNetflixProfilesGrid();
+}
+if (remotePayload.multiProfilesStore && remotePayload.multiProfilesStore.profiles && Object.keys(remotePayload.multiProfilesStore.profiles).length > 0) {
 multiProfilesStore = remotePayload.multiProfilesStore;
 Object.keys(multiProfilesStore.profiles).forEach(pid => {
 multiProfilesStore.profiles[pid] = normalizeImportedState(multiProfilesStore.profiles[pid]);
+if (preserveRemoteTs) multiProfilesStore.profiles[pid].updatedAt = remoteUpdatedAt;
 });
-appState = multiProfilesStore.profiles[multiProfilesStore.activeProfileId] || Object.values(multiProfilesStore.profiles)[0];
-} else {
-await syncDriveNow(true);
+if (remotePayload.activeProfileId && multiProfilesStore.profiles[remotePayload.activeProfileId]) {
+multiProfilesStore.activeProfileId = remotePayload.activeProfileId;
+} else if (!multiProfilesStore.profiles[multiProfilesStore.activeProfileId]) {
+multiProfilesStore.activeProfileId = Object.keys(multiProfilesStore.profiles)[0];
 }
+const activeId = multiProfilesStore.activeProfileId;
+const topLevelState = normalizeImportedState(remotePayload);
+if (getSingleStateRichnessScore(topLevelState) > getSingleStateRichnessScore(multiProfilesStore.profiles[activeId])) {
+if (preserveRemoteTs) topLevelState.updatedAt = remoteUpdatedAt;
+multiProfilesStore.profiles[activeId] = topLevelState;
+}
+multiProfilesStore.updatedAt = remoteUpdatedAt;
+appState = multiProfilesStore.profiles[activeId];
 } else {
-if (remoteUpdatedAt >= localUpdatedAt) {
 appState = normalizeImportedState(remotePayload);
-} else {
-await syncDriveNow(true);
-}
+appState.updatedAt = remoteUpdatedAt;
+const activeId = (multiProfilesStore && multiProfilesStore.activeProfileId) ? multiProfilesStore.activeProfileId : 'edital-1';
+multiProfilesStore = {
+updatedAt: remoteUpdatedAt,
+activeProfileId: activeId,
+profiles: { ...(multiProfilesStore?.profiles || {}), [activeId]: appState }
+};
 }
 if (Array.isArray(remotePayload.platformCards) && remotePayload.platformCards.length > 0) {
 savePlatformCardsList(remotePayload.platformCards, false);
 }
+if (Array.isArray(remotePayload.ankiCourses) && remotePayload.ankiCourses.length > 0 && typeof saveAnkiCoursesList === 'function') {
+saveAnkiCoursesList(remotePayload.ankiCourses, false);
+}
+const ankiProg = remotePayload.ankiProgress || (appState && appState.ankiProgress);
+if (ankiProg && typeof ankiProg === 'object') {
+const profId = activeNetflixProfile ? activeNetflixProfile.id : 'user-gabriel';
+try {
+localStorage.setItem('ORGANIZE_ANKI_PROG_' + profId, JSON.stringify(ankiProg));
+} catch (e) {}
+}
+if (activeNetflixProfile) {
+if (appState && appState.userProfile && appState.userProfile.photoBase64) {
+activeNetflixProfile.avatar = appState.userProfile.photoBase64;
+}
+const headerAvatar = document.getElementById('headerNetflixAvatar');
+const headerName = document.getElementById('headerNetflixName');
+renderAvatarElementContent(headerAvatar, activeNetflixProfile, 'w-6 h-6 rounded theme-accent-bg flex items-center justify-center shrink-0', 'text-white keep-white font-black text-[11px]');
+if (headerName) headerName.textContent = activeNetflixProfile.name;
+}
 saveAppState(false);
-renderActiveModule();
-showToast('Sincronizado com o Google Drive!', 'success');
+return true;
+}
+// 3. SINCRONIZAÇÃO COMPLETA E CONFIÁVEL DOS DADOS COM O GOOGLE DRIVE
+async function findOrLoadDriveBackup(forcePull = true) {
+if (!isRealOAuthToken()) return;
+const expectedBackupFileName = (!activeNetflixProfile || activeNetflixProfile.id === 'user-gabriel')
+? 'organize_backup.json'
+: `organize_backup_${activeNetflixProfile.id}.json`;
+const candidateNames = [];
+if (!activeNetflixProfile || activeNetflixProfile.id === 'user-gabriel') {
+candidateNames.push('organize_backup.json');
+} else {
+candidateNames.push(`organize_backup_${activeNetflixProfile.id}.json`);
+if (activeNetflixProfile.name) {
+candidateNames.push(`organize_backup_user-${activeNetflixProfile.name.toLowerCase().trim()}.json`);
+}
+candidateNames.push('organize_backup.json');
+}
+try {
+let hadFetchError = false;
+const candidateFiles = [];
+const seenFileIds = new Set();
+for (const fileName of candidateNames) {
+const q = encodeURIComponent(`name='${fileName}' and trashed=false`);
+const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime desc&includeItemsFromAllDrives=true&supportsAllDrives=true&fields=files(id,name,modifiedTime)`, {
+headers: { Authorization: `Bearer ${driveAccessToken}` },
+cache: 'no-store'
+});
+if (!res.ok) {
+hadFetchError = true;
+if (res.status === 401) {
+driveAccessToken = null;
+persistDriveOAuthSession(null);
+updateDriveStatusUI(false);
+return;
+}
+continue;
+}
+const data = await res.json();
+if (Array.isArray(data.files)) {
+data.files.forEach(f => {
+if (f && f.id && !seenFileIds.has(f.id)) {
+seenFileIds.add(f.id);
+candidateFiles.push(f);
+}
+});
+}
+}
+if (candidateFiles.length === 0) {
+const qFallback = encodeURIComponent("name contains 'organize_backup' and trashed=false");
+const fbRes = await fetch(`https://www.googleapis.com/drive/v3/files?q=${qFallback}&orderBy=modifiedTime desc&includeItemsFromAllDrives=true&supportsAllDrives=true&fields=files(id,name,modifiedTime)`, {
+headers: { Authorization: `Bearer ${driveAccessToken}` },
+cache: 'no-store'
+});
+if (fbRes.ok) {
+const fbData = await fbRes.json();
+if (Array.isArray(fbData.files)) {
+fbData.files.forEach(f => {
+if (f && f.id && !seenFileIds.has(f.id)) {
+seenFileIds.add(f.id);
+candidateFiles.push(f);
+}
+});
 }
 } else {
+hadFetchError = true;
+}
+}
+let chosenFile = null;
+let chosenPayload = null;
+let chosenRichness = -1;
+for (const fileMeta of candidateFiles.slice(0, 5)) {
+const fileRes = await fetch(`https://www.googleapis.com/drive/v3/files/${fileMeta.id}?alt=media`, {
+headers: { Authorization: `Bearer ${driveAccessToken}` },
+cache: 'no-store'
+});
+if (!fileRes.ok) {
+hadFetchError = true;
+continue;
+}
+let parsedPayload = null;
+try {
+parsedPayload = await fileRes.json();
+} catch (e) {
+continue;
+}
+if (!parsedPayload || typeof parsedPayload !== 'object') continue;
+const richness = getBackupPayloadRichnessScore(parsedPayload);
+if (!chosenPayload || (chosenRichness === 0 && richness > 0)) {
+chosenFile = fileMeta;
+chosenPayload = parsedPayload;
+chosenRichness = richness;
+}
+if (chosenRichness > 0) break;
+}
+if (chosenFile && chosenPayload) {
+if (chosenFile.name === expectedBackupFileName) {
+remoteDriveFileId = chosenFile.id;
+}
+const localUpdatedAt = multiProfilesStore?.updatedAt || appState?.updatedAt || 0;
+const remoteModifiedMs = chosenFile.modifiedTime ? (Date.parse(chosenFile.modifiedTime) || 0) : 0;
+const remoteUpdatedAt = chosenPayload.updatedAt || remoteModifiedMs || 0;
+const localRichness = getBackupPayloadRichnessScore({ multiProfilesStore, ...appState });
+if (forcePull || !localUpdatedAt || remoteUpdatedAt >= localUpdatedAt || (localRichness === 0 && chosenRichness > 0)) {
+if (!chosenPayload.updatedAt && remoteModifiedMs) {
+chosenPayload.updatedAt = remoteModifiedMs;
+}
+applyImportedOrRemoteBackupPayload(chosenPayload, true);
+const statusTxt = document.getElementById('gdriveStatusText');
+const nowTime = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+if (statusTxt) statusTxt.textContent = `Sincronizado (${nowTime}) ✓`;
+renderActiveModule();
+if (currentTab === 'mod2' && currentAgendaSubTab === 'WEEKLY_PLAN') {
+renderWeeklyPlanGrid();
+}
+showToast('Backup carregado e sincronizado do Google Drive!', 'success');
+} else {
+await syncDriveNow(true);
+}
+} else if (!hadFetchError) {
 await syncDriveNow(true);
 }
 } catch (err) {
 console.error('Erro ao buscar backup no Drive:', err);
+showToast('Erro ao carregar backup do Google Drive.', 'warning');
 }
 }
 async function syncDriveNow(isSilent = false) {
@@ -4685,7 +5250,10 @@ if (!isRealOAuthToken()) {
 if (!isSilent) handleDriveAuthClick();
 return;
 }
-if (isDriveSyncInProgress) return;
+if (isDriveSyncInProgress) {
+pendingDriveResync = true;
+return;
+}
 isDriveSyncInProgress = true;
 const backupFileName = (!activeNetflixProfile || activeNetflixProfile.id === 'user-gabriel')
 ? 'organize_backup.json'
@@ -4693,8 +5261,9 @@ const backupFileName = (!activeNetflixProfile || activeNetflixProfile.id === 'us
 try {
 if (!remoteDriveFileId) {
 const q = encodeURIComponent(`name='${backupFileName}' and trashed=false`);
-const checkRes = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime desc&fields=files(id,name)`, {
-headers: { Authorization: `Bearer ${driveAccessToken}` }
+const checkRes = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime desc&includeItemsFromAllDrives=true&supportsAllDrives=true&fields=files(id,name)`, {
+headers: { Authorization: `Bearer ${driveAccessToken}` },
+cache: 'no-store'
 });
 if (checkRes.ok) {
 const checkData = await checkRes.json();
@@ -4703,11 +5272,24 @@ remoteDriveFileId = checkData.files[0].id;
 }
 }
 }
+const nowTs = Date.now();
+if (appState) appState.updatedAt = nowTs;
+if (multiProfilesStore) {
+multiProfilesStore.updatedAt = nowTs;
+if (multiProfilesStore.activeProfileId) {
+multiProfilesStore.profiles[multiProfilesStore.activeProfileId] = appState;
+}
+}
 const payloadToSave = {
-updatedAt: Date.now(),
+updatedAt: nowTs,
+activeNetflixProfileId: activeNetflixProfile ? activeNetflixProfile.id : 'user-gabriel',
 activeProfileId: multiProfilesStore?.activeProfileId || 'edital-1',
 multiProfilesStore: multiProfilesStore,
 platformCards: getPlatformCardsList(),
+netflixProfilesList: netflixProfilesList,
+ankiCourses: typeof getAnkiCoursesList === 'function' ? getAnkiCoursesList() : [],
+ankiProgress: typeof getAnkiUserProgressMap === 'function' ? getAnkiUserProgressMap() : {},
+gdriveCreds: getDriveCredentials(),
 ...appState
 };
 const fileContent = JSON.stringify(payloadToSave, null, 2);
@@ -4740,7 +5322,12 @@ const nowTime = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute
 if (statusTxt) statusTxt.textContent = `Salvo às ${nowTime} ✓`;
 if (!isSilent) showToast('Todas as edições foram salvas no Google Drive!', 'success');
 } else {
-if (response.status === 404) {
+if (response.status === 401) {
+driveAccessToken = null;
+persistDriveOAuthSession(null);
+updateDriveStatusUI(false);
+}
+if (response.status === 404 || response.status === 403) {
 remoteDriveFileId = null;
 }
 if (!isSilent) showToast('Erro ao atualizar arquivo no Google Drive.', 'warning');
@@ -4750,6 +5337,10 @@ console.error('Erro ao sincronizar no Drive:', err);
 if (!isSilent) showToast('Erro de conexão ao salvar no Google Drive.', 'warning');
 } finally {
 isDriveSyncInProgress = false;
+if (pendingDriveResync && isRealOAuthToken()) {
+pendingDriveResync = false;
+setTimeout(() => syncDriveNow(true), 250);
+}
 }
 }
 function showToast(message, type = 'info') {
@@ -5158,13 +5749,14 @@ function sendWeeklyItemToTodayAgenda(day, id) {
 const item = (appState.weeklyPlan[day] || []).find(i => i.id === id);
 if (!item) return;
 const targetDate = document.getElementById('agendaFilterDate')?.value || getTodayISO();
+const isSim = item.modality === 'Simulado' || /simulado/i.test(item.subject || '');
 appState.agenda.push({
 id: 'ag-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
 date: targetDate,
 subjectName: item.subject,
 subtopicId: 'grade-semanal',
 subtopicName: item.focus || 'Planejamento da Grade Semanal',
-type: item.modality === 'Simulado' ? 'Simulado' : 'Teoria/Questões',
+type: isSim ? 'Simulado' : 'Teoria/Questões',
 status: 'Pendente',
 linkId: newLinkId(),
 origin: 'scheduled',
@@ -5189,13 +5781,14 @@ let added = 0;
 items.forEach((item, idx) => {
 const alreadyExists = appState.agenda.some(g => g.date === selectedDate && g.subjectName === item.subject && g.subtopicName === (item.focus || 'Planejamento da Grade Semanal'));
 if (!alreadyExists) {
+const isSim = item.modality === 'Simulado' || /simulado/i.test(item.subject || '');
 appState.agenda.push({
 id: 'ag-' + Date.now() + '-' + idx + '-' + Math.random().toString(36).slice(2, 5),
 date: selectedDate,
 subjectName: item.subject,
 subtopicId: 'grade-semanal',
 subtopicName: item.focus || 'Planejamento da Grade Semanal',
-type: item.modality === 'Simulado' ? 'Simulado' : 'Teoria/Questões',
+type: isSim ? 'Simulado' : 'Teoria/Questões',
 status: 'Pendente',
 linkId: newLinkId(),
 origin: 'scheduled',
@@ -5229,7 +5822,8 @@ document.getElementById('weeklyPlanInputDay').value = day;
 document.getElementById('weeklyPlanInputSubject').value = item.subject;
 document.getElementById('weeklyPlanInputFocus').value = item.focus || '';
 document.getElementById('weeklyPlanInputHours').value = item.hours || '';
-document.getElementById('weeklyPlanInputModality').value = item.modality || 'Teoria';
+const isSim = item.modality === 'Simulado' || /simulado/i.test(item.subject || '');
+document.getElementById('weeklyPlanInputModality').value = isSim ? 'Simulado' : 'Teoria/Questões';
 document.getElementById('weeklyPlanModalTitle').textContent = 'Editar Matéria da Grade';
 openModal('modalAddWeeklyPlanItem');
 }
@@ -5284,30 +5878,35 @@ function renderAgendaModule() {
     const renderCard = (g) => {
         const secs = (typeof g.studySeconds === 'number') ? g.studySeconds : Math.round((g.studyMinutes || 0) * 60);
         const topics = goalSubtopics(g).map(s => s.name).join(' + ');
+        const hasEssayScore = g.essayScore !== undefined && g.essayScore !== null && g.essayScore !== '';
         return `
 <div class="p-3.5 rounded-xl bg-tactical-bg border border-tactical-border space-y-2">
-<div class="flex items-center justify-between">
+<div class="flex flex-wrap items-center justify-between gap-1.5">
+<div class="flex flex-wrap items-center gap-1.5">
 <span class="px-2 py-0.5 rounded text-[10px] font-mono theme-accent-soft-bg font-semibold">${escapeHTML(g.type)}</span>
+${g.onlyEssay ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-[10px] font-mono theme-accent-text font-semibold">Somente Redação</span>` : (g.didEssay ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-[10px] font-mono text-slate-300">+ Redação</span>` : '')}
+</div>
 <span class="text-[10px] font-mono ${g.status === 'Concluído' ? 'theme-accent-text font-bold' : 'text-slate-400'}">${g.status === 'Concluído' ? '✓ Visto / Concluído' : 'Pendente'}</span>
 </div>
 <div>
 <h4 class="text-xs font-bold text-white">${escapeHTML(g.subjectName)}</h4>
 <p class="text-xs text-slate-300 mt-0.5">${escapeHTML(topics)}</p>
-${secs > 0 || g.questionsTotal > 0 ? `
+${secs > 0 || g.questionsTotal > 0 || hasEssayScore ? `
 <div class="flex flex-wrap items-center gap-2 mt-1.5">
 ${secs > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-[10px] font-mono theme-accent-text">${formatDurationSec(secs)}</span>` : ''}
 ${g.questionsTotal > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-[10px] font-mono text-white">${g.questionsCorrect}/${g.questionsTotal} acertos</span>` : ''}
+${hasEssayScore ? `<span class="px-2 py-0.5 rounded theme-accent-soft-bg text-[10px] font-mono font-bold">Redação: ${g.essayScore}/${g.essayMax || 10}</span>` : ''}
 </div>
 ` : ''}
 ${g.notes ? `<p class="text-[11px] text-slate-400 mt-1 italic">"${escapeHTML(g.notes)}"</p>` : ''}
 </div>
-<div class="pt-2 border-t border-tactical-subtle flex items-center justify-between">
+<div class="pt-2 border-t border-tactical-subtle flex flex-wrap items-center justify-between gap-2">
 ${g.status !== 'Concluído' ? `
 <button onclick="startTimerFromGoal('${g.id}')" class="px-2.5 py-1 rounded-lg bg-tactical-accent text-white keep-white text-[11px] font-semibold flex items-center gap-1">
 <i data-lucide="play" class="w-3 h-3"></i> Cronometrar
 </button>` : '<span></span>'}
-<div class="flex items-center gap-1">
-${g.status !== 'Concluído' ? `<button onclick="openStudyRegisterForGoal('${g.id}')" title="Marcar como visto e registrar horas/questões" class="p-1.5 rounded-lg bg-tactical-card hover:bg-tactical-surface text-slate-300"><i data-lucide="check" class="w-3.5 h-3.5"></i></button>` : ''}
+<div class="flex items-center gap-1.5">
+${g.status !== 'Concluído' ? `<button onclick="openStudyRegisterForGoal('${g.id}')" title="Concluir estudo / simulado e registrar horas, questões ou redação" class="px-2.5 py-1 rounded-lg bg-tactical-card hover:bg-tactical-surface text-slate-200 hover:text-white text-[11px] font-semibold flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5 theme-accent-text"></i> Concluir</button>` : ''}
 <button onclick="deleteAgendaGoal('${g.id}')" title="Excluir" class="p-1 text-slate-400 hover:theme-accent-text"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
 </div>
 </div>
@@ -5317,7 +5916,7 @@ ${g.status !== 'Concluído' ? `<button onclick="openStudyRegisterForGoal('${g.id
     document.getElementById('colAgendaPendente').innerHTML = pendentes.map(renderCard).join('') || '<div class="text-xs text-slate-400 text-center py-10 font-mono">Nenhuma meta pendente</div>';
     document.getElementById('colAgendaConcluido').innerHTML = concluidos.map(renderCard).join('') || '<div class="text-xs text-slate-400 text-center py-10 font-mono">Nenhum estudo registrado neste dia</div>';
     renderAgendaPreviousDaysHistory();
-    lucide.createIcons();
+    if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
 }
 function renderAgendaPreviousDaysHistory() {
     const container = document.getElementById('agendaPreviousDaysHistory');
@@ -5355,24 +5954,88 @@ ${dayEntries.map(e => renderHistoryEntryHTML(e, false)).join('')}
 `;
     }).join('');
 }
+function onAgendaTypeChange() {
+    const isSim = document.getElementById('agendaInputType')?.value === 'Simulado';
+    const box = document.getElementById('agendaSimuladoEssayBox');
+    if (box) box.classList.toggle('hidden', !isSim);
+    if (!isSim) {
+        const onlyChk = document.getElementById('agendaOnlyEssayCheck');
+        const essayChk = document.getElementById('agendaEssayCheck');
+        if (onlyChk) onlyChk.checked = false;
+        if (essayChk) essayChk.checked = false;
+        document.getElementById('agendaEssayFields')?.classList.add('hidden');
+        applyAgendaOnlyEssayUI(false);
+    }
+}
+function toggleAgendaOnlyEssayMode() {
+    const onlyOn = Boolean(document.getElementById('agendaOnlyEssayCheck')?.checked);
+    const essayChk = document.getElementById('agendaEssayCheck');
+    if (onlyOn && essayChk) {
+        essayChk.checked = true;
+    }
+    document.getElementById('agendaEssayFields')?.classList.toggle('hidden', !(onlyOn || essayChk?.checked));
+    applyAgendaOnlyEssayUI(onlyOn);
+}
+function toggleAgendaEssayFields() {
+    const on = Boolean(document.getElementById('agendaEssayCheck')?.checked);
+    const onlyChk = document.getElementById('agendaOnlyEssayCheck');
+    if (!on && onlyChk && onlyChk.checked) {
+        onlyChk.checked = false;
+        applyAgendaOnlyEssayUI(false);
+    }
+    document.getElementById('agendaEssayFields')?.classList.toggle('hidden', !on);
+}
+function applyAgendaOnlyEssayUI(onlyOn) {
+    document.getElementById('agendaSubjectWrap')?.classList.toggle('hidden', onlyOn);
+    document.getElementById('agendaSubtopicDropdownContainer')?.classList.toggle('hidden', onlyOn);
+    document.getElementById('agendaQuestionsGridWrap')?.classList.toggle('hidden', onlyOn);
+    document.getElementById('agendaMarkSeenWrap')?.classList.toggle('hidden', onlyOn);
+    if (onlyOn) document.getElementById('agendaQSubWrap')?.classList.add('hidden');
+    const subjEl = document.getElementById('agendaInputSubject');
+    if (subjEl) subjEl.required = !onlyOn;
+}
 function handleAddAgendaGoal(e) {
     e.preventDefault();
     const date = document.getElementById('agendaInputDate').value || getTodayISO();
-    const subjectName = document.getElementById('agendaInputSubject').value || 'Geral';
-    const checked = getCheckedSubtopics('agendaInputSubtopicList');
-    const subtopics = checked.length ? checked : [{ id: 'geral', name: 'Assunto Geral' }];
-    const subtopicName = subtopics.map(s => s.name).join(' + ');
     const type = document.getElementById('agendaInputType').value;
+    const isSim = type === 'Simulado';
+    const onlyEssay = isSim && Boolean(document.getElementById('agendaOnlyEssayCheck')?.checked);
+    const didEssay = onlyEssay || (isSim && Boolean(document.getElementById('agendaEssayCheck')?.checked));
+    const essayTheme = (document.getElementById('agendaEssayTheme')?.value || '').trim();
     const banca = document.getElementById('agendaInputBanca')?.value || 'Geral';
     const notes = document.getElementById('agendaInputNotes').value.trim();
     const submitStatus = document.getElementById('agendaSubmitMode')?.value || 'Pendente';
-    const seconds = readHMS('agendaInputStudyH', 'agendaInputStudyM', 'agendaInputStudyS');
-    const qCorrect = Math.max(0, parseInt(document.getElementById('agendaInputQCorrect')?.value, 10) || 0);
-    const qWrong = Math.max(0, parseInt(document.getElementById('agendaInputQWrong')?.value, 10) || 0);
-    const qTotal = qCorrect + qWrong;
-    const markSeen = document.getElementById('agendaMarkSeen')?.checked;
     const isDone = submitStatus === 'Concluído';
     const linkId = newLinkId();
+
+    let essay = null;
+    if (isDone && didEssay) {
+        const scoreRaw = document.getElementById('agendaEssayScore')?.value ?? '';
+        const max = parseFloat(String(document.getElementById('agendaEssayMax')?.value || '10').replace(',', '.')) || 10;
+        if (scoreRaw !== '') {
+            const score = parseFloat(String(scoreRaw).replace(',', '.'));
+            if (isNaN(score) || score < 0 || score > max) {
+                showToast('A nota da redação deve estar entre 0 e a nota máxima.', 'warning');
+                return;
+            }
+            essay = { id: uid('es-'), linkId, date, score, max, theme: essayTheme, banca };
+        } else if (!onlyEssay) {
+            showToast('Informe a nota da redação ou desmarque a opção.', 'warning');
+            return;
+        }
+    }
+
+    const subjectName = onlyEssay ? 'Redação' : (document.getElementById('agendaInputSubject').value || 'Geral');
+    const checked = onlyEssay ? [] : getCheckedSubtopics('agendaInputSubtopicList');
+    const subtopics = onlyEssay
+        ? [{ id: 'redacao', name: essayTheme ? `Redação: ${essayTheme}` : 'Somente Redação' }]
+        : (checked.length ? checked : [{ id: 'geral', name: 'Assunto Geral' }]);
+    const subtopicName = subtopics.map(s => s.name).join(' + ');
+    const seconds = readHMS('agendaInputStudyH', 'agendaInputStudyM', 'agendaInputStudyS');
+    const qCorrect = onlyEssay ? 0 : (Math.max(0, parseInt(document.getElementById('agendaInputQCorrect')?.value, 10) || 0));
+    const qWrong = onlyEssay ? 0 : (Math.max(0, parseInt(document.getElementById('agendaInputQWrong')?.value, 10) || 0));
+    const qTotal = qCorrect + qWrong;
+    const markSeen = !onlyEssay && document.getElementById('agendaMarkSeen')?.checked;
 
     const goal = {
         id: uid('ag-'),
@@ -5383,6 +6046,11 @@ function handleAddAgendaGoal(e) {
         subtopicName,
         subtopics,
         type,
+        onlyEssay,
+        didEssay,
+        essayTheme,
+        essayScore: essay ? essay.score : null,
+        essayMax: essay ? essay.max : null,
         status: submitStatus,
         notes,
         studySeconds: isDone ? seconds : 0,
@@ -5408,6 +6076,10 @@ function handleAddAgendaGoal(e) {
                 subtopicId: qSub.id, subtopicName: qSub.name, banca, correct: qCorrect, wrong: qWrong
             });
         }
+        if (essay) {
+            appState.essayScores = appState.essayScores || [];
+            appState.essayScores.push(essay);
+        }
         if (markSeen) {
             const seen = markSubtopicsSeen(subtopics, date);
             if (seen.completedIds.length || seen.createdReviewIds.length) {
@@ -5418,21 +6090,29 @@ function handleAddAgendaGoal(e) {
     }
 
     document.getElementById('agendaInputNotes').value = '';
-    ['agendaInputStudyH', 'agendaInputStudyM', 'agendaInputStudyS', 'agendaInputQCorrect', 'agendaInputQWrong'].forEach(id => {
+    ['agendaInputStudyH', 'agendaInputStudyM', 'agendaInputStudyS', 'agendaInputQCorrect', 'agendaInputQWrong', 'agendaEssayTheme', 'agendaEssayScore'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
     });
+    const maxEl = document.getElementById('agendaEssayMax');
+    if (maxEl) maxEl.value = 10;
+    const onlyChk = document.getElementById('agendaOnlyEssayCheck');
+    const essayChk = document.getElementById('agendaEssayCheck');
+    if (onlyChk) onlyChk.checked = false;
+    if (essayChk) essayChk.checked = false;
+    document.getElementById('agendaEssayFields')?.classList.add('hidden');
+    applyAgendaOnlyEssayUI(false);
     document.getElementById('agendaFilterDate').value = date;
     saveAppState();
     closeAllSubtopicDropdowns();
     renderActiveModule();
     renderAgendaSubtopicChecklist(true);
     if (isDone) {
-        showToast('Estudo, horas e questões registrados com sucesso!', 'success');
+        showToast(onlyEssay ? 'Simulado (Somente Redação) registrado com sucesso!' : 'Estudo, horas e questões registrados com sucesso!', 'success');
     } else if (seconds > 0 || qTotal > 0) {
         showToast('Meta agendada! Horas e questões só contam quando o estudo for concluído.', 'info');
     } else {
-        showToast('Meta agendada!', 'success');
+        showToast(onlyEssay ? 'Meta de Simulado (Somente Redação) agendada!' : 'Meta agendada!', 'success');
     }
 }
 function updateAgendaStatus(goalId, newStatus) {
@@ -6016,12 +6696,20 @@ function openSimuladoPostModal(seconds) {
     subjectsList.forEach(subjName => {
         appendSimuladoRowHTML(subjName);
     });
+    const linkedGoal = timerLinkedGoalId ? appState.agenda.find(g => g.id === timerLinkedGoalId) : null;
+    const onlyChk = document.getElementById('simuladoOnlyEssayCheck');
     const chk = document.getElementById('simuladoEssayCheck');
-    if (chk) chk.checked = false;
-    ['simuladoEssayTheme', 'simuladoEssayScore'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    const preOnlyEssay = Boolean(linkedGoal && linkedGoal.onlyEssay);
+    const preDidEssay = Boolean(preOnlyEssay || (linkedGoal && linkedGoal.didEssay));
+    if (onlyChk) onlyChk.checked = preOnlyEssay;
+    if (chk) chk.checked = preDidEssay;
+    const themeEl = document.getElementById('simuladoEssayTheme');
+    if (themeEl) themeEl.value = (linkedGoal && linkedGoal.essayTheme) ? linkedGoal.essayTheme : '';
+    const scoreEl = document.getElementById('simuladoEssayScore');
+    if (scoreEl) scoreEl.value = '';
     const mx = document.getElementById('simuladoEssayMax');
     if (mx) mx.value = 10;
-    toggleSimuladoEssayFields();
+    toggleSimuladoOnlyEssayMode();
     updateSimuladoLiveSummary();
     openModal('modalPostTimerSimulado');
 }
@@ -6049,6 +6737,21 @@ function addSimuladoSubjectRow() {
 appendSimuladoRowHTML('');
 }
 function updateSimuladoLiveSummary() {
+const el = document.getElementById('simuladoLiveSummary');
+if (!el) return;
+const onlyEssay = Boolean(document.getElementById('simuladoOnlyEssayCheck')?.checked);
+if (onlyEssay) {
+    const scoreRaw = document.getElementById('simuladoEssayScore')?.value ?? '';
+    const max = parseFloat(String(document.getElementById('simuladoEssayMax')?.value || '10').replace(',', '.')) || 10;
+    const sc = parseFloat(String(scoreRaw).replace(',', '.'));
+    if (scoreRaw !== '' && !isNaN(sc)) {
+        const pct = max > 0 ? ((sc / max) * 100).toFixed(1) : '0.0';
+        el.textContent = `Somente Redação • Nota: ${sc}/${max} (${pct}%)`;
+    } else {
+        el.textContent = 'Modo: Somente Redação (sem questões objetivas)';
+    }
+    return;
+}
 let totalC = 0, totalW = 0;
 document.querySelectorAll('.simulado-subj-row').forEach(row => {
 const c = parseInt(row.querySelector('.sim-subj-correct')?.value, 10) || 0;
@@ -6058,8 +6761,7 @@ totalW += w;
 });
 const tot = totalC + totalW;
 const pct = tot > 0 ? ((totalC / tot) * 100).toFixed(1) : '0.0';
-const el = document.getElementById('simuladoLiveSummary');
-if (el) el.textContent = `${tot} feitas • ${totalC} certas • ${totalW} erradas (${pct}%)`;
+el.textContent = `${tot} feitas • ${totalC} certas • ${totalW} erradas (${pct}%)`;
 }
 function confirmPostTimerSimulado(e) {
     e.preventDefault();
@@ -6815,7 +7517,27 @@ function closeModal(id) {
 }
 function exportDataJSON() {
 try {
-const jsonString = JSON.stringify(appState, null, 2);
+const nowTs = Date.now();
+if (appState) appState.updatedAt = nowTs;
+if (multiProfilesStore) {
+multiProfilesStore.updatedAt = nowTs;
+if (multiProfilesStore.activeProfileId) {
+multiProfilesStore.profiles[multiProfilesStore.activeProfileId] = appState;
+}
+}
+const exportPayload = {
+updatedAt: nowTs,
+activeNetflixProfileId: activeNetflixProfile ? activeNetflixProfile.id : 'user-gabriel',
+activeProfileId: multiProfilesStore?.activeProfileId || 'edital-1',
+multiProfilesStore: multiProfilesStore,
+platformCards: getPlatformCardsList(),
+netflixProfilesList: netflixProfilesList,
+ankiCourses: typeof getAnkiCoursesList === 'function' ? getAnkiCoursesList() : [],
+ankiProgress: typeof getAnkiUserProgressMap === 'function' ? getAnkiUserProgressMap() : {},
+gdriveCreds: getDriveCredentials(),
+...appState
+};
+const jsonString = JSON.stringify(exportPayload, null, 2);
 const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8' });
 const url = URL.createObjectURL(blob);
 const a = document.createElement('a');
@@ -6828,7 +7550,7 @@ setTimeout(() => {
 if (a.parentNode) document.body.removeChild(a);
 URL.revokeObjectURL(url);
 }, 200);
-showToast('Backup exportado com sucesso!', 'success');
+showToast('Backup completo exportado com sucesso!', 'success');
 } catch (err) {
 console.error('Erro ao exportar JSON:', err);
 showToast('Erro ao exportar o arquivo.', 'warning');
@@ -6852,7 +7574,28 @@ const parsed = JSON.parse(e.target.result);
 if (!parsed || typeof parsed !== 'object') {
 throw new Error('Formato JSON inválido');
 }
-appState = normalizeImportedState(parsed);
+if (Array.isArray(parsed.netflixProfilesList) && parsed.netflixProfilesList.length > 0) {
+netflixProfilesList = parsed.netflixProfilesList;
+DEFAULT_NETFLIX_PROFILES.forEach(def => {
+if (!netflixProfilesList.some(p => p.name.toLowerCase() === def.name.toLowerCase())) {
+netflixProfilesList.push({ ...def });
+}
+});
+hydrateNetflixProfileAvatars(true);
+saveNetflixProfilesList();
+}
+if (!activeNetflixProfile) {
+const targetProf = pendingNetflixProfileToEnter
+|| (parsed.activeNetflixProfileId && netflixProfilesList.find(p => p.id === parsed.activeNetflixProfileId))
+|| netflixProfilesList.find(p => p.isOwner)
+|| netflixProfilesList[0];
+if (targetProf) {
+pendingNetflixProfileToEnter = targetProf;
+pendingAdminManageAction = false;
+completeProfileEntryAfterDriveAuth(true);
+}
+}
+applyImportedOrRemoteBackupPayload(parsed, false);
 saveAppState(true);
 renderActiveModule();
 if (currentTab === 'mod2' && currentAgendaSubTab === 'WEEKLY_PLAN') {
@@ -6985,7 +7728,7 @@ showToast('Dados limpos!', 'info');
                                     <h4 id="ankiStudyTopicTitle" class="text-sm font-bold text-white">--</h4>
                                     <span id="ankiStudyProgressTxt" class="text-[11px] font-mono text-slate-400 block mt-0.5"></span>
                                 </div>
-                                <div class="flex items-center gap-3 text-xs font-mono">
+                                <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-xs font-mono">
                                     <span class="px-2.5 py-1 rounded-lg bg-blue-500/15 text-blue-400 font-bold">Novos: <b id="ankiCountNew">0</b></span>
                                     <span class="px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-400 font-bold">Aprender: <b id="ankiCountLearn">0</b></span>
                                     <span class="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-400 font-bold">Revisar: <b id="ankiCountRev">0</b></span>
@@ -7032,8 +7775,8 @@ showToast('Dados limpos!', 'info');
                         </div>
                     </section>
 
-                    <div id="modalUploadApkg" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-                        <div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+                    <div id="modalUploadApkg" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+                        <div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-5 sm:p-6 space-y-4 shadow-2xl my-auto max-h-[92dvh] overflow-y-auto">
                             <div class="flex items-center justify-between border-b border-tactical-border pb-3">
                                 <h3 class="text-base font-bold text-white flex items-center gap-2">
                                     <i data-lucide="layers" class="w-5 h-5 theme-accent-text"></i> Carregar Curso Anki (.apkg)
@@ -7837,14 +8580,16 @@ showToast('Dados limpos!', 'info');
             initPipCanvas();
             loadThemePreference();
             loadAppState();
+            restoreDriveOAuthSession();
             const defaultProf = netflixProfilesList.find(p => p.isOwner) || netflixProfilesList[0];
             if (defaultProf) {
                 const headerAvatar = document.getElementById('headerNetflixAvatar');
                 renderAvatarElementContent(headerAvatar, defaultProf, 'w-6 h-6 rounded theme-accent-bg flex items-center justify-center shrink-0', 'text-white keep-white font-black text-[11px]');
             }
+            updateDriveStatusUI(isRealOAuthToken());
             renderNetflixProfilesGrid();
             switchTab('mod7');
-            lucide.createIcons();
+            if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
             setTimeout(initGoogleDriveClients, 800);
 
             playOrganizeLoginVignette(1650);
