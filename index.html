@@ -477,6 +477,22 @@ padding-right: 0 !important;
 padding-left: 64px;
 }
 }
+@media (max-width: 767px) {
+header {
+padding-top: calc(0.75rem + env(safe-area-inset-top, 0px)) !important;
+padding-left: max(0.75rem, env(safe-area-inset-left, 0px)) !important;
+padding-right: max(0.75rem, env(safe-area-inset-right, 0px)) !important;
+}
+aside#sidebar {
+height: 100dvh;
+padding-top: env(safe-area-inset-top, 0px);
+padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+#netflixProfilesOverlay {
+padding-top: calc(0.875rem + env(safe-area-inset-top, 0px)) !important;
+padding-bottom: calc(0.875rem + env(safe-area-inset-bottom, 0px)) !important;
+}
+}
 [data-theme="pink"] aside#sidebar,
 [data-theme="pink"] header,
 [data-theme="pink"] .bg-tactical-surface {
@@ -5380,20 +5396,169 @@ if (fromTabSwitch) sidebarCollapseLockUntil = Date.now() + 350;
 sb.classList.remove('sidebar-expanded');
 sb.classList.add('sidebar-collapsed');
 }
-function toggleMobileSidebar() {
+function openMobileSidebar() {
 const sb = document.getElementById('sidebar');
 const backdrop = document.getElementById('mobileSidebarBackdrop');
-const isHidden = sb.classList.contains('-translate-x-full');
-if (isHidden) {
+if (!sb || !backdrop) return;
+sb.style.transition = '';
+sb.style.transform = '';
+backdrop.style.opacity = '';
 sb.classList.remove('-translate-x-full');
 sb.classList.add('sidebar-expanded');
 backdrop.classList.remove('hidden');
-} else {
+if (window.innerWidth < 768) {
+document.body.style.overflow = 'hidden';
+}
+}
+function closeMobileSidebar() {
+const sb = document.getElementById('sidebar');
+const backdrop = document.getElementById('mobileSidebarBackdrop');
+if (!sb || !backdrop) return;
+sb.style.transition = '';
+sb.style.transform = '';
+backdrop.style.opacity = '';
 sb.classList.add('-translate-x-full');
 sb.classList.remove('sidebar-expanded');
 backdrop.classList.add('hidden');
+document.body.style.overflow = '';
+}
+function toggleMobileSidebar() {
+const sb = document.getElementById('sidebar');
+if (!sb) return;
+if (sb.classList.contains('-translate-x-full')) {
+openMobileSidebar();
+} else {
+closeMobileSidebar();
 }
 }
+(function initMobileSidebarSwipe() {
+let startX = 0;
+let startY = 0;
+let startTime = 0;
+let mode = null;
+let dragging = false;
+function hasBlockingOverlay() {
+const intro = document.getElementById('netflixIntroOverlay');
+if (intro && !intro.classList.contains('hidden')) return true;
+const profiles = document.getElementById('netflixProfilesOverlay');
+if (profiles && !profiles.classList.contains('hidden')) return true;
+return !!document.querySelector('[id^="modal"]:not(.hidden)');
+}
+function canScrollHorizontally(target, swipeMode) {
+let el = target && target.nodeType === 1 ? target : null;
+while (el && el !== document.body) {
+const style = window.getComputedStyle(el);
+const overflowX = style.overflowX;
+if ((overflowX === 'auto' || overflowX === 'scroll') && el.scrollWidth > el.clientWidth + 1) {
+if (swipeMode === 'open' && el.scrollLeft > 0) return true;
+if (swipeMode === 'close' && el.scrollLeft + el.clientWidth < el.scrollWidth - 1) return true;
+}
+el = el.parentElement;
+}
+return false;
+}
+document.addEventListener('touchstart', (e) => {
+if (window.innerWidth >= 768 || e.touches.length !== 1) return;
+if (hasBlockingOverlay()) return;
+const sb = document.getElementById('sidebar');
+if (!sb) return;
+if (e.target.closest('input, textarea, select, [contenteditable="true"]')) return;
+const touch = e.touches[0];
+const isClosed = sb.classList.contains('-translate-x-full');
+if (isClosed) {
+if (touch.clientX <= 72 && !canScrollHorizontally(e.target, 'open')) {
+mode = 'open';
+startX = touch.clientX;
+startY = touch.clientY;
+startTime = Date.now();
+dragging = false;
+}
+} else if (!canScrollHorizontally(e.target, 'close')) {
+mode = 'close';
+startX = touch.clientX;
+startY = touch.clientY;
+startTime = Date.now();
+dragging = false;
+}
+}, { passive: true });
+document.addEventListener('touchmove', (e) => {
+if (!mode || window.innerWidth >= 768 || e.touches.length !== 1) return;
+const sb = document.getElementById('sidebar');
+const backdrop = document.getElementById('mobileSidebarBackdrop');
+if (!sb || !backdrop) return;
+const touch = e.touches[0];
+const dx = touch.clientX - startX;
+const dy = touch.clientY - startY;
+if (!dragging) {
+if (Math.abs(dy) > 12 && Math.abs(dy) >= Math.abs(dx)) {
+mode = null;
+return;
+}
+if ((mode === 'open' && dx > 10 && dx > Math.abs(dy) * 1.2) ||
+(mode === 'close' && dx < -10 && Math.abs(dx) > Math.abs(dy) * 1.2)) {
+dragging = true;
+sb.style.transition = 'none';
+backdrop.classList.remove('hidden');
+} else {
+return;
+}
+}
+if (e.cancelable) e.preventDefault();
+const width = sb.offsetWidth || 288;
+if (mode === 'open') {
+const clampedDx = Math.max(0, Math.min(width, dx));
+sb.style.transform = `translateX(${clampedDx - width}px)`;
+backdrop.style.opacity = String(clampedDx / width);
+} else if (mode === 'close') {
+const clampedDx = Math.min(0, Math.max(-width, dx));
+sb.style.transform = `translateX(${clampedDx}px)`;
+backdrop.style.opacity = String(1 + clampedDx / width);
+}
+}, { passive: false });
+function finishSwipe(e) {
+if (!mode) return;
+const sb = document.getElementById('sidebar');
+const backdrop = document.getElementById('mobileSidebarBackdrop');
+const currentMode = mode;
+const wasDragging = dragging;
+mode = null;
+dragging = false;
+if (!sb || !backdrop || !wasDragging) return;
+const touch = (e.changedTouches && e.changedTouches[0]) || null;
+const dx = touch ? touch.clientX - startX : 0;
+const dt = Math.max(1, Date.now() - startTime);
+const velocity = dx / dt;
+sb.style.transition = '';
+sb.style.transform = '';
+backdrop.style.opacity = '';
+if (window.innerWidth >= 768) {
+document.body.style.overflow = '';
+return;
+}
+if (currentMode === 'open') {
+if (dx > 60 || (velocity > 0.35 && dx > 25)) {
+openMobileSidebar();
+} else {
+closeMobileSidebar();
+}
+} else if (currentMode === 'close') {
+if (dx < -60 || (velocity < -0.35 && dx < -25)) {
+closeMobileSidebar();
+} else {
+openMobileSidebar();
+}
+}
+}
+document.addEventListener('touchend', finishSwipe, { passive: true });
+document.addEventListener('touchcancel', finishSwipe, { passive: true });
+window.addEventListener('resize', () => {
+if (window.innerWidth >= 768) {
+mode = null;
+dragging = false;
+document.body.style.overflow = '';
+}
+});
+})();
 const MODULE_NAMES = {
 mod1: 'Edital Verticalizado',
 mod2: 'Agenda do Dia',
