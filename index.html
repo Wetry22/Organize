@@ -1680,7 +1680,8 @@ Flashcards
 </select>
 </div>
 </div>
-<div id="errorListViewContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+<div id="errorSubjectPillsBar" class="flex flex-wrap items-center gap-2"></div>
+<div id="errorListViewContainer" class="space-y-6"></div>
 <!-- Flashcard 3D View -->
 <div id="errorFlashcardViewContainer" class="hidden max-w-3xl mx-auto space-y-5 py-2">
 <div class="flex items-center justify-between text-xs font-mono text-slate-400">
@@ -6511,30 +6512,163 @@ return appState.errorCards.filter(c => {
 if (forMode === 'LIST' && c.showInList === false) return false;
 if (forMode === 'FLASHCARD' && c.showInFlashcard === false) return false;
 const matchKw = !kw || c.question.toLowerCase().includes(kw) || c.answer.toLowerCase().includes(kw) || (c.bizu || '').toLowerCase().includes(kw);
-const matchSubj = fSubj === 'ALL' || c.subjectName === fSubj;
-const matchBanca = fBanca === 'ALL' || c.banca === fBanca;
+const matchSubj = fSubj === 'ALL' || (c.subjectName || 'Geral').trim().toLowerCase() === fSubj.trim().toLowerCase();
+const matchBanca = fBanca === 'ALL' || (c.banca || 'Geral').trim().toLowerCase() === fBanca.trim().toLowerCase();
 return matchKw && matchSubj && matchBanca;
 });
 }
+function filterErrorBySubject(subjectName) {
+const sel = document.getElementById('errorFilterSubject');
+if (sel) {
+const target = (subjectName || 'ALL').trim();
+if (target === 'ALL') {
+sel.value = 'ALL';
+} else {
+const matchedOpt = Array.from(sel.options).find(o => o.value.trim().toLowerCase() === target.toLowerCase());
+sel.value = matchedOpt ? matchedOpt.value : 'ALL';
+}
+}
+renderErrorNotebookModule();
+}
+function sanitizeErrorCardHtml(rawHtml) {
+if (!rawHtml) return '';
+const tpl = document.createElement('template');
+tpl.innerHTML = String(rawHtml);
+const allowedTags = new Set(['B', 'STRONG', 'I', 'EM', 'U', 'BR', 'P', 'DIV', 'SPAN', 'MARK', 'UL', 'OL', 'LI']);
+const cleanNode = (node) => {
+if (node.nodeType === Node.TEXT_NODE) return;
+if (node.nodeType !== Node.ELEMENT_NODE) {
+node.remove();
+return;
+}
+if (!allowedTags.has(node.tagName)) {
+const text = document.createTextNode(node.textContent || '');
+node.replaceWith(text);
+return;
+}
+const attrs = Array.from(node.attributes);
+attrs.forEach(attr => {
+const name = attr.name.toLowerCase();
+if (name === 'style') {
+const safeStyles = [];
+const rules = attr.value.split(';');
+rules.forEach(r => {
+const parts = r.split(':');
+if (parts.length >= 2) {
+const prop = parts[0].trim().toLowerCase();
+const val = parts.slice(1).join(':').trim();
+if (['background-color', 'background', 'color', 'font-weight', 'padding', 'border-radius'].includes(prop) && !/expression|url\s*\(|javascript:/i.test(val)) {
+safeStyles.push(`${prop}: ${val}`);
+}
+}
+});
+if (safeStyles.length > 0) node.setAttribute('style', safeStyles.join('; '));
+else node.removeAttribute('style');
+} else {
+node.removeAttribute(attr.name);
+}
+});
+Array.from(node.childNodes).forEach(cleanNode);
+};
+Array.from(tpl.content.childNodes).forEach(cleanNode);
+return tpl.innerHTML;
+}
+function renderErrorSubjectPillsBar() {
+const pillsBar = document.getElementById('errorSubjectPillsBar');
+if (!pillsBar) return;
+const kw = (document.getElementById('errorSearchKeyword')?.value || '').toLowerCase();
+const fBanca = document.getElementById('errorFilterBanca')?.value || 'ALL';
+const fSubj = document.getElementById('errorFilterSubject')?.value || 'ALL';
+const modeCards = appState.errorCards.filter(c => {
+if (currentErrorMode === 'LIST' && c.showInList === false) return false;
+if (currentErrorMode === 'FLASHCARD' && c.showInFlashcard === false) return false;
+const matchKw = !kw || (c.question || '').toLowerCase().includes(kw) || (c.answer || '').toLowerCase().includes(kw) || (c.bizu || '').toLowerCase().includes(kw);
+const matchBanca = fBanca === 'ALL' || (c.banca || 'Geral').trim().toLowerCase() === fBanca.trim().toLowerCase();
+return matchKw && matchBanca;
+});
+const countsBySubject = new Map();
+const canonicalByKey = new Map();
+if (Array.isArray(appState.edital)) {
+appState.edital.forEach(s => {
+const n = (s.name || '').trim();
+if (n && !canonicalByKey.has(n.toLowerCase())) canonicalByKey.set(n.toLowerCase(), n);
+});
+}
+modeCards.forEach(c => {
+const rawName = (c.subjectName || 'Geral').trim() || 'Geral';
+const key = rawName.toLowerCase();
+if (!canonicalByKey.has(key)) canonicalByKey.set(key, rawName);
+countsBySubject.set(key, (countsBySubject.get(key) || 0) + 1);
+});
+if (countsBySubject.size === 0) {
+pillsBar.innerHTML = '';
+return;
+}
+const subjects = Array.from(countsBySubject.keys())
+.map(key => ({ key, name: canonicalByKey.get(key), count: countsBySubject.get(key) || 0 }))
+.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+let html = `<button type="button" onclick="filterErrorBySubject('ALL')" class="px-3 py-1.5 rounded-xl text-xs font-semibold border transition ${fSubj === 'ALL' ? 'theme-accent-bg border-transparent' : 'bg-tactical-surface border-tactical-border text-slate-300 hover:text-white'}">Todas as Matérias <span class="ml-1 opacity-80 font-mono">(${modeCards.length})</span></button>`;
+subjects.forEach(({ key, name, count }) => {
+const isActive = fSubj !== 'ALL' && fSubj.trim().toLowerCase() === key;
+const safeSubjAttr = escapeHTML(name).replace(/'/g, '&#39;');
+html += `<button type="button" onclick="filterErrorBySubject('${safeSubjAttr}')" class="px-3 py-1.5 rounded-xl text-xs font-semibold border transition ${isActive ? 'theme-accent-bg border-transparent' : 'bg-tactical-surface border-tactical-border text-slate-300 hover:text-white'}">${escapeHTML(name)} <span class="ml-1 opacity-80 font-mono">(${count})</span></button>`;
+});
+pillsBar.innerHTML = html;
+}
 function renderErrorNotebookModule() {
+renderErrorSubjectPillsBar();
 const filtered = getFilteredErrorCards(currentErrorMode);
+const fSubj = document.getElementById('errorFilterSubject')?.value || 'ALL';
 if (currentErrorMode === 'LIST') {
 const container = document.getElementById('errorListViewContainer');
 container.innerHTML = '';
 if (filtered.length === 0) {
-container.innerHTML = `<div class="col-span-full bg-tactical-surface border border-tactical-border rounded-2xl p-8 text-center text-xs text-slate-400 font-mono">Nenhum cartão na lista.</div>`;
+container.innerHTML = `<div class="bg-tactical-surface border border-tactical-border rounded-2xl p-8 text-center text-xs text-slate-400 font-mono">Nenhum cartão na lista.</div>`;
 return;
 }
+const groupsMap = new Map();
+const groupDisplayByKey = new Map();
+if (Array.isArray(appState.edital)) {
+appState.edital.forEach(s => {
+const n = (s.name || '').trim();
+if (n && !groupDisplayByKey.has(n.toLowerCase())) groupDisplayByKey.set(n.toLowerCase(), n);
+});
+}
 filtered.forEach(c => {
-container.innerHTML += `
+const rawSubj = (c.subjectName || 'Geral').trim() || 'Geral';
+const key = rawSubj.toLowerCase();
+if (!groupDisplayByKey.has(key)) groupDisplayByKey.set(key, rawSubj);
+if (!groupsMap.has(key)) groupsMap.set(key, []);
+groupsMap.get(key).push(c);
+});
+const sortedSubjects = Array.from(groupsMap.keys())
+.map(key => ({ key, subjName: groupDisplayByKey.get(key) }))
+.sort((a, b) => a.subjName.localeCompare(b.subjName, 'pt-BR'));
+sortedSubjects.forEach(({ key, subjName }) => {
+const cards = groupsMap.get(key);
+const safeSubjAttr = escapeHTML(subjName).replace(/'/g, '&#39;');
+const toggleBtnHtml = (fSubj === 'ALL' && sortedSubjects.length > 1)
+? `<button type="button" onclick="filterErrorBySubject('${safeSubjAttr}')" class="px-2.5 py-1 rounded-lg bg-tactical-bg hover:bg-tactical-card border border-tactical-border text-[11px] font-semibold text-slate-300 hover:text-white transition">Ver só esta matéria</button>`
+: (fSubj !== 'ALL'
+? `<button type="button" onclick="filterErrorBySubject('ALL')" class="px-2.5 py-1 rounded-lg bg-tactical-bg hover:bg-tactical-card border border-tactical-border text-[11px] font-semibold text-slate-300 hover:text-white transition">Mostrar todas</button>`
+: '');
+let cardsHtml = '';
+cards.forEach(c => {
+const sourceBadge = c.sourcePlatform
+? (c.sourceUrl && /^https?:\/\//i.test(c.sourceUrl)
+? `<a href="${escapeHTML(c.sourceUrl)}" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-tactical-card border border-tactical-border text-[10px] font-mono text-slate-300 hover:text-white transition">${escapeHTML(c.sourcePlatform)}</a>`
+: `<span class="px-2 py-0.5 rounded bg-tactical-card border border-tactical-border text-[10px] font-mono text-slate-300">${escapeHTML(c.sourcePlatform)}</span>`)
+: '';
+cardsHtml += `
 <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 space-y-3 shadow-sm">
-<div class="flex items-center justify-between border-b border-tactical-border pb-2">
-<div>
-<span class="text-[11px] font-mono theme-accent-text font-bold">${c.subjectName}</span>
-<div class="text-xs font-semibold text-white">${c.subtopicName}</div>
+<div class="flex items-center justify-between border-b border-tactical-border pb-2 gap-2">
+<div class="min-w-0">
+<span class="text-[11px] font-mono theme-accent-text font-bold">${escapeHTML(c.subjectName || 'Geral')}</span>
+<div class="text-xs font-semibold text-white truncate">${escapeHTML(c.subtopicName || 'Assunto Geral')}</div>
 </div>
-<div class="flex items-center gap-1.5">
-<span class="px-2 py-0.5 rounded bg-tactical-bg text-xs font-mono text-slate-300">${c.banca}</span>
+<div class="flex items-center gap-1.5 shrink-0">
+${sourceBadge}
+<span class="px-2 py-0.5 rounded bg-tactical-bg text-xs font-mono text-slate-300">${escapeHTML(c.banca || 'Geral')}</span>
 <button onclick="openEditErrorCardModal('${c.id}')" title="Editar Card" class="p-1.5 rounded-lg hover:bg-tactical-card text-slate-400 hover:theme-accent-text transition">
 <i data-lucide="edit-2" class="w-4 h-4"></i>
 </button>
@@ -6557,6 +6691,22 @@ ${c.bizu ? `
 <div class="text-xs sm:text-sm text-white leading-relaxed">${c.bizu}</div>
 </div>
 ` : ''}
+</div>
+`;
+});
+container.innerHTML += `
+<div class="space-y-3">
+<div class="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 rounded-xl bg-tactical-surface border border-tactical-border">
+<div class="flex items-center gap-2.5">
+<span class="w-2.5 h-2.5 rounded-full theme-accent-bg"></span>
+<h4 class="text-sm font-bold text-white uppercase tracking-wide">${escapeHTML(subjName)}</h4>
+<span class="px-2 py-0.5 rounded-full text-[11px] font-mono theme-accent-soft-bg font-semibold">${cards.length} ${cards.length === 1 ? 'questão' : 'questões'}</span>
+</div>
+${toggleBtnHtml}
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+${cardsHtml}
+</div>
 </div>
 `;
 });
@@ -6598,15 +6748,40 @@ document.getElementById('modalErrorCardTitle').textContent = 'Editar Card / Flas
 document.getElementById('errEditCardId').value = card.id;
 const subjSel = document.getElementById('errInputSubject');
 if (subjSel) {
-subjSel.value = card.subjectName;
+if (card.subjectName && !Array.from(subjSel.options).some(o => o.value === card.subjectName)) {
+const opt = document.createElement('option');
+opt.value = card.subjectName;
+opt.textContent = card.subjectName;
+subjSel.appendChild(opt);
+}
+subjSel.value = card.subjectName || 'Geral';
 populateSubtopicSelect('errInputSubject', 'errInputSubtopic');
 }
 const subSel = document.getElementById('errInputSubtopic');
-if (subSel && card.subtopicId) {
-subSel.value = card.subtopicId;
+if (subSel) {
+const targetSubId = card.subtopicId || 'geral';
+const targetSubName = card.subtopicName || 'Assunto Geral';
+const existingSubOpt = Array.from(subSel.options).find(o => o.value === targetSubId);
+if (!existingSubOpt) {
+const opt = document.createElement('option');
+opt.value = targetSubId;
+opt.textContent = targetSubName;
+subSel.appendChild(opt);
+} else if (targetSubId === 'geral' && targetSubName && targetSubName !== 'Assunto Geral') {
+existingSubOpt.textContent = targetSubName;
+}
+subSel.value = targetSubId;
 }
 const bancaSel = document.getElementById('errInputBanca');
-if (bancaSel) bancaSel.value = card.banca;
+if (bancaSel) {
+if (card.banca && !Array.from(bancaSel.options).some(o => o.value === card.banca)) {
+const opt = document.createElement('option');
+opt.value = card.banca;
+opt.textContent = card.banca;
+bancaSel.appendChild(opt);
+}
+bancaSel.value = card.banca || 'Geral';
+}
 document.getElementById('errInputQuestion').innerHTML = card.question || '';
 document.getElementById('errInputAnswer').innerHTML = card.answer || '';
 document.getElementById('errInputBizu').innerHTML = card.bizu || '';
@@ -7267,8 +7442,29 @@ function populateAllSubjectSelects() {
         const el = document.getElementById(id);
         if (!el) return;
         const prev = el.value || 'ALL';
-        el.innerHTML = `<option value="ALL">Todas as Matérias</option>` + appState.edital.map(s => `<option value="${escapeHTML(s.name)}">${escapeHTML(s.name)}</option>`).join('');
-        el.value = prev;
+        const seen = new Set();
+        const subjects = [];
+        appState.edital.forEach(s => {
+            const name = (s.name || '').trim();
+            if (name && !seen.has(name.toLowerCase())) {
+                seen.add(name.toLowerCase());
+                subjects.push(name);
+            }
+        });
+        if (id === 'errorFilterSubject' && Array.isArray(appState.errorCards)) {
+            const extra = [];
+            appState.errorCards.forEach(c => {
+                const name = (c.subjectName || '').trim();
+                if (name && !seen.has(name.toLowerCase())) {
+                    seen.add(name.toLowerCase());
+                    extra.push(name);
+                }
+            });
+            extra.sort((a, b) => a.localeCompare(b, 'pt-BR'));
+            subjects.push(...extra);
+        }
+        el.innerHTML = `<option value="ALL">Todas as Matérias</option>` + subjects.map(name => `<option value="${escapeHTML(name)}">${escapeHTML(name)}</option>`).join('');
+        el.value = Array.from(el.options).some(o => o.value === prev) ? prev : 'ALL';
     });
     renderAgendaSubtopicChecklist(false);
     populateSubtopicSelect('qInputSubject', 'qInputSubtopic');
@@ -7305,8 +7501,26 @@ function populateAllBancaSelects() {
         const el = document.getElementById(id);
         if (!el) return;
         const prev = el.value || 'ALL';
-        el.innerHTML = `<option value="ALL">Todas as Bancas</option>` + appState.bancas.map(b => `<option value="${escapeHTML(b)}">${escapeHTML(b)}</option>`).join('');
-        el.value = prev;
+        const seen = new Set();
+        const bancas = [];
+        appState.bancas.forEach(b => {
+            const name = (b || '').trim();
+            if (name && !seen.has(name.toLowerCase())) {
+                seen.add(name.toLowerCase());
+                bancas.push(name);
+            }
+        });
+        if (id === 'errorFilterBanca' && Array.isArray(appState.errorCards)) {
+            appState.errorCards.forEach(c => {
+                const name = (c.banca || '').trim();
+                if (name && !seen.has(name.toLowerCase())) {
+                    seen.add(name.toLowerCase());
+                    bancas.push(name);
+                }
+            });
+        }
+        el.innerHTML = `<option value="ALL">Todas as Bancas</option>` + bancas.map(b => `<option value="${escapeHTML(b)}">${escapeHTML(b)}</option>`).join('');
+        el.value = Array.from(el.options).some(o => o.value === prev) ? prev : 'ALL';
     });
 }
 function openModal(id) {
@@ -8740,11 +8954,148 @@ showToast('Dados limpos!', 'info');
             await loadSharedAnkiCoursesFromDrive();
         };
 
+        let pendingExtensionErrorCards = [];
+
+        function importErrorCardsFromExtension(cards) {
+            if (!Array.isArray(cards) || cards.length === 0) return [];
+            if (!appState || !Array.isArray(appState.errorCards)) {
+                pendingExtensionErrorCards.push(...cards);
+                return [];
+            }
+
+            const existingExtIds = new Set(
+                appState.errorCards
+                    .map(c => c.externalId)
+                    .filter(Boolean)
+            );
+            const syncedIds = [];
+            let addedCount = 0;
+
+            cards.forEach(raw => {
+                if (!raw || typeof raw !== 'object') return;
+                const extId = raw.externalId ? String(raw.externalId).trim() : '';
+                if (extId && existingExtIds.has(extId)) {
+                    syncedIds.push(extId);
+                    return;
+                }
+
+                const questionHtml = sanitizeErrorCardHtml(raw.question || '').trim();
+                const answerHtml = sanitizeErrorCardHtml(raw.answer || '').trim();
+                const bizuHtml = sanitizeErrorCardHtml(raw.bizu || '').trim();
+                if (!questionHtml || !answerHtml) return;
+
+                let subjectName = String(raw.subjectName || 'Geral').trim() || 'Geral';
+                const editalSubjMatch = Array.isArray(appState.edital)
+                    ? appState.edital.find(s => (s.name || '').trim().toLowerCase() === subjectName.toLowerCase())
+                    : null;
+                if (editalSubjMatch && editalSubjMatch.name) {
+                    subjectName = editalSubjMatch.name.trim();
+                } else {
+                    const existingCardSubj = appState.errorCards.find(c => (c.subjectName || '').trim().toLowerCase() === subjectName.toLowerCase());
+                    if (existingCardSubj && existingCardSubj.subjectName) {
+                        subjectName = existingCardSubj.subjectName.trim();
+                    } else if (subjectName === subjectName.toUpperCase() && subjectName !== subjectName.toLowerCase()) {
+                        const lowerWords = new Set(['de', 'da', 'do', 'das', 'dos', 'e', 'em', 'para', 'com', 'a', 'o', 'as', 'os']);
+                        subjectName = subjectName.toLowerCase().split(/\s+/).map((w, idx) =>
+                            (idx > 0 && lowerWords.has(w)) ? w : (w.charAt(0).toUpperCase() + w.slice(1))
+                        ).join(' ');
+                    }
+                }
+                const subtopicName = String(raw.subtopicName || 'Assunto Geral').trim() || 'Assunto Geral';
+                let bancaName = String(raw.banca || 'Geral').trim() || 'Geral';
+
+                if (bancaName && bancaName !== 'Geral' && Array.isArray(appState.bancas)) {
+                    const matchedBanca = appState.bancas.find(b => b.toLowerCase() === bancaName.toLowerCase());
+                    if (matchedBanca) {
+                        bancaName = matchedBanca;
+                    } else {
+                        appState.bancas.push(bancaName);
+                    }
+                }
+
+                const newCard = {
+                    id: 'err-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+                    externalId: extId || undefined,
+                    sourcePlatform: raw.sourcePlatform ? String(raw.sourcePlatform).trim() : '',
+                    sourceUrl: raw.sourceUrl ? String(raw.sourceUrl).trim() : '',
+                    subjectName,
+                    subtopicId: 'geral',
+                    subtopicName,
+                    banca: bancaName,
+                    question: questionHtml,
+                    answer: answerHtml,
+                    bizu: bizuHtml,
+                    mastery: 'Revisão',
+                    showInList: true,
+                    showInFlashcard: true,
+                    importedAt: raw.createdAt || new Date().toISOString()
+                };
+
+                appState.errorCards.unshift(newCard);
+                if (extId) {
+                    existingExtIds.add(extId);
+                    syncedIds.push(extId);
+                }
+                addedCount++;
+            });
+
+            if (addedCount > 0) {
+                saveAppState(true);
+                populateAllSubjectSelects();
+                populateAllBancaSelects();
+                if (currentTab === 'mod5') {
+                    renderErrorNotebookModule();
+                }
+                if (typeof showToast === 'function') {
+                    showToast(`${addedCount} questão(ões) salva(s) no Caderno de Erros!`, 'success');
+                }
+            }
+            return syncedIds;
+        }
+
+        function flushPendingExtensionErrorCards() {
+            if (pendingExtensionErrorCards.length > 0 && appState && Array.isArray(appState.errorCards)) {
+                const queued = pendingExtensionErrorCards.splice(0, pendingExtensionErrorCards.length);
+                const syncedIds = importErrorCardsFromExtension(queued);
+                if (syncedIds.length > 0) {
+                    window.postMessage({
+                        source: 'ORGANIZE_APP',
+                        type: 'ORGANIZE_IMPORT_ACK',
+                        syncedIds
+                    }, '*');
+                }
+            }
+        }
+
+        window.addEventListener('message', function(event) {
+            if (event.source !== window || !event.data || event.data.source !== 'ORGANIZE_EXT_BRIDGE') return;
+            const msg = event.data;
+            if (msg.type === 'ORGANIZE_IMPORT_ERROR_CARDS') {
+                const syncedIds = importErrorCardsFromExtension(msg.cards);
+                window.postMessage({
+                    source: 'ORGANIZE_APP',
+                    type: 'ORGANIZE_IMPORT_ACK',
+                    requestId: msg.requestId || null,
+                    syncedIds
+                }, '*');
+            } else if (msg.type === 'ORGANIZE_PING') {
+                window.postMessage({
+                    source: 'ORGANIZE_APP',
+                    type: 'ORGANIZE_PONG',
+                    ready: Boolean(appState),
+                    activeProfile: typeof activeNetflixProfile !== 'undefined' && activeNetflixProfile ? activeNetflixProfile.name : '',
+                    targetExam: appState ? (appState.targetExamName || '') : ''
+                }, '*');
+            }
+        });
+
         window.onload = function() {
             injectAnkiModuleDOMAndScripts();
             initPipCanvas();
             loadThemePreference();
             loadAppState();
+            flushPendingExtensionErrorCards();
+            window.postMessage({ source: 'ORGANIZE_APP', type: 'ORGANIZE_BRIDGE_READY' }, '*');
             restoreDriveOAuthSession();
             const defaultProf = netflixProfilesList.find(p => p.isOwner) || netflixProfilesList[0];
             if (defaultProf) {
@@ -8758,6 +9109,7 @@ showToast('Dados limpos!', 'info');
             setTimeout(initGoogleDriveClients, 800);
 
             playOrganizeLoginVignette(1650);
+            window.postMessage({ source: 'ORGANIZE_APP', type: 'ORGANIZE_BRIDGE_READY' }, '*');
         };
     </script>
 </body>
