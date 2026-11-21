@@ -3,17 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Organize">
+<meta name="application-name" content="Organize">
+<meta name="theme-color" content="#121314">
 <title>Organize | Plataforma de Estudos</title>
+<!-- App Logo: Favicon (Guia), PWA Manifest & Apple Touch Icon (PC & Celular) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='108' fill='%2316181b'/%3E%3Cpath d='M256 76 L396 132 L396 276 C396 356 334 410 256 440 C178 410 116 356 116 276 L116 132 Z' fill='%23181b1e' stroke='%239bb098' stroke-width='20' stroke-linejoin='round'/%3E%3Ccircle cx='256' cy='248' r='76' fill='none' stroke='%23f3f4f6' stroke-width='26'/%3E%3Cpath d='M226 248 L248 270 L290 226' fill='none' stroke='%239bb098' stroke-width='24' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="./favicon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+<link rel="manifest" href="./manifest.json">
 <!-- Tailwind CSS CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- Lucide Icons -->
 <script src="https://unpkg.com/lucide@latest" crossorigin="anonymous"></script>
-<!-- Google Identity Services & GAPI Client -->
-<script src="https://accounts.google.com/gsi/client" async="" defer=""></script>
-<script src="https://apis.google.com/js/api.js" async="" defer=""></script>
+<!-- Google Identity Services (OAuth 2.0) -->
+<script src="https://accounts.google.com/gsi/client" async defer onload="if(typeof initGoogleDriveClients==='function')initGoogleDriveClients()"></script>
 <!-- Google Fonts: Inter & JetBrains Mono -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -246,50 +254,62 @@ color-scheme: dark;
 --scroll-track: #0d1117;
 --scroll-thumb: #30363d;
 }
-/* Remoção global de bordas e aspectos de IA */
-*, ::before, ::after {
-border-color: transparent;
+/* ==========================================
+   SISTEMA VISUAL DE PRECISÃO TECNOLÓGICA (INDUSTRIAL / TÁTICO)
+   Sem excessos de IA: superfícies usinadas, hairlines 1px, botões táteis
+   ========================================== */
+:root {
+--border-tech: rgba(255, 255, 255, 0.08);
+--border-tech-hover: rgba(255, 255, 255, 0.16);
+--surface-top-edge: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+--card-depth: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 14px rgba(0, 0, 0, 0.18);
+--btn-depth: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 1px 2px rgba(0, 0, 0, 0.32);
 }
-.border,
-.border-2,
-.border-t,
-.border-b,
-.border-l,
-.border-r,
-.border-l-2,
-.border-tactical-border,
-.border-tactical-subtle,
-.border-tactical-accent,
-.border-white\/10,
-.border-white\/15,
-.border-white\/20,
-.border-white\/25 {
-border-color: transparent !important;
-border-width: 0 !important;
+[data-theme="pink"] {
+--border-tech: rgba(236, 72, 153, 0.16);
+--border-tech-hover: rgba(236, 72, 153, 0.34);
+--surface-top-edge: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+--card-depth: 0 1px 3px rgba(131, 24, 67, 0.07), 0 4px 12px rgba(131, 24, 67, 0.04);
+--btn-depth: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 1px 2px rgba(131, 24, 67, 0.10);
+}
+[data-theme="blue"] {
+--border-tech: rgba(2, 132, 199, 0.16);
+--border-tech-hover: rgba(2, 132, 199, 0.34);
+--surface-top-edge: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+--card-depth: 0 1px 3px rgba(7, 89, 133, 0.07), 0 4px 12px rgba(7, 89, 133, 0.04);
+--btn-depth: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 1px 2px rgba(7, 89, 133, 0.10);
+}
+*, ::before, ::after {
+border-color: var(--border-tech);
+}
+.border-tactical-border {
+border-color: var(--border-tech) !important;
+}
+.border-tactical-subtle {
+border-color: var(--border-subtle) !important;
+}
+.border-tactical-accent {
+border-color: var(--accent-main) !important;
 }
 .divide-y > :not([hidden]) ~ :not([hidden]) {
 border-top-width: 1px !important;
 border-color: var(--border-subtle) !important;
 }
-/* Geometria reta e sóbria inspirada nas telas de referência */
-.rounded-3xl,
-.rounded-2xl,
-.rounded-xl,
-.rounded-lg,
-.rounded-md {
-border-radius: 4px !important;
-}
-.shadow-2xl,
-.shadow-xl,
-.shadow-lg,
-.shadow-md,
-.shadow-sm,
-.shadow-inner {
-box-shadow: none !important;
-}
+/* Geometria técnica precisa: cantos definidos sem arredondamento exagerado */
+.rounded-3xl { border-radius: 10px !important; }
+.rounded-2xl { border-radius: 8px !important; }
+.rounded-xl  { border-radius: 6px !important; }
+.rounded-lg  { border-radius: 6px !important; }
+.rounded-md  { border-radius: 5px !important; }
+.shadow-2xl { box-shadow: 0 18px 48px rgba(0, 0, 0, 0.52), 0 0 0 1px var(--border-tech) !important; }
+.shadow-xl  { box-shadow: 0 10px 28px rgba(0, 0, 0, 0.38) !important; }
+.shadow-lg  { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28) !important; }
+.shadow-sm  { box-shadow: var(--card-depth) !important; }
 html, body {
 max-width: 100vw;
 overflow-x: hidden;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
 }
 body {
 background-color: var(--bg-main);
@@ -299,9 +319,63 @@ overflow-x: hidden;
 width: 100%;
 transition: background-color 0.2s ease, color 0.2s ease;
 }
+.font-mono {
+font-variant-numeric: tabular-nums;
+}
 aside#sidebar {
 height: 100vh;
 height: 100dvh;
+border: none;
+border-right: 1px solid var(--border-tech) !important;
+box-shadow: none;
+}
+header {
+border: none;
+border-bottom: 1px solid var(--border-tech) !important;
+box-shadow: none;
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+}
+/* Cards com hairline estrutural e iluminação de topo sutil */
+.bg-tactical-surface {
+border: 1px solid var(--border-tech);
+box-shadow: var(--surface-top-edge), var(--card-depth);
+}
+/* Botões táteis e precisos */
+button:not(.nav-btn):not(.netflix-profile-card) {
+transition: background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease, transform 0.08s ease, filter 0.14s ease, opacity 0.14s ease;
+}
+button:not(.nav-btn):not(.netflix-profile-card):active:not(:disabled) {
+transform: translateY(0.5px);
+}
+button:disabled {
+opacity: 0.6;
+cursor: not-allowed;
+}
+button.bg-tactical-accent,
+button.theme-accent-bg,
+a.theme-accent-bg {
+border: 1px solid rgba(255, 255, 255, 0.14) !important;
+box-shadow: var(--btn-depth);
+}
+button.bg-tactical-accent:hover:not(:disabled),
+button.theme-accent-bg:hover:not(:disabled) {
+filter: brightness(1.08);
+}
+button.bg-tactical-card {
+border: 1px solid var(--border-tech);
+box-shadow: var(--surface-top-edge);
+}
+button.bg-tactical-card:hover:not(:disabled) {
+border-color: var(--border-tech-hover);
+filter: brightness(1.06);
+}
+button.theme-accent-soft-bg {
+border: 1px solid var(--border-tech);
+}
+button.theme-accent-soft-bg:hover:not(:disabled) {
+border-color: var(--accent-main);
+filter: brightness(1.08);
 }
 .theme-accent-bg {
 background-color: var(--accent-main) !important;
@@ -315,10 +389,11 @@ background-color: var(--accent-soft) !important;
 color: var(--accent-text) !important;
 }
 .theme-accent-border {
-border-color: transparent !important;
+border-color: var(--accent-main) !important;
 }
 .brand-header-banner {
 background: var(--bg-surface) !important;
+border-bottom: 1px solid var(--border-tech);
 }
 /* Ajustes de contraste para Temas Claros */
 [data-theme="pink"] .text-white:not(.keep-white),
@@ -535,11 +610,11 @@ select,
 textarea,
 .rich-editor,
 .subtopic-dropdown-trigger {
-border: none !important;
+border: 1px solid var(--border-input) !important;
 background-color: var(--bg-main) !important;
 color: var(--text-main) !important;
-border-radius: 3px !important;
-transition: background-color 0.15s ease;
+border-radius: 6px !important;
+transition: background-color 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
 }
 .bg-tactical-bg input:not([type="checkbox"]):not([type="file"]):not([type="color"]),
 .bg-tactical-bg select,
@@ -554,9 +629,9 @@ select:focus,
 textarea:focus,
 .rich-editor:focus,
 .subtopic-dropdown-trigger:focus {
-border: none !important;
+border: 1px solid var(--accent-main) !important;
 background-color: var(--bg-input-focus, var(--bg-card)) !important;
-box-shadow: none !important;
+box-shadow: 0 0 0 2px var(--accent-soft) !important;
 outline: none !important;
 }
 .bg-tactical-bg input:not([type="checkbox"]):not([type="file"]):not([type="color"]):focus,
@@ -568,8 +643,8 @@ background-color: var(--bg-surface) !important;
 }
 .subtopic-dropdown-panel {
 background-color: var(--bg-card) !important;
-border: none !important;
-border-radius: 4px !important;
+border: 1px solid var(--border-tech-hover) !important;
+border-radius: 8px !important;
 box-shadow: 0 14px 32px rgba(0, 0, 0, 0.72) !important;
 }
 .rich-editor:empty:before {
@@ -577,6 +652,13 @@ content: attr(data-placeholder);
 color: var(--text-muted);
 opacity: 0.65;
 pointer-events: none;
+}
+.rich-editor mark,
+.error-card-content mark {
+background-color: #facc15;
+color: #111827;
+padding: 0 3px;
+border-radius: 3px;
 }
 ::-webkit-scrollbar {
 width: 6px;
@@ -590,11 +672,13 @@ background: var(--scroll-thumb);
 border-radius: 3px;
 }
 .perspective-1000 {
-perspective: 1000px;
+perspective: 1100px;
 }
 .transform-style-3d {
 transform-style: preserve-3d;
-transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+-webkit-transform-style: preserve-3d;
+transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+will-change: transform;
 }
 .backface-hidden {
 backface-visibility: hidden;
@@ -606,6 +690,13 @@ transform: rotateY(180deg);
 .bg-tactical-grid {
 background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
 background-size: 24px 24px;
+}
+@keyframes spinFast {
+from { transform: rotate(0deg); }
+to { transform: rotate(360deg); }
+}
+.drive-spin {
+animation: spinFast 0.75s linear infinite;
 }
 /* Escudo protetor para bloquear pop-out/redirecionamento externo do iframe do Google Drive */
 .drive-popout-shield {
@@ -619,7 +710,7 @@ background: transparent;
 cursor: default;
 }
 /* ==========================================
-VINHETA TÁTICA ORGANIZE (ESTILO CAVEIRA) & TELA DE PERFIS NETFLIX
+VINHETA TÁTICA ORGANIZE (RÁPIDA & FLUIDA) & TELA DE PERFIS NETFLIX
 ========================================== */
 #netflixIntroOverlay {
 background: transparent;
@@ -629,26 +720,26 @@ position: absolute;
 inset: 0;
 background-color: var(--bg-main);
 z-index: 1;
-animation: organizeSkeletonPhase 1.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+animation: organizeSkeletonPhase 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 @keyframes organizeSkeletonPhase {
-0%, 58% { opacity: 1; }
-82%, 100% { opacity: 0; }
+0%, 45% { opacity: 1; }
+100% { opacity: 0; }
 }
 .organize-vignette-veil {
 position: absolute;
 inset: 0;
-background-color: rgba(10, 11, 13, 0.78);
+background-color: rgba(10, 11, 13, 0.72);
 backdrop-filter: blur(1.5px);
 z-index: 2;
 display: flex;
 align-items: center;
 justify-content: center;
-animation: organizeVeilPhase 1.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+animation: organizeVeilPhase 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 @keyframes organizeVeilPhase {
-0%, 14% { opacity: 0; }
-26%, 84% { opacity: 1; }
+0% { opacity: 0.7; }
+55% { opacity: 1; }
 100% { opacity: 0; }
 }
 .organize-vignette-emblem {
@@ -656,24 +747,24 @@ display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: center;
-animation: organizeEmblemPhase 1.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+animation: organizeEmblemPhase 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 @keyframes organizeEmblemPhase {
-0%, 14% {
-opacity: 0;
-transform: scale(0.92);
+0% {
+opacity: 0.6;
+transform: scale(0.95);
 }
-28%, 82% {
+55% {
 opacity: 1;
 transform: scale(1);
 }
 100% {
 opacity: 0;
-transform: scale(1.04);
+transform: scale(1.03);
 }
 }
 .organize-vignette-bar-fill {
-animation: organizeBarFill 1.25s ease-out forwards;
+animation: organizeBarFill 0.38s ease-out forwards;
 }
 @keyframes organizeBarFill {
 0% { width: 0%; }
@@ -1076,8 +1167,12 @@ Salvar Chaves & Conectar
 <!-- Brand Header -->
 <div id="sidebarBrandHeader" class="brand-header-banner px-4 py-4 flex items-center justify-between">
 <div class="flex items-center gap-3 min-w-0">
-<div class="w-9 h-9 rounded theme-accent-bg flex items-center justify-center shrink-0">
-<i data-lucide="shield" class="w-5 h-5 text-white keep-white"></i>
+<div class="w-9 h-9 rounded-lg bg-tactical-bg border border-tactical-border flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
+<svg viewBox="0 0 512 512" class="w-7 h-7" aria-hidden="true">
+<path d="M256 64 L404 124 L404 278 C404 362 338 418 256 450 C174 418 108 362 108 278 L108 124 Z" fill="var(--bg-surface)" stroke="var(--accent-text)" stroke-width="24" stroke-linejoin="round"/>
+<circle cx="256" cy="248" r="76" fill="none" stroke="var(--text-main)" stroke-width="26"/>
+<path d="M224 248 L248 272 L292 224" fill="none" stroke="var(--accent-text)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
 </div>
 <div class="sidebar-hide-collapsed min-w-0">
 <h1 class="font-extrabold text-base tracking-wide text-white leading-none truncate">ORGANIZE</h1>
@@ -1202,11 +1297,11 @@ Conectar
 <input type="file" id="importJsonInput" accept=".json,application/json,text/plain,*/*" class="hidden" onchange="importDataJSON(event)">
 </div>
 <div class="grid grid-cols-2 gap-2">
-<button type="button" onclick="pullDriveBackupManual()" title="Puxar backup salvo no Google Drive (ex: feito no PC)" class="flex items-center justify-center gap-1.5 px-2.5 py-2 rounded theme-accent-soft-bg text-[11px] font-semibold transition">
-<i data-lucide="cloud-download" class="w-3.5 h-3.5 shrink-0"></i> Puxar Drive
+<button type="button" id="btnPullDrive" onclick="pullDriveBackupManual()" title="Puxar backup salvo no Google Drive (ex: feito no PC)" class="flex items-center justify-center gap-1.5 px-2.5 py-2 rounded theme-accent-soft-bg text-[11px] font-semibold transition">
+<i data-lucide="cloud-download" class="w-3.5 h-3.5 shrink-0"></i> <span>Puxar Drive</span>
 </button>
-<button type="button" onclick="syncDriveNow(false)" title="Salvar dados atuais no Google Drive" class="flex items-center justify-center gap-1.5 px-2.5 py-2 rounded theme-accent-soft-bg text-[11px] font-semibold transition">
-<i data-lucide="cloud-upload" class="w-3.5 h-3.5 shrink-0"></i> Salvar Drive
+<button type="button" id="btnSaveDrive" onclick="syncDriveNow(false)" title="Salvar dados atuais no Google Drive" class="flex items-center justify-center gap-1.5 px-2.5 py-2 rounded theme-accent-soft-bg text-[11px] font-semibold transition">
+<i data-lucide="cloud-upload" class="w-3.5 h-3.5 shrink-0"></i> <span>Salvar Drive</span>
 </button>
 </div>
 <button type="button" onclick="openResetModal()" class="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded hover:bg-tactical-card text-[11px] font-mono text-slate-400 hover:text-white transition">
@@ -1664,19 +1759,26 @@ Flashcards
 </button>
 </div>
 </div>
-<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-tactical-surface border border-tactical-border rounded-2xl p-4 shadow-sm">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-tactical-surface border border-tactical-border rounded-2xl p-4 shadow-sm">
 <div class="relative">
 <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-<input type="text" id="errorSearchKeyword" oninput="renderErrorNotebookModule()" placeholder="Buscar bizu ou palavra-chave..." class="w-full pl-10 pr-4 py-2 rounded-xl text-sm">
+<input type="text" id="errorSearchKeyword" oninput="onErrorFilterChange()" placeholder="Buscar bizu ou palavra-chave..." class="w-full pl-10 pr-4 py-2 rounded-xl text-sm">
 </div>
 <div>
-<select id="errorFilterSubject" onchange="renderErrorNotebookModule()" class="w-full px-3.5 py-2 rounded-xl text-sm">
+<select id="errorFilterSubject" onchange="onErrorFilterChange()" class="w-full px-3.5 py-2 rounded-xl text-sm">
 <option value="ALL">Todas as Matérias</option>
 </select>
 </div>
 <div>
-<select id="errorFilterBanca" onchange="renderErrorNotebookModule()" class="w-full px-3.5 py-2 rounded-xl text-sm">
+<select id="errorFilterBanca" onchange="onErrorFilterChange()" class="w-full px-3.5 py-2 rounded-xl text-sm">
 <option value="ALL">Todas as Bancas</option>
+</select>
+</div>
+<div>
+<select id="errorFilterMastery" onchange="onErrorFilterChange()" class="w-full px-3.5 py-2 rounded-xl text-sm">
+<option value="ALL">Todos os Status</option>
+<option value="REVISAR">Para Revisar</option>
+<option value="DOMINADO">Dominados</option>
 </select>
 </div>
 </div>
@@ -1684,44 +1786,52 @@ Flashcards
 <div id="errorListViewContainer" class="space-y-6"></div>
 <!-- Flashcard 3D View -->
 <div id="errorFlashcardViewContainer" class="hidden max-w-3xl mx-auto space-y-5 py-2">
-<div class="flex items-center justify-between text-xs font-mono text-slate-400">
+<div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-slate-400">
+<div class="flex items-center gap-2">
 <span id="flashcardCounterText">CARD 0 DE 0</span>
+<button type="button" onclick="shuffleFlashcards()" title="Embaralhar ordem dos flashcards" class="px-2 py-0.5 rounded bg-tactical-card hover:bg-tactical-surface text-[11px] font-sans font-semibold text-slate-300 hover:text-white flex items-center gap-1">
+<i data-lucide="shuffle" class="w-3 h-3 theme-accent-text"></i> Embaralhar
+</button>
+</div>
+<div class="flex items-center gap-2">
+<span class="hidden sm:inline text-[10px] text-slate-500">Espaço: virar • ←/→: navegar</span>
 <span id="flashcardStatusBadge" class="px-2.5 py-0.5 rounded theme-accent-soft-bg font-semibold">Revisão</span>
 </div>
-<div class="perspective-1000 w-full h-[360px] cursor-pointer" onclick="flipCurrentFlashcard()">
+</div>
+<div class="perspective-1000 w-full h-[380px] cursor-pointer" onclick="handleFlashcardSurfaceClick(event)">
 <div id="flashcardInner3D" class="relative w-full h-full transform-style-3d">
 <!-- Card Front -->
 <div class="absolute inset-0 backface-hidden bg-tactical-surface border border-tactical-border rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-xl">
 <div class="flex items-center justify-between gap-2 border-b border-tactical-border pb-3">
-<div>
+<div class="min-w-0">
 <span id="fcFrontSubject" class="text-xs font-mono uppercase theme-accent-text font-bold">--</span>
-<h4 id="fcFrontSubtopic" class="text-sm font-semibold text-slate-200">--</h4>
+<h4 id="fcFrontSubtopic" class="text-sm font-semibold text-slate-200 truncate">--</h4>
 </div>
-<span id="fcFrontBanca" class="px-3 py-1 rounded-lg bg-tactical-bg border border-tactical-border text-xs font-mono text-slate-300">--</span>
+<span id="fcFrontBanca" class="px-3 py-1 rounded-lg bg-tactical-bg border border-tactical-border text-xs font-mono text-slate-300 shrink-0">--</span>
 </div>
 <div class="my-auto py-3 overflow-y-auto space-y-3">
 <div class="text-[11px] font-mono uppercase text-slate-400">Pergunta / Ponto Central:</div>
-<div id="fcFrontQuestion" class="text-base sm:text-lg font-medium text-white leading-relaxed"></div>
+<div id="fcFrontQuestion" class="error-card-content text-base sm:text-lg font-medium text-white leading-relaxed"></div>
 </div>
 <div class="pt-3 border-t border-tactical-border flex items-center justify-between text-xs text-slate-400">
 <span>Toque para virar</span>
-<span class="theme-accent-text font-semibold flex items-center gap-1">Ver Resposta & Bizu <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i></span>
+<span class="theme-accent-text font-semibold flex items-center gap-1">Ver Resposta &amp; Bizu <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i></span>
 </div>
 </div>
 <!-- Card Back -->
 <div class="absolute inset-0 backface-hidden rotate-y-180 bg-tactical-surface border-2 border-tactical-accent rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-xl">
 <div class="flex items-center justify-between gap-2 border-b border-tactical-border pb-3">
-<span class="text-xs font-mono uppercase theme-accent-text font-bold">Resposta & Bizu</span>
+<span class="text-xs font-mono uppercase theme-accent-text font-bold">Resposta &amp; Bizu</span>
 <span class="text-xs font-mono text-slate-400">Verso</span>
 </div>
 <div class="my-auto py-3 overflow-y-auto space-y-4">
 <div>
 <div class="text-[10px] font-mono uppercase text-slate-400 mb-1">Explicação:</div>
-<div id="fcBackAnswer" class="text-sm sm:text-base text-white leading-relaxed"></div>
+<div id="fcBackAnswer" class="error-card-content text-sm sm:text-base text-white leading-relaxed"></div>
 </div>
 <div id="fcBackBizuBox" class="p-3 rounded-xl bg-tactical-card border border-tactical-border">
 <div class="text-[10px] font-mono uppercase theme-accent-text font-bold mb-1">BIZU:</div>
-<div id="fcBackBizu" class="text-xs sm:text-sm text-white leading-relaxed"></div>
+<div id="fcBackBizu" class="error-card-content text-xs sm:text-sm text-white leading-relaxed"></div>
 </div>
 </div>
 <div class="pt-3 border-t border-tactical-border flex items-center justify-between text-xs text-slate-400">
@@ -1733,24 +1843,24 @@ Flashcards
 </div>
 <div class="flex flex-wrap items-center justify-between gap-3 bg-tactical-surface border border-tactical-border rounded-2xl p-4 shadow-sm">
 <div class="flex items-center gap-2">
-<button onclick="prevFlashcard()" class="px-3.5 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-slate-200 flex items-center gap-1">
+<button type="button" onclick="prevFlashcard()" class="px-3.5 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-slate-200 flex items-center gap-1">
 <i data-lucide="chevron-left" class="w-4 h-4"></i> Anterior
 </button>
-<button onclick="nextFlashcard()" class="px-3.5 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-slate-200 flex items-center gap-1">
+<button type="button" onclick="nextFlashcard()" class="px-3.5 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-slate-200 flex items-center gap-1">
 Próximo <i data-lucide="chevron-right" class="w-4 h-4"></i>
 </button>
 </div>
 <div class="flex flex-wrap items-center gap-2">
-<button onclick="editCurrentFlashcard()" title="Editar este Flashcard" class="px-3 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-slate-200 flex items-center gap-1">
+<button type="button" onclick="editCurrentFlashcard()" title="Editar este Flashcard" class="px-3 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-slate-200 flex items-center gap-1">
 <i data-lucide="edit-2" class="w-3.5 h-3.5 theme-accent-text"></i> Editar
 </button>
-<button onclick="deleteCurrentFlashcardOnly()" title="Excluir apenas dos Flashcards (mantém na Lista)" class="px-3 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-slate-200 flex items-center gap-1">
-<i data-lucide="trash-2" class="w-3.5 h-3.5 theme-accent-text"></i> Excluir Flashcard
+<button type="button" onclick="deleteCurrentFlashcardOnly()" title="Excluir este Card permanentemente" class="px-3 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-slate-200 flex items-center gap-1">
+<i data-lucide="trash-2" class="w-3.5 h-3.5 theme-accent-text"></i> Excluir Card
 </button>
-<button onclick="markFlashcardMastery('Revisar')" class="px-3.5 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-slate-300">
+<button type="button" onclick="markFlashcardMastery('Revisar')" class="px-3.5 py-2 rounded-xl bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-xs font-semibold text-slate-300">
 Revisar
 </button>
-<button onclick="markFlashcardMastery('Dominado')" class="px-3.5 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold">
+<button type="button" onclick="markFlashcardMastery('Dominado')" class="px-3.5 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold">
 Dominado
 </button>
 </div>
@@ -2406,21 +2516,27 @@ Evolução da Redação
 <h3 class="text-base font-bold text-white" id="modalErrorCardTitle">Novo Card de Erro</h3>
 <button onclick="closeModal('modalAddErrorCard')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
 </div>
-<!-- Barra de Formatação Rica (Negrito, Marca-Texto, Cor da Fonte) -->
-<div class="flex flex-wrap items-center gap-2 p-2.5 rounded-xl bg-tactical-card border border-tactical-border">
-<span class="text-[10px] font-mono uppercase text-slate-400 mr-1">Formatar seleção:</span>
-<button type="button" onmousedown="event.preventDefault(); formatRichText('bold')" class="px-2.5 py-1 rounded-lg bg-tactical-surface border border-tactical-border text-xs font-extrabold text-white hover:border-tactical-accent" title="Negrito">
-<b>B</b> Negrito
+<!-- Barra de Formatação Rica (Negrito, Itálico, Sublinhado, Marca-Texto, Cor da Fonte) -->
+<div class="flex flex-wrap items-center gap-1.5 p-2.5 rounded-xl bg-tactical-card border border-tactical-border">
+<span class="text-[10px] font-mono uppercase text-slate-400 mr-1">Formatar:</span>
+<button type="button" onmousedown="event.preventDefault(); formatRichText('bold')" class="px-2.5 py-1 rounded-lg bg-tactical-surface border border-tactical-border text-xs font-extrabold text-white hover:border-tactical-accent" title="Negrito (Ctrl+B)">
+<b>B</b>
 </button>
-<button type="button" onmousedown="event.preventDefault(); applyHighlight('#facc15')" class="px-2.5 py-1 rounded-lg bg-tactical-surface border border-tactical-border text-xs font-semibold text-white hover:border-tactical-accent" title="Marca-Texto Amarelo">
-🖍️ Marca-Texto
+<button type="button" onmousedown="event.preventDefault(); formatRichText('italic')" class="px-2.5 py-1 rounded-lg bg-tactical-surface border border-tactical-border text-xs italic font-semibold text-white hover:border-tactical-accent" title="Itálico (Ctrl+I)">
+I
 </button>
-<button type="button" onmousedown="event.preventDefault(); applyHighlight('#4ade80')" class="px-2.5 py-1 rounded-lg bg-tactical-surface border border-tactical-border text-xs font-semibold text-white hover:border-tactical-accent" title="Marca-Texto Verde">
-🖍️ Destaque
+<button type="button" onmousedown="event.preventDefault(); formatRichText('underline')" class="px-2.5 py-1 rounded-lg bg-tactical-surface border border-tactical-border text-xs underline font-semibold text-white hover:border-tactical-accent" title="Sublinhado (Ctrl+U)">
+U
+</button>
+<button type="button" onmousedown="event.preventDefault(); applyHighlight('#facc15')" class="px-2.5 py-1 rounded-lg bg-tactical-surface border border-tactical-border text-xs font-semibold text-white hover:border-tactical-accent flex items-center gap-1" title="Marca-Texto Amarelo">
+<span class="w-2.5 h-2.5 rounded-sm bg-yellow-400 inline-block"></span> Amarelo
+</button>
+<button type="button" onmousedown="event.preventDefault(); applyHighlight('#4ade80')" class="px-2.5 py-1 rounded-lg bg-tactical-surface border border-tactical-border text-xs font-semibold text-white hover:border-tactical-accent flex items-center gap-1" title="Marca-Texto Verde">
+<span class="w-2.5 h-2.5 rounded-sm bg-green-400 inline-block"></span> Verde
 </button>
 <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-tactical-surface border border-tactical-border">
 <span class="text-[11px] text-slate-300">Cor:</span>
-<input type="color" id="richTextColorPicker" value="#ec4899" onchange="formatRichText('foreColor', this.value)" class="w-6 h-6 rounded cursor-pointer border-0 bg-transparent">
+<input type="color" id="richTextColorPicker" value="#f87171" onmousedown="saveErrorEditorSelection()" oninput="formatRichText('foreColor', this.value)" onchange="formatRichText('foreColor', this.value)" class="w-6 h-6 rounded cursor-pointer border-0 bg-transparent">
 </div>
 <button type="button" onmousedown="event.preventDefault(); formatRichText('removeFormat')" class="px-2 py-1 rounded-lg bg-tactical-surface text-[11px] text-slate-400 hover:text-white ml-auto" title="Limpar Formatação">
 Limpar
@@ -2470,6 +2586,115 @@ Limpar
 <button onclick="closeModal('modalAddBanca')" class="px-3.5 py-1.5 rounded-xl bg-tactical-card text-xs text-slate-300">Cancelar</button>
 <button onclick="confirmAddBanca()" class="px-4 py-1.5 rounded-xl bg-tactical-accent text-xs font-semibold text-white keep-white">Salvar</button>
 </div>
+</div>
+</div>
+<!-- MODAL: EDITAR REGISTRO DO HISTÓRICO (AGENDA DO DIA) -->
+<div id="modalEditHistoryEntry" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-xl w-full p-5 sm:p-6 space-y-4 shadow-2xl my-auto max-h-[92dvh] overflow-y-auto">
+<div class="flex items-center justify-between border-b border-tactical-border pb-3">
+<h3 class="text-base font-bold text-white flex items-center gap-2">
+<i data-lucide="pencil" class="w-4 h-4 theme-accent-text"></i>
+Editar Registro do Histórico
+</h3>
+<button type="button" onclick="closeModal('modalEditHistoryEntry')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+</div>
+<form onsubmit="handleSaveHistoryEntryEdit(event)" class="space-y-4">
+<input type="hidden" id="editHistLinkId" value="">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<div>
+<label class="block text-xs font-mono uppercase text-slate-400 mb-1">Data</label>
+<input type="date" id="editHistDate" required class="w-full px-3 py-2 rounded-xl text-sm font-mono">
+</div>
+<div>
+<label class="block text-xs font-mono uppercase text-slate-400 mb-1">Modalidade / Tipo</label>
+<select id="editHistModality" class="w-full px-3 py-2 rounded-xl text-sm">
+<option value="Teoria/Questões">Teoria/Questões</option>
+<option value="Teoria">Teoria</option>
+<option value="Questões">Questões</option>
+<option value="Revisão">Revisão</option>
+<option value="Lei Seca">Lei Seca</option>
+<option value="Simulado">Simulado</option>
+<option value="Videoaula">Videoaula</option>
+<option value="PDF">PDF</option>
+<option value="Redação">Redação</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<div>
+<label class="block text-xs font-mono uppercase text-slate-400 mb-1">Disciplina</label>
+<select id="editHistSubject" class="w-full px-3 py-2 rounded-xl text-sm"></select>
+</div>
+<div>
+<label class="block text-xs font-mono uppercase text-slate-400 mb-1">Assunto / Tópico</label>
+<input type="text" id="editHistSubtopic" placeholder="Ex: Princípios Fundamentais" class="w-full px-3 py-2 rounded-xl text-sm">
+</div>
+</div>
+<div>
+<label class="block text-xs font-mono uppercase text-slate-400 mb-1">Anotações</label>
+<textarea id="editHistNotes" rows="2" placeholder="Observações, páginas lidas, pontos a revisar..." class="w-full px-3 py-2 rounded-xl text-sm resize-y"></textarea>
+</div>
+<!-- Tempo de Estudo -->
+<div class="p-3.5 rounded-xl bg-tactical-bg border border-tactical-border space-y-2">
+<label class="block text-xs font-mono uppercase text-slate-300 font-semibold">Tempo de Estudo</label>
+<div class="grid grid-cols-3 gap-2">
+<div>
+<span class="block text-[10px] font-mono text-slate-400 mb-1">Horas</span>
+<input type="number" id="editHistH" min="0" max="99" value="0" class="w-full px-3 py-1.5 rounded-lg text-sm font-mono text-center">
+</div>
+<div>
+<span class="block text-[10px] font-mono text-slate-400 mb-1">Minutos</span>
+<input type="number" id="editHistM" min="0" max="59" value="0" class="w-full px-3 py-1.5 rounded-lg text-sm font-mono text-center">
+</div>
+<div>
+<span class="block text-[10px] font-mono text-slate-400 mb-1">Segundos</span>
+<input type="number" id="editHistS" min="0" max="59" value="0" class="w-full px-3 py-1.5 rounded-lg text-sm font-mono text-center">
+</div>
+</div>
+</div>
+<!-- Questões -->
+<div class="p-3.5 rounded-xl bg-tactical-bg border border-tactical-border space-y-2.5">
+<div class="flex items-center justify-between gap-2">
+<label class="text-xs font-mono uppercase text-slate-300 font-semibold">Questões Resolvidas</label>
+<div class="flex items-center gap-2">
+<span id="editHistQSummary" class="text-[11px] font-mono theme-accent-text font-bold">0 questões</span>
+<button type="button" onclick="addEditHistoryQuestionRow()" class="px-2 py-1 rounded bg-tactical-card text-[11px] font-semibold text-slate-200 hover:text-white flex items-center gap-1">
+<i data-lucide="plus" class="w-3 h-3 theme-accent-text"></i> Adicionar bloco
+</button>
+</div>
+</div>
+<div id="editHistQuestionsContainer" class="space-y-2"></div>
+</div>
+<!-- Redação -->
+<div class="p-3.5 rounded-xl bg-tactical-bg border border-tactical-border space-y-2.5">
+<label class="flex items-center gap-2 text-xs font-semibold text-slate-200 cursor-pointer">
+<input type="checkbox" id="editHistHasEssay" onchange="toggleEditHistEssayFields()" class="w-4 h-4 rounded">
+<span>Incluir / Editar Nota de Redação</span>
+</label>
+<div id="editHistEssayFields" class="hidden grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+<div class="sm:col-span-3">
+<label class="block text-[10px] font-mono text-slate-400 mb-1">Tema da Redação</label>
+<input type="text" id="editHistEssayTheme" placeholder="Tema da redação..." class="w-full px-3 py-1.5 rounded-lg text-xs">
+</div>
+<div>
+<label class="block text-[10px] font-mono text-slate-400 mb-1">Nota Obtida</label>
+<input type="number" step="0.1" min="0" id="editHistEssayScore" placeholder="Ex: 8.5" class="w-full px-3 py-1.5 rounded-lg text-xs font-mono">
+</div>
+<div>
+<label class="block text-[10px] font-mono text-slate-400 mb-1">Nota Máxima</label>
+<input type="number" step="0.1" min="0.1" id="editHistEssayMax" value="10" class="w-full px-3 py-1.5 rounded-lg text-xs font-mono">
+</div>
+<div>
+<label class="block text-[10px] font-mono text-slate-400 mb-1">Banca</label>
+<select id="editHistEssayBanca" class="w-full px-2.5 py-1.5 rounded-lg text-xs"></select>
+</div>
+</div>
+</div>
+<div class="flex justify-end gap-2 pt-2 border-t border-tactical-border">
+<button type="button" onclick="closeModal('modalEditHistoryEntry')" class="px-4 py-2 rounded-xl bg-tactical-card text-slate-300 text-xs font-semibold">Cancelar</button>
+<button type="submit" class="px-5 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold">Salvar Alterações</button>
+</div>
+</form>
 </div>
 </div>
 <!-- MODAL: RESTAURAR DADOS -->
@@ -2651,7 +2876,7 @@ function playTudumSound() {
 // Som da vinheta desativado conforme solicitado pelo usuário
 }
 
-function playOrganizeLoginVignette(durationMs = 1650) {
+function playOrganizeLoginVignette(durationMs = 450) {
 const intro = document.getElementById('netflixIntroOverlay');
 const profilesScreen = document.getElementById('netflixProfilesOverlay');
 if (!intro) return;
@@ -2692,7 +2917,7 @@ renderNetflixProfilesGrid();
 }
 
 function replayNetflixIntro() {
-playOrganizeLoginVignette(1650);
+playOrganizeLoginVignette(450);
 }
 
 // SISTEMA DE PERFIS ESTILO NETFLIX + UPLOAD DE IMAGEM NO ÍCONE + CONTROLE DO GABRIEL
@@ -3130,24 +3355,28 @@ if (!pendingNetflixProfileToEnter) return;
 const creds = getDriveCredentials();
 const typedClientId = (document.getElementById('gateClientIdInput')?.value || '').trim();
 const typedApiKey = (document.getElementById('gateApiKeyInput')?.value || '').trim();
-if (typedClientId || typedApiKey) {
+const nextClientId = typedClientId || creds.clientId;
+const nextApiKey = typedApiKey || creds.apiKey;
+const credsChanged = (nextClientId !== (creds.clientId || '')) || (nextApiKey !== (creds.apiKey || ''));
+if (credsChanged && (nextClientId || nextApiKey)) {
 try {
 localStorage.setItem(GDRIVE_CREDS_KEY, JSON.stringify({
-clientId: typedClientId || creds.clientId,
-apiKey: typedApiKey || creds.apiKey
+clientId: nextClientId,
+apiKey: nextApiKey
 }));
 } catch (e) {}
 gapiInited = false;
 gisInited = false;
 }
 if (isRealOAuthToken()) {
+if (!currentLoggedUserEmail) {
 await fetchLoggedGoogleUserProfile();
-await loadSharedPlatformsFromDrive();
+}
 const enteredOk = completeProfileEntryAfterDriveAuth(false);
 if (!enteredOk) return;
 updateDriveStatusUI(true);
-await findOrLoadDriveBackup(true);
-renderActiveModule();
+// Sincroniza backup e plataformas em paralelo sem travar a entrada no app (com proteção contra race condition)
+runBackgroundDrivePullAfterLogin();
 return;
 }
 const updatedCreds = getDriveCredentials();
@@ -3164,7 +3393,7 @@ tokenClient.requestAccessToken({ prompt: 'select_account' });
 return;
 }
 }
-showToast('Inicializando Google Drive... aguarde 1 segundo.', 'info');
+showToast('Inicializando login Google...', 'info');
 let attempts = 0;
 const retryTimer = setInterval(() => {
 attempts++;
@@ -3172,11 +3401,11 @@ if (typeof google !== 'undefined' && google.accounts) {
 clearInterval(retryTimer);
 initGoogleDriveClients();
 if (tokenClient) tokenClient.requestAccessToken({ prompt: 'select_account' });
-} else if (attempts >= 12) {
+} else if (attempts >= 20) {
 clearInterval(retryTimer);
 showToast('Não foi possível carregar o serviço do Google. Verifique sua conexão ou use "Importar Backup (.json)".', 'warning');
 }
-}, 250);
+}, 150);
 }
 function completeProfileEntryAfterDriveAuth(isExplicitOffline = false) {
 const prof = pendingNetflixProfileToEnter;
@@ -3242,7 +3471,6 @@ overlay.classList.remove('flex');
 updateDriveStatusUI(isRealOAuthToken());
 updateCourseAdminVisibility();
 renderActiveModule();
-playOrganizeLoginVignette(1650);
 showToast(`Bem-vindo(a), ${prof.name}!`, 'success');
 return true;
 }
@@ -3255,13 +3483,82 @@ overlay.classList.add('flex');
 }
 renderNetflixProfilesGrid();
 }
+let savedErrorEditorRange = null;
+function saveErrorEditorSelection() {
+const sel = window.getSelection();
+if (!sel || sel.rangeCount === 0) return;
+const range = sel.getRangeAt(0);
+const container = range.commonAncestorContainer;
+const el = container.nodeType === 1 ? container : container.parentElement;
+if (el && el.closest && el.closest('.rich-editor')) {
+savedErrorEditorRange = range.cloneRange();
+}
+}
+function restoreErrorEditorSelection() {
+if (!savedErrorEditorRange) return false;
+const sel = window.getSelection();
+if (!sel) return false;
+try {
+sel.removeAllRanges();
+sel.addRange(savedErrorEditorRange);
+return true;
+} catch (e) {
+return false;
+}
+}
+document.addEventListener('selectionchange', () => {
+const modal = document.getElementById('modalAddErrorCard');
+if (modal && !modal.classList.contains('hidden')) {
+saveErrorEditorSelection();
+}
+});
 function formatRichText(command, value = null) {
+restoreErrorEditorSelection();
+try {
+if (command === 'foreColor' || command === 'hiliteColor') {
+document.execCommand('styleWithCSS', false, true);
+}
+} catch (e) {}
 document.execCommand(command, false, value);
+if (command === 'removeFormat') {
+const sel = window.getSelection();
+if (sel && sel.rangeCount > 0) {
+const container = sel.getRangeAt(0).commonAncestorContainer;
+const el = container.nodeType === 1 ? container : container.parentElement;
+const span = el && el.closest ? el.closest('.rich-editor span[style]') : null;
+if (span && span.closest('.rich-editor')) {
+const parent = span.parentNode;
+while (span.firstChild) parent.insertBefore(span.firstChild, span);
+parent.removeChild(span);
+}
+}
+}
+saveErrorEditorSelection();
 }
 function applyHighlight(colorHex) {
+restoreErrorEditorSelection();
 const sel = window.getSelection();
-if (!sel || sel.isCollapsed) return;
+if (!sel || sel.isCollapsed) {
+showToast('Selecione o texto que deseja destacar primeiro.', 'info');
+return;
+}
+try {
+const range = sel.getRangeAt(0);
+const span = document.createElement('span');
+span.style.backgroundColor = colorHex;
+span.style.color = '#111827';
+span.style.padding = '0 3px';
+span.style.borderRadius = '3px';
+span.appendChild(range.extractContents());
+range.insertNode(span);
+sel.removeAllRanges();
+const newRange = document.createRange();
+newRange.selectNodeContents(span);
+sel.addRange(newRange);
+savedErrorEditorRange = newRange.cloneRange();
+} catch (e) {
 document.execCommand('hiliteColor', false, colorHex);
+}
 }
 function loadThemeCustomBg(theme) {
 let savedBg = null;
@@ -3566,9 +3863,14 @@ ${showDate ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-slate-200">
 ${totalSec > 0 ? `<span class="px-2 py-0.5 rounded bg-tactical-card text-white">${formatDurationSec(totalSec)}</span>` : ''}
 ${qT > 0 ? `<span class="px-2 py-0.5 rounded theme-accent-soft-bg font-bold">${qT} questões (${Math.round((qC / qT) * 100)}%)</span>` : ''}
 </div>
-<button type="button" data-link="${escapeHTML(e.linkId)}" onclick="deleteHistoryEntry(this.dataset.link)" title="Excluir do histórico (abate horas, questões e assuntos vistos)" class="p-1 text-slate-400 hover:theme-accent-text">
+<div class="flex items-center gap-1 shrink-0">
+<button type="button" data-link="${escapeHTML(e.linkId)}" onclick="openEditHistoryEntry(this.dataset.link)" title="Editar registro (anotações, tempo, questões, redação)" class="p-1.5 rounded hover:bg-tactical-card text-slate-400 hover:theme-accent-text transition">
+<i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+</button>
+<button type="button" data-link="${escapeHTML(e.linkId)}" onclick="deleteHistoryEntry(this.dataset.link)" title="Excluir do histórico (abate horas, questões e assuntos vistos)" class="p-1.5 rounded hover:bg-tactical-card text-slate-400 hover:theme-accent-text transition">
 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
 </button>
+</div>
 </div>
 <div>${lines.join('') || '<div class="text-xs text-slate-400 font-mono">Registro sem detalhes.</div>'}</div>
 </div>`;
@@ -3663,6 +3965,308 @@ function deleteHistoryEntry(linkId) {
     saveAppState();
     renderActiveModule();
     showToast('Registro excluído e valores abatidos!', 'info');
+}
+function toggleEditHistEssayFields() {
+    const chk = document.getElementById('editHistHasEssay');
+    const box = document.getElementById('editHistEssayFields');
+    if (box) box.classList.toggle('hidden', !chk?.checked);
+}
+function updateEditHistoryQSummary() {
+    const rows = document.querySelectorAll('#editHistQuestionsContainer .edit-hist-q-row');
+    let totalC = 0, totalW = 0;
+    rows.forEach(row => {
+        totalC += Math.max(0, parseInt(row.querySelector('.ehq-correct')?.value, 10) || 0);
+        totalW += Math.max(0, parseInt(row.querySelector('.ehq-wrong')?.value, 10) || 0);
+    });
+    const total = totalC + totalW;
+    const pct = total > 0 ? Math.round((totalC / total) * 100) : 0;
+    const el = document.getElementById('editHistQSummary');
+    if (el) el.textContent = total > 0 ? `${total} questões (${totalC} acertos • ${pct}%)` : '0 questões';
+}
+function addEditHistoryQuestionRow(qData = null) {
+    const container = document.getElementById('editHistQuestionsContainer');
+    if (!container) return;
+    const editalSubjects = (appState.edital || []).map(s => s.name);
+    const defaultSubj = qData?.subjectName || document.getElementById('editHistSubject')?.value || editalSubjects[0] || 'Geral';
+    const subjectsList = Array.from(new Set([defaultSubj, ...editalSubjects, 'Geral'].filter(Boolean)));
+    const defaultBanca = qData?.banca || (appState.bancas && appState.bancas[0]) || 'Geral';
+    const bancasList = Array.from(new Set([defaultBanca, ...(appState.bancas || []), 'Geral'].filter(Boolean)));
+    const row = document.createElement('div');
+    row.className = 'edit-hist-q-row p-2.5 rounded-lg bg-tactical-surface border border-tactical-border space-y-2';
+    row.dataset.qid = qData?.id || '';
+    row.dataset.subtopicId = qData?.subtopicId || 'geral';
+    row.innerHTML = `
+<div class="grid grid-cols-1 sm:grid-cols-12 gap-2 items-end">
+<div class="sm:col-span-4">
+<span class="block text-[10px] font-mono text-slate-400 mb-0.5">Disciplina</span>
+<select class="ehq-subject w-full px-2 py-1.5 rounded text-xs">
+${subjectsList.map(s => `<option value="${escapeHTML(s)}" ${s === defaultSubj ? 'selected' : ''}>${escapeHTML(s)}</option>`).join('')}
+</select>
+</div>
+<div class="sm:col-span-4">
+<span class="block text-[10px] font-mono text-slate-400 mb-0.5">Assunto</span>
+<input type="text" class="ehq-subtopic w-full px-2 py-1.5 rounded text-xs" value="${escapeHTML(qData?.subtopicName || document.getElementById('editHistSubtopic')?.value || 'Assunto Geral')}" placeholder="Assunto">
+</div>
+<div class="sm:col-span-4">
+<span class="block text-[10px] font-mono text-slate-400 mb-0.5">Banca</span>
+<select class="ehq-banca w-full px-2 py-1.5 rounded text-xs">
+${bancasList.map(b => `<option value="${escapeHTML(b)}" ${b === defaultBanca ? 'selected' : ''}>${escapeHTML(b)}</option>`).join('')}
+</select>
+</div>
+<div class="sm:col-span-5">
+<span class="block text-[10px] font-mono text-slate-400 mb-0.5">Acertos</span>
+<input type="number" min="0" class="ehq-correct w-full px-2 py-1.5 rounded text-xs font-mono text-center" value="${qData ? (qData.correct || 0) : 0}" oninput="updateEditHistoryQSummary()">
+</div>
+<div class="sm:col-span-5">
+<span class="block text-[10px] font-mono text-slate-400 mb-0.5">Erros</span>
+<input type="number" min="0" class="ehq-wrong w-full px-2 py-1.5 rounded text-xs font-mono text-center" value="${qData ? (qData.wrong || 0) : 0}" oninput="updateEditHistoryQSummary()">
+</div>
+<div class="sm:col-span-2 flex justify-end">
+<button type="button" onclick="this.closest('.edit-hist-q-row').remove(); updateEditHistoryQSummary();" title="Remover bloco de questões" class="p-1.5 rounded bg-tactical-card text-slate-400 hover:theme-accent-text">
+<i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+</button>
+</div>
+</div>`;
+    container.appendChild(row);
+    updateEditHistoryQSummary();
+    if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+}
+function openEditHistoryEntry(linkId) {
+    if (!linkId) return;
+    const entries = buildHistoryEntries();
+    const entry = entries.find(e => e.linkId === linkId);
+    if (!entry) {
+        showToast('Registro não encontrado no histórico.', 'warning');
+        return;
+    }
+    const primaryGoal = entry.goals[0] || null;
+    const primarySession = entry.sessions[0] || null;
+    const primaryQ = entry.questions[0] || null;
+    const primaryEssay = entry.essays[0] || null;
+
+    document.getElementById('editHistLinkId').value = linkId;
+    document.getElementById('editHistDate').value = entry.date || getTodayISO();
+
+    const modality = primaryGoal?.type || primarySession?.modality || (primaryEssay ? 'Simulado' : 'Teoria/Questões');
+    const modSel = document.getElementById('editHistModality');
+    if (modSel) {
+        if (!Array.from(modSel.options).some(o => o.value === modality)) {
+            const opt = document.createElement('option');
+            opt.value = modality;
+            opt.textContent = modality;
+            modSel.appendChild(opt);
+        }
+        modSel.value = modality;
+    }
+
+    const subjName = primaryGoal?.subjectName || primarySession?.subjectName || primaryQ?.subjectName || (primaryEssay ? 'Redação' : 'Geral');
+    const subjSel = document.getElementById('editHistSubject');
+    if (subjSel) {
+        const names = Array.from(new Set([subjName, ...(appState.edital || []).map(s => s.name), 'Geral', 'Redação'].filter(Boolean)));
+        subjSel.innerHTML = names.map(n => `<option value="${escapeHTML(n)}">${escapeHTML(n)}</option>`).join('');
+        subjSel.value = subjName;
+    }
+
+    const subtopicText = primaryGoal
+        ? goalSubtopics(primaryGoal).map(s => s.name).join(' + ')
+        : (primarySession?.subtopicName || primaryQ?.subtopicName || (primaryEssay ? (primaryEssay.theme || 'Redação') : ''));
+    const subtopicInput = document.getElementById('editHistSubtopic');
+    subtopicInput.value = subtopicText;
+    subtopicInput.dataset.initialText = subtopicText;
+    document.getElementById('editHistNotes').value = primaryGoal?.notes || primarySession?.notes || '';
+
+    const totalSec = entry.sessions.reduce((acc, s) => acc + sessionSeconds(s), 0) || (primaryGoal ? ((typeof primaryGoal.studySeconds === 'number') ? primaryGoal.studySeconds : Math.round((primaryGoal.studyMinutes || 0) * 60)) : 0);
+    writeHMS('editHistH', 'editHistM', 'editHistS', totalSec);
+
+    const qContainer = document.getElementById('editHistQuestionsContainer');
+    qContainer.innerHTML = '';
+    if (entry.questions.length > 0) {
+        entry.questions.forEach(q => addEditHistoryQuestionRow(q));
+    } else {
+        updateEditHistoryQSummary();
+    }
+
+    const essayBancaSel = document.getElementById('editHistEssayBanca');
+    if (essayBancaSel) {
+        const bList = Array.from(new Set([primaryEssay?.banca, ...(appState.bancas || []), 'Geral'].filter(Boolean)));
+        essayBancaSel.innerHTML = bList.map(b => `<option value="${escapeHTML(b)}">${escapeHTML(b)}</option>`).join('');
+        essayBancaSel.value = primaryEssay?.banca || bList[0] || 'Geral';
+    }
+    const hasEssayChk = document.getElementById('editHistHasEssay');
+    if (hasEssayChk) hasEssayChk.checked = Boolean(primaryEssay);
+    document.getElementById('editHistEssayTheme').value = primaryEssay?.theme || primaryGoal?.essayTheme || '';
+    document.getElementById('editHistEssayScore').value = primaryEssay ? primaryEssay.score : '';
+    document.getElementById('editHistEssayMax').value = primaryEssay ? primaryEssay.max : 10;
+    toggleEditHistEssayFields();
+
+    openModal('modalEditHistoryEntry');
+    if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+}
+function handleSaveHistoryEntryEdit(e) {
+    e.preventDefault();
+    const linkId = document.getElementById('editHistLinkId').value;
+    if (!linkId) return;
+
+    const date = document.getElementById('editHistDate').value || getTodayISO();
+    const modality = document.getElementById('editHistModality').value || 'Teoria/Questões';
+    const subjectName = document.getElementById('editHistSubject').value || 'Geral';
+    const subtopicName = (document.getElementById('editHistSubtopic').value || '').trim() || 'Assunto Geral';
+    const notes = (document.getElementById('editHistNotes').value || '').trim();
+    const seconds = readHMS('editHistH', 'editHistM', 'editHistS');
+
+    // Validar redação se marcada
+    const hasEssay = Boolean(document.getElementById('editHistHasEssay')?.checked);
+    let essayObj = null;
+    if (hasEssay) {
+        const theme = (document.getElementById('editHistEssayTheme')?.value || '').trim();
+        const scoreRaw = document.getElementById('editHistEssayScore')?.value ?? '';
+        const max = parseFloat(String(document.getElementById('editHistEssayMax')?.value || '10').replace(',', '.')) || 10;
+        const banca = document.getElementById('editHistEssayBanca')?.value || 'Geral';
+        const score = parseFloat(String(scoreRaw).replace(',', '.'));
+        if (scoreRaw === '' || isNaN(score) || score < 0 || score > max) {
+            showToast('Informe uma nota de redação válida (entre 0 e a nota máxima).', 'warning');
+            return;
+        }
+        essayObj = { theme, score, max, banca };
+    }
+
+    // Ler blocos de questões
+    const qRows = Array.from(document.querySelectorAll('#editHistQuestionsContainer .edit-hist-q-row'));
+    const updatedQuestions = [];
+    let totalCorrect = 0, totalWrong = 0;
+    qRows.forEach(row => {
+        const c = Math.max(0, parseInt(row.querySelector('.ehq-correct')?.value, 10) || 0);
+        const w = Math.max(0, parseInt(row.querySelector('.ehq-wrong')?.value, 10) || 0);
+        if (c + w > 0) {
+            totalCorrect += c;
+            totalWrong += w;
+            updatedQuestions.push({
+                id: row.dataset.qid || uid('q-'),
+                linkId,
+                date,
+                subjectName: row.querySelector('.ehq-subject')?.value || subjectName,
+                subtopicId: row.dataset.subtopicId || 'geral',
+                subtopicName: (row.querySelector('.ehq-subtopic')?.value || '').trim() || subtopicName,
+                banca: row.querySelector('.ehq-banca')?.value || 'Geral',
+                correct: c,
+                wrong: w
+            });
+        }
+    });
+
+    // 1) Atualizar metas da agenda vinculadas (ou criar se houver notas sem meta)
+    const linkedGoals = appState.agenda.filter(g => (g.linkId || ('lk-' + g.id)) === linkId);
+    if (linkedGoals.length === 0 && !notes && seconds === 0 && updatedQuestions.length === 0 && !essayObj) {
+        showToast('O registro não pode ficar totalmente vazio. Para remover, use o botão Excluir.', 'warning');
+        return;
+    }
+    const subtopicInputEl = document.getElementById('editHistSubtopic');
+    const subtopicChanged = !subtopicInputEl || (subtopicInputEl.value || '').trim() !== (subtopicInputEl.dataset.initialText || '').trim();
+    if (linkedGoals.length > 0) {
+        linkedGoals.forEach((g, idx) => {
+            g.linkId = linkId;
+            g.date = date;
+            if (idx === 0) {
+                g.subjectName = subjectName;
+                if (subtopicChanged || !Array.isArray(g.subtopics) || g.subtopics.length <= 1) {
+                    g.subtopicName = subtopicName;
+                    g.subtopics = [{ id: g.subtopicId || 'geral', name: subtopicName }];
+                }
+                g.type = modality;
+                g.notes = notes;
+                g.studySeconds = seconds;
+                g.studyMinutes = seconds / 60;
+                g.questionsCorrect = totalCorrect;
+                g.questionsWrong = totalWrong;
+                g.questionsTotal = totalCorrect + totalWrong;
+                g.didEssay = hasEssay;
+                g.essayTheme = essayObj ? essayObj.theme : '';
+                g.essayScore = essayObj ? essayObj.score : null;
+                g.essayMax = essayObj ? essayObj.max : null;
+            }
+        });
+    } else if (notes) {
+        appState.agenda.push({
+            id: uid('ag-'),
+            linkId,
+            date,
+            subjectName,
+            subtopicId: 'geral',
+            subtopicName,
+            subtopics: [{ id: 'geral', name: subtopicName }],
+            type: modality,
+            status: 'Concluído',
+            origin: 'direct',
+            notes,
+            studySeconds: seconds,
+            studyMinutes: seconds / 60,
+            questionsCorrect: totalCorrect,
+            questionsWrong: totalWrong,
+            questionsTotal: totalCorrect + totalWrong,
+            didEssay: hasEssay,
+            essayTheme: essayObj ? essayObj.theme : '',
+            essayScore: essayObj ? essayObj.score : null,
+            essayMax: essayObj ? essayObj.max : null
+        });
+    }
+
+    // 2) Atualizar sessões de tempo vinculadas
+    const linkedSessions = appState.timeSessions.filter(s => (s.linkId || ('lk-' + s.id)) === linkId);
+    if (seconds > 0) {
+        if (linkedSessions.length > 0) {
+            const first = linkedSessions[0];
+            first.linkId = linkId;
+            first.date = date;
+            first.subjectName = subjectName;
+            first.subtopicName = subtopicName;
+            first.modality = modality;
+            first.notes = notes;
+            first.seconds = seconds;
+            first.minutes = seconds / 60;
+            // Remove duplicatas extras do mesmo linkId para manter total exato
+            if (linkedSessions.length > 1) {
+                const extraIds = new Set(linkedSessions.slice(1).map(s => s.id));
+                appState.timeSessions = appState.timeSessions.filter(s => !extraIds.has(s.id));
+            }
+        } else {
+            appState.timeSessions.unshift({
+                id: uid('ts-'),
+                linkId,
+                date,
+                subjectName,
+                subtopicName,
+                modality,
+                notes,
+                seconds,
+                minutes: seconds / 60
+            });
+        }
+    } else if (linkedSessions.length > 0) {
+        appState.timeSessions = appState.timeSessions.filter(s => (s.linkId || ('lk-' + s.id)) !== linkId);
+    }
+
+    // 3) Atualizar registros de questões vinculados
+    appState.questionLogs = appState.questionLogs.filter(q => (q.linkId || ('lk-' + q.id)) !== linkId);
+    updatedQuestions.forEach(q => appState.questionLogs.push(q));
+
+    // 4) Atualizar redação vinculada
+    appState.essayScores = (appState.essayScores || []).filter(es => (es.linkId || ('lk-' + es.id)) !== linkId);
+    if (essayObj) {
+        appState.essayScores.push({
+            id: uid('es-'),
+            linkId,
+            date,
+            score: essayObj.score,
+            max: essayObj.max,
+            theme: essayObj.theme,
+            banca: essayObj.banca
+        });
+    }
+
+    saveAppState();
+    closeModal('modalEditHistoryEntry');
+    renderActiveModule();
+    showToast('Registro do histórico atualizado com sucesso!', 'success');
 }
 function normalizeSearchText(str) {
     return String(str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
@@ -4786,6 +5390,31 @@ console.error(err);
 // GOOGLE DRIVE SYNC COMPLETO
 const GDRIVE_OAUTH_SESSION_KEY = 'ORGANIZE_GDRIVE_OAUTH_SESSION_V1';
 let pendingDriveResync = false;
+let pendingDriveResyncNotify = false;
+let isDrivePullInProgress = false;
+async function fetchWithTimeout(url, options = {}, timeoutMs = 20000) {
+const controller = new AbortController();
+const timer = setTimeout(() => controller.abort(), timeoutMs);
+try {
+return await fetch(url, { ...options, signal: controller.signal });
+} finally {
+clearTimeout(timer);
+}
+}
+function setDriveActionButtonLoading(kind, isLoading) {
+const btn = document.getElementById(kind === 'pull' ? 'btnPullDrive' : 'btnSaveDrive');
+if (!btn) return;
+btn.disabled = Boolean(isLoading);
+const labelSpan = btn.querySelector('span');
+const iconEl = btn.querySelector('svg, i');
+if (isLoading) {
+if (labelSpan) labelSpan.textContent = kind === 'pull' ? 'Puxando...' : 'Salvando...';
+if (iconEl) iconEl.classList.add('drive-spin');
+} else {
+if (labelSpan) labelSpan.textContent = kind === 'pull' ? 'Puxar Drive' : 'Salvar Drive';
+if (iconEl) iconEl.classList.remove('drive-spin');
+}
+}
 function persistDriveOAuthSession(token, expiresInSec = 3500) {
 try {
 if (!token) {
@@ -4867,19 +5496,6 @@ updateCourseAdminVisibility();
 function initGoogleDriveClients() {
 const creds = getDriveCredentials();
 if (!creds.clientId) return;
-if (typeof gapi !== 'undefined' && creds.apiKey && !gapiInited) {
-gapi.load('client', async () => {
-try {
-await gapi.client.init({
-apiKey: creds.apiKey,
-discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
-});
-gapiInited = true;
-} catch (err) {
-console.error('Erro ao iniciar GAPI:', err);
-}
-});
-}
 if (typeof google !== 'undefined' && google.accounts && !gisInited) {
 try {
 tokenClient = google.accounts.oauth2.initTokenClient({
@@ -4894,15 +5510,14 @@ driveAccessToken = resp.access_token;
 persistDriveOAuthSession(resp.access_token, resp.expires_in);
 await fetchLoggedGoogleUserProfile();
 persistDriveOAuthSession(resp.access_token, resp.expires_in);
-await loadSharedPlatformsFromDrive();
 let enteredOk = true;
 if (pendingNetflixProfileToEnter) {
 enteredOk = completeProfileEntryAfterDriveAuth(false);
 }
 if (!enteredOk) return;
 updateDriveStatusUI(true);
-await findOrLoadDriveBackup(true);
-renderActiveModule();
+// Carrega backup e plataformas em paralelo sem travar a entrada no app (com proteção contra race condition)
+await runBackgroundDrivePullAfterLogin();
 }
 });
 gisInited = true;
@@ -4911,12 +5526,35 @@ console.error('Erro ao iniciar GIS:', err);
 }
 }
 }
+async function runBackgroundDrivePullAfterLogin() {
+if (!isRealOAuthToken() || isDrivePullInProgress) return;
+isDrivePullInProgress = true;
+setDriveActionButtonLoading('pull', true);
+const statusTxt = document.getElementById('gdriveStatusText');
+if (statusTxt) statusTxt.textContent = 'Sincronizando Drive...';
+try {
+await Promise.allSettled([
+findOrLoadDriveBackup(true),
+loadSharedPlatformsFromDrive()
+]);
+renderActiveModule();
+} finally {
+isDrivePullInProgress = false;
+setDriveActionButtonLoading('pull', false);
+if (pendingDriveResync && isRealOAuthToken()) {
+const shouldNotify = pendingDriveResyncNotify;
+pendingDriveResync = false;
+pendingDriveResyncNotify = false;
+setTimeout(() => syncDriveNow(!shouldNotify), 150);
+}
+}
+}
 async function fetchLoggedGoogleUserProfile() {
 if (!isRealOAuthToken()) return;
 try {
-const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+const res = await fetchWithTimeout('https://www.googleapis.com/oauth2/v3/userinfo', {
 headers: { Authorization: `Bearer ${driveAccessToken}` }
-});
+}, 8000);
 if (res.ok) {
 const info = await res.json();
 currentLoggedUserEmail = (info.email || '').toLowerCase().trim();
@@ -5005,11 +5643,30 @@ if (!isRealOAuthToken()) {
 handleDriveAuthClick();
 return;
 }
+if (isDrivePullInProgress) {
+showToast('Já estamos buscando seu backup no Google Drive...', 'info');
+return;
+}
+isDrivePullInProgress = true;
+setDriveActionButtonLoading('pull', true);
 const statusTxt = document.getElementById('gdriveStatusText');
 if (statusTxt) statusTxt.textContent = 'Buscando no Drive...';
-await loadSharedPlatformsFromDrive();
-await findOrLoadDriveBackup(true);
+try {
+await Promise.allSettled([
+findOrLoadDriveBackup(true),
+loadSharedPlatformsFromDrive()
+]);
 renderActiveModule();
+} finally {
+isDrivePullInProgress = false;
+setDriveActionButtonLoading('pull', false);
+if (pendingDriveResync && isRealOAuthToken()) {
+const shouldNotify = pendingDriveResyncNotify;
+pendingDriveResync = false;
+pendingDriveResyncNotify = false;
+setTimeout(() => syncDriveNow(!shouldNotify), 150);
+}
+}
 }
 function getSingleStateRichnessScore(st) {
 if (!st || typeof st !== 'object') return 0;
@@ -5153,28 +5810,36 @@ candidateNames.push(`organize_backup_user-${activeNetflixProfile.name.toLowerCas
 }
 candidateNames.push('organize_backup.json');
 }
+const uniqueCandidateNames = Array.from(new Set(candidateNames));
 try {
 let hadFetchError = false;
 const candidateFiles = [];
 const seenFileIds = new Set();
-for (const fileName of candidateNames) {
-const q = encodeURIComponent(`name='${fileName}' and trashed=false`);
-const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime desc&includeItemsFromAllDrives=true&supportsAllDrives=true&fields=files(id,name,modifiedTime)`, {
+// 1 única consulta combinada (OR) no Drive em vez de 3-4 chamadas sequenciais
+const nameClause = uniqueCandidateNames.map(n => `name='${n.replace(/'/g, "\\'")}'`).join(' or ');
+const qCombined = encodeURIComponent(`(${nameClause}) and trashed=false`);
+const res = await fetchWithTimeout(`https://www.googleapis.com/drive/v3/files?q=${qCombined}&orderBy=modifiedTime desc&includeItemsFromAllDrives=true&supportsAllDrives=true&fields=files(id,name,modifiedTime)`, {
 headers: { Authorization: `Bearer ${driveAccessToken}` },
 cache: 'no-store'
-});
+}, 18000);
 if (!res.ok) {
 hadFetchError = true;
 if (res.status === 401) {
 driveAccessToken = null;
 persistDriveOAuthSession(null);
 updateDriveStatusUI(false);
+showToast('Sessão do Google Drive expirou. Clique em Conectar novamente.', 'warning');
 return;
 }
-continue;
-}
+} else {
 const data = await res.json();
 if (Array.isArray(data.files)) {
+// Prioriza pela ordem de uniqueCandidateNames e depois pelo modifiedTime mais recente
+const priorityOf = (fname) => {
+const idx = uniqueCandidateNames.indexOf(fname);
+return idx >= 0 ? idx : 99;
+};
+data.files.sort((a, b) => priorityOf(a.name) - priorityOf(b.name) || (Date.parse(b.modifiedTime || 0) - Date.parse(a.modifiedTime || 0)));
 data.files.forEach(f => {
 if (f && f.id && !seenFileIds.has(f.id)) {
 seenFileIds.add(f.id);
@@ -5183,12 +5848,12 @@ candidateFiles.push(f);
 });
 }
 }
-if (candidateFiles.length === 0) {
+if (candidateFiles.length === 0 && !hadFetchError) {
 const qFallback = encodeURIComponent("name contains 'organize_backup' and trashed=false");
-const fbRes = await fetch(`https://www.googleapis.com/drive/v3/files?q=${qFallback}&orderBy=modifiedTime desc&includeItemsFromAllDrives=true&supportsAllDrives=true&fields=files(id,name,modifiedTime)`, {
+const fbRes = await fetchWithTimeout(`https://www.googleapis.com/drive/v3/files?q=${qFallback}&orderBy=modifiedTime desc&includeItemsFromAllDrives=true&supportsAllDrives=true&fields=files(id,name,modifiedTime)`, {
 headers: { Authorization: `Bearer ${driveAccessToken}` },
 cache: 'no-store'
-});
+}, 18000);
 if (fbRes.ok) {
 const fbData = await fbRes.json();
 if (Array.isArray(fbData.files)) {
@@ -5201,18 +5866,32 @@ candidateFiles.push(f);
 }
 } else {
 hadFetchError = true;
+if (fbRes.status === 401) {
+driveAccessToken = null;
+persistDriveOAuthSession(null);
+updateDriveStatusUI(false);
+showToast('Sessão do Google Drive expirou. Clique em Conectar novamente.', 'warning');
+return;
+}
 }
 }
 let chosenFile = null;
 let chosenPayload = null;
 let chosenRichness = -1;
-for (const fileMeta of candidateFiles.slice(0, 5)) {
-const fileRes = await fetch(`https://www.googleapis.com/drive/v3/files/${fileMeta.id}?alt=media`, {
+for (const fileMeta of candidateFiles.slice(0, 4)) {
+const fileRes = await fetchWithTimeout(`https://www.googleapis.com/drive/v3/files/${fileMeta.id}?alt=media`, {
 headers: { Authorization: `Bearer ${driveAccessToken}` },
 cache: 'no-store'
-});
+}, 25000);
 if (!fileRes.ok) {
 hadFetchError = true;
+if (fileRes.status === 401) {
+driveAccessToken = null;
+persistDriveOAuthSession(null);
+updateDriveStatusUI(false);
+showToast('Sessão do Google Drive expirou. Clique em Conectar novamente.', 'warning');
+return;
+}
 continue;
 }
 let parsedPayload = null;
@@ -5252,41 +5931,79 @@ renderWeeklyPlanGrid();
 }
 showToast('Backup carregado e sincronizado do Google Drive!', 'success');
 } else {
-await syncDriveNow(true);
+await syncDriveNow(true, true);
 }
 } else if (!hadFetchError) {
-await syncDriveNow(true);
+await syncDriveNow(true, true);
+} else {
+const statusTxt = document.getElementById('gdriveStatusText');
+if (statusTxt) statusTxt.textContent = 'Falha ao puxar Drive';
+showToast('Não foi possível ler o backup do Google Drive. Tente novamente.', 'warning');
 }
 } catch (err) {
 console.error('Erro ao buscar backup no Drive:', err);
-showToast('Erro ao carregar backup do Google Drive.', 'warning');
+const statusTxt = document.getElementById('gdriveStatusText');
+if (statusTxt) statusTxt.textContent = 'Drive Conectado';
+const isAbort = err && err.name === 'AbortError';
+showToast(isAbort ? 'Tempo esgotado ao buscar backup no Google Drive. Tente novamente.' : 'Erro ao carregar backup do Google Drive.', 'warning');
 }
 }
-async function syncDriveNow(isSilent = false) {
+async function syncDriveNow(isSilent = false, allowDuringPull = false) {
 if (!isRealOAuthToken()) {
 if (!isSilent) handleDriveAuthClick();
 return;
 }
+if (driveSyncDebounceTimer) {
+clearTimeout(driveSyncDebounceTimer);
+driveSyncDebounceTimer = null;
+}
+if (isDrivePullInProgress && !allowDuringPull) {
+pendingDriveResync = true;
+if (!isSilent) {
+pendingDriveResyncNotify = true;
+setDriveActionButtonLoading('save', true);
+showToast('Aguardando conclusão da sincronização do Drive para salvar suas alterações...', 'info');
+}
+return;
+}
 if (isDriveSyncInProgress) {
 pendingDriveResync = true;
+if (!isSilent) {
+pendingDriveResyncNotify = true;
+setDriveActionButtonLoading('save', true);
+showToast('Sincronização em andamento — suas alterações serão salvas em seguida...', 'info');
+}
 return;
 }
 isDriveSyncInProgress = true;
+if (!isSilent) setDriveActionButtonLoading('save', true);
+const statusTxt = document.getElementById('gdriveStatusText');
+if (statusTxt) statusTxt.textContent = 'Salvando no Drive...';
 const backupFileName = (!activeNetflixProfile || activeNetflixProfile.id === 'user-gabriel')
 ? 'organize_backup.json'
 : `organize_backup_${activeNetflixProfile.id}.json`;
 try {
 if (!remoteDriveFileId) {
-const q = encodeURIComponent(`name='${backupFileName}' and trashed=false`);
-const checkRes = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime desc&includeItemsFromAllDrives=true&supportsAllDrives=true&fields=files(id,name)`, {
+const q = encodeURIComponent(`name='${backupFileName.replace(/'/g, "\\'")}' and trashed=false`);
+const checkRes = await fetchWithTimeout(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=modifiedTime desc&includeItemsFromAllDrives=true&supportsAllDrives=true&fields=files(id,name)`, {
 headers: { Authorization: `Bearer ${driveAccessToken}` },
 cache: 'no-store'
-});
-if (checkRes.ok) {
+}, 15000);
+if (checkRes.status === 401) {
+driveAccessToken = null;
+persistDriveOAuthSession(null);
+updateDriveStatusUI(false);
+if (!isSilent) showToast('Sessão do Google Drive expirou. Clique em Conectar novamente.', 'warning');
+return;
+}
+if (!checkRes.ok) {
+if (statusTxt) statusTxt.textContent = 'Erro ao verificar Drive';
+if (!isSilent) showToast(`Não foi possível verificar o backup existente (HTTP ${checkRes.status}). Tente novamente.`, 'warning');
+return;
+}
 const checkData = await checkRes.json();
 if (checkData.files && checkData.files.length > 0) {
 remoteDriveFileId = checkData.files[0].id;
-}
 }
 }
 const nowTs = Date.now();
@@ -5309,32 +6026,43 @@ ankiProgress: typeof getAnkiUserProgressMap === 'function' ? getAnkiUserProgress
 gdriveCreds: getDriveCredentials(),
 ...appState
 };
-const fileContent = JSON.stringify(payloadToSave, null, 2);
+// JSON compacto (sem identação) reduz ~40% do tamanho e acelera muito o upload
+const fileContent = JSON.stringify(payloadToSave);
 const metadata = {
 name: backupFileName,
 mimeType: 'application/json'
 };
-const form = new FormData();
-form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-form.append('file', new Blob([fileContent], { type: 'application/json' }));
-let url = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
-let method = 'POST';
-if (remoteDriveFileId) {
-url = `https://www.googleapis.com/upload/drive/v3/files/${remoteDriveFileId}?uploadType=multipart`;
-method = 'PATCH';
-}
-const response = await fetch(url, {
+const buildUploadForm = () => {
+const f = new FormData();
+f.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+f.append('file', new Blob([fileContent], { type: 'application/json' }));
+return f;
+};
+let url = remoteDriveFileId
+? `https://www.googleapis.com/upload/drive/v3/files/${remoteDriveFileId}?uploadType=multipart`
+: 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
+let method = remoteDriveFileId ? 'PATCH' : 'POST';
+let response = await fetchWithTimeout(url, {
 method,
 headers: { Authorization: `Bearer ${driveAccessToken}` },
-body: form
-});
+body: buildUploadForm()
+}, 25000);
+// Se o arquivo antigo foi movido/apagado (404/403), cria automaticamente um novo sem falhar
+if (!response.ok && remoteDriveFileId && (response.status === 404 || response.status === 403)) {
+remoteDriveFileId = null;
+response = await fetchWithTimeout('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+method: 'POST',
+headers: { Authorization: `Bearer ${driveAccessToken}` },
+body: buildUploadForm()
+}, 25000);
+}
 if (response.ok) {
 const result = await response.json();
 if (result && result.id) remoteDriveFileId = result.id;
+// Sincronização das plataformas compartilhadas em segundo plano para não travar o salvamento
 if (isGabrielDriveAdminAuthenticated()) {
-await syncSharedPlatformsAndProfilesToDrive();
+syncSharedPlatformsAndProfilesToDrive().catch(e => console.warn('Sync plataformas:', e));
 }
-const statusTxt = document.getElementById('gdriveStatusText');
 const nowTime = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 if (statusTxt) statusTxt.textContent = `Salvo às ${nowTime} ✓`;
 if (!isSilent) showToast('Todas as edições foram salvas no Google Drive!', 'success');
@@ -5343,20 +6071,25 @@ if (response.status === 401) {
 driveAccessToken = null;
 persistDriveOAuthSession(null);
 updateDriveStatusUI(false);
+if (!isSilent) showToast('Sessão do Google Drive expirou. Clique em Conectar novamente.', 'warning');
+} else {
+if (statusTxt) statusTxt.textContent = 'Erro ao salvar';
+if (!isSilent) showToast(`Erro ao salvar no Google Drive (HTTP ${response.status}). Tente novamente.`, 'warning');
 }
-if (response.status === 404 || response.status === 403) {
-remoteDriveFileId = null;
-}
-if (!isSilent) showToast('Erro ao atualizar arquivo no Google Drive.', 'warning');
 }
 } catch (err) {
 console.error('Erro ao sincronizar no Drive:', err);
-if (!isSilent) showToast('Erro de conexão ao salvar no Google Drive.', 'warning');
+if (statusTxt) statusTxt.textContent = 'Drive Conectado';
+const isAbort = err && err.name === 'AbortError';
+if (!isSilent) showToast(isAbort ? 'Tempo esgotado ao salvar no Google Drive. Verifique a internet e tente novamente.' : 'Erro de conexão ao salvar no Google Drive.', 'warning');
 } finally {
 isDriveSyncInProgress = false;
+setDriveActionButtonLoading('save', false);
 if (pendingDriveResync && isRealOAuthToken()) {
+const shouldNotify = pendingDriveResyncNotify;
 pendingDriveResync = false;
-setTimeout(() => syncDriveNow(true), 250);
+pendingDriveResyncNotify = false;
+setTimeout(() => syncDriveNow(!shouldNotify), 200);
 }
 }
 }
@@ -5369,7 +6102,9 @@ toast.innerHTML = `
 <div class="text-xs font-medium text-white flex-1">${message}</div>
 `;
 container.appendChild(toast);
-lucide.createIcons();
+if (typeof lucide !== 'undefined' && lucide.createIcons) {
+try { lucide.createIcons({ nodes: [toast] }); } catch (e) { lucide.createIcons(); }
+}
 setTimeout(() => {
 toast.style.opacity = '0';
 setTimeout(() => toast.remove(), 250);
@@ -6072,7 +6807,7 @@ ${g.status !== 'Concluído' ? `
 <i data-lucide="play" class="w-3 h-3"></i> Cronometrar
 </button>` : '<span></span>'}
 <div class="flex items-center gap-1.5">
-${g.status !== 'Concluído' ? `<button onclick="openStudyRegisterForGoal('${g.id}')" title="Concluir estudo / simulado e registrar horas, questões ou redação" class="px-2.5 py-1 rounded-lg bg-tactical-card hover:bg-tactical-surface text-slate-200 hover:text-white text-[11px] font-semibold flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5 theme-accent-text"></i> Concluir</button>` : ''}
+${g.status !== 'Concluído' ? `<button onclick="openStudyRegisterForGoal('${g.id}')" title="Concluir estudo / simulado e registrar horas, questões ou redação" class="px-2.5 py-1 rounded-lg bg-tactical-card hover:bg-tactical-surface text-slate-200 hover:text-white text-[11px] font-semibold flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5 theme-accent-text"></i> Concluir</button>` : `<button type="button" data-link="${escapeHTML(g.linkId || ('lk-' + g.id))}" onclick="openEditHistoryEntry(this.dataset.link)" title="Editar registro (anotações, tempo, questões)" class="p-1 text-slate-400 hover:theme-accent-text"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>`}
 <button onclick="deleteAgendaGoal('${g.id}')" title="Excluir" class="p-1 text-slate-400 hover:theme-accent-text"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
 </div>
 </div>
@@ -6483,6 +7218,24 @@ renderQuestionsModule();
 closeModal('modalAddBanca');
 }
 // MÓDULO 5: CADERNO DE ERROS & FLASHCARDS
+let flashcardShuffleOrder = null;
+function stripHtmlToText(html) {
+if (!html) return '';
+const div = document.createElement('div');
+div.innerHTML = String(html);
+return (div.textContent || div.innerText || '').replace(/\u00a0/g, ' ').trim();
+}
+function resetFlashcardFlipUI() {
+isFlashcardFlipped = false;
+const inner = document.getElementById('flashcardInner3D');
+if (inner) inner.classList.remove('rotate-y-180');
+}
+function onErrorFilterChange() {
+currentFlashcardIndex = 0;
+flashcardShuffleOrder = null;
+resetFlashcardFlipUI();
+renderErrorNotebookModule();
+}
 function setErrorNotebookMode(mode) {
 currentErrorMode = mode;
 const btnList = document.getElementById('btnErrorModeList');
@@ -6500,22 +7253,36 @@ btnList.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold transition t
 listContainer.classList.add('hidden');
 fcContainer.classList.remove('hidden');
 currentFlashcardIndex = 0;
-isFlashcardFlipped = false;
+resetFlashcardFlipUI();
 }
 renderErrorNotebookModule();
 }
 function getFilteredErrorCards(forMode) {
-const kw = (document.getElementById('errorSearchKeyword')?.value || '').toLowerCase();
+const kw = normalizeSearchText(document.getElementById('errorSearchKeyword')?.value || '');
 const fSubj = document.getElementById('errorFilterSubject')?.value || 'ALL';
 const fBanca = document.getElementById('errorFilterBanca')?.value || 'ALL';
-return appState.errorCards.filter(c => {
+const fMastery = document.getElementById('errorFilterMastery')?.value || 'ALL';
+let cards = (appState.errorCards || []).filter(c => {
+if (!c) return false;
 if (forMode === 'LIST' && c.showInList === false) return false;
 if (forMode === 'FLASHCARD' && c.showInFlashcard === false) return false;
-const matchKw = !kw || c.question.toLowerCase().includes(kw) || c.answer.toLowerCase().includes(kw) || (c.bizu || '').toLowerCase().includes(kw);
 const matchSubj = fSubj === 'ALL' || (c.subjectName || 'Geral').trim().toLowerCase() === fSubj.trim().toLowerCase();
 const matchBanca = fBanca === 'ALL' || (c.banca || 'Geral').trim().toLowerCase() === fBanca.trim().toLowerCase();
-return matchKw && matchSubj && matchBanca;
+const masteryNorm = (c.mastery || 'Revisão').trim().toLowerCase();
+const isDominado = masteryNorm === 'dominado';
+const matchMastery = fMastery === 'ALL' || (fMastery === 'DOMINADO' ? isDominado : !isDominado);
+if (!matchSubj || !matchBanca || !matchMastery) return false;
+if (!kw) return true;
+const searchable = normalizeSearchText(
+`${stripHtmlToText(c.question)} ${stripHtmlToText(c.answer)} ${stripHtmlToText(c.bizu)} ${c.subjectName || ''} ${c.subtopicName || ''} ${c.banca || ''}`
+);
+return searchable.includes(kw);
 });
+if (forMode === 'FLASHCARD' && Array.isArray(flashcardShuffleOrder) && flashcardShuffleOrder.length > 0) {
+const rank = new Map(flashcardShuffleOrder.map((id, i) => [id, i]));
+cards = cards.slice().sort((a, b) => (rank.has(a.id) ? rank.get(a.id) : 999999) - (rank.has(b.id) ? rank.get(b.id) : 999999));
+}
+return cards;
 }
 function filterErrorBySubject(subjectName) {
 const sel = document.getElementById('errorFilterSubject');
@@ -6524,11 +7291,50 @@ const target = (subjectName || 'ALL').trim();
 if (target === 'ALL') {
 sel.value = 'ALL';
 } else {
-const matchedOpt = Array.from(sel.options).find(o => o.value.trim().toLowerCase() === target.toLowerCase());
-sel.value = matchedOpt ? matchedOpt.value : 'ALL';
+let matchedOpt = Array.from(sel.options).find(o => o.value.trim().toLowerCase() === target.toLowerCase());
+if (!matchedOpt) {
+matchedOpt = document.createElement('option');
+matchedOpt.value = target;
+matchedOpt.textContent = target;
+sel.appendChild(matchedOpt);
+}
+sel.value = matchedOpt.value;
 }
 }
+onErrorFilterChange();
+}
+function toggleErrorCardMastery(cardId) {
+const card = (appState.errorCards || []).find(c => c.id === cardId);
+if (!card) return;
+const isDom = (card.mastery || '').toLowerCase() === 'dominado';
+card.mastery = isDom ? 'Revisar' : 'Dominado';
+saveAppState();
 renderErrorNotebookModule();
+showToast(card.mastery === 'Dominado' ? 'Card marcado como Dominado!' : 'Card marcado para Revisar.', 'info');
+}
+function shuffleFlashcards() {
+const filtered = getFilteredErrorCards('FLASHCARD');
+if (filtered.length <= 1) {
+showToast('É necessário pelo menos 2 flashcards para embaralhar.', 'info');
+return;
+}
+const ids = filtered.map(c => c.id);
+for (let i = ids.length - 1; i > 0; i--) {
+const j = Math.floor(Math.random() * (i + 1));
+[ids[i], ids[j]] = [ids[j], ids[i]];
+}
+flashcardShuffleOrder = ids;
+currentFlashcardIndex = 0;
+resetFlashcardFlipUI();
+renderErrorNotebookModule();
+showToast('Flashcards embaralhados!', 'success');
+}
+function handleFlashcardSurfaceClick(event) {
+// Não vira o card se o usuário estiver selecionando texto ou clicando em link/botão
+const sel = window.getSelection ? window.getSelection() : null;
+if (sel && sel.toString().trim().length > 0) return;
+if (event && event.target && event.target.closest('a, button')) return;
+flipCurrentFlashcard();
 }
 function sanitizeErrorCardHtml(rawHtml) {
 if (!rawHtml) return '';
@@ -6539,6 +7345,17 @@ const cleanNode = (node) => {
 if (node.nodeType === Node.TEXT_NODE) return;
 if (node.nodeType !== Node.ELEMENT_NODE) {
 node.remove();
+return;
+}
+if (node.tagName === 'FONT') {
+const span = document.createElement('span');
+const colorAttr = (node.getAttribute('color') || '').trim();
+if (colorAttr && !/expression|url\s*\(|javascript:/i.test(colorAttr)) {
+span.setAttribute('style', `color: ${colorAttr}`);
+}
+while (node.firstChild) span.appendChild(node.firstChild);
+node.replaceWith(span);
+Array.from(span.childNodes).forEach(cleanNode);
 return;
 }
 if (!allowedTags.has(node.tagName)) {
@@ -6576,15 +7393,24 @@ return tpl.innerHTML;
 function renderErrorSubjectPillsBar() {
 const pillsBar = document.getElementById('errorSubjectPillsBar');
 if (!pillsBar) return;
-const kw = (document.getElementById('errorSearchKeyword')?.value || '').toLowerCase();
+const kw = normalizeSearchText(document.getElementById('errorSearchKeyword')?.value || '');
 const fBanca = document.getElementById('errorFilterBanca')?.value || 'ALL';
 const fSubj = document.getElementById('errorFilterSubject')?.value || 'ALL';
-const modeCards = appState.errorCards.filter(c => {
+const fMastery = document.getElementById('errorFilterMastery')?.value || 'ALL';
+const modeCards = (appState.errorCards || []).filter(c => {
+if (!c) return false;
 if (currentErrorMode === 'LIST' && c.showInList === false) return false;
 if (currentErrorMode === 'FLASHCARD' && c.showInFlashcard === false) return false;
-const matchKw = !kw || (c.question || '').toLowerCase().includes(kw) || (c.answer || '').toLowerCase().includes(kw) || (c.bizu || '').toLowerCase().includes(kw);
 const matchBanca = fBanca === 'ALL' || (c.banca || 'Geral').trim().toLowerCase() === fBanca.trim().toLowerCase();
-return matchKw && matchBanca;
+const masteryNorm = (c.mastery || 'Revisão').trim().toLowerCase();
+const isDominado = masteryNorm === 'dominado';
+const matchMastery = fMastery === 'ALL' || (fMastery === 'DOMINADO' ? isDominado : !isDominado);
+if (!matchBanca || !matchMastery) return false;
+if (!kw) return true;
+const searchable = normalizeSearchText(
+`${stripHtmlToText(c.question)} ${stripHtmlToText(c.answer)} ${stripHtmlToText(c.bizu)} ${c.subjectName || ''} ${c.subtopicName || ''} ${c.banca || ''}`
+);
+return searchable.includes(kw);
 });
 const countsBySubject = new Map();
 const canonicalByKey = new Map();
@@ -6659,6 +7485,11 @@ const sourceBadge = c.sourcePlatform
 ? `<a href="${escapeHTML(c.sourceUrl)}" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-tactical-card border border-tactical-border text-[10px] font-mono text-slate-300 hover:text-white transition">${escapeHTML(c.sourcePlatform)}</a>`
 : `<span class="px-2 py-0.5 rounded bg-tactical-card border border-tactical-border text-[10px] font-mono text-slate-300">${escapeHTML(c.sourcePlatform)}</span>`)
 : '';
+const isDom = (c.mastery || '').toLowerCase() === 'dominado';
+const masteryBtn = `<button type="button" onclick="toggleErrorCardMastery('${c.id}')" title="Alternar status entre Revisar e Dominado" class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold transition ${isDom ? 'theme-accent-bg' : 'bg-tactical-card text-slate-300 hover:text-white'}">${isDom ? '✓ Dominado' : 'Revisar'}</button>`;
+const safeQ = sanitizeErrorCardHtml(c.question || '');
+const safeA = sanitizeErrorCardHtml(c.answer || '');
+const safeB = sanitizeErrorCardHtml(c.bizu || '');
 cardsHtml += `
 <div class="bg-tactical-surface border border-tactical-border rounded-2xl p-5 space-y-3 shadow-sm">
 <div class="flex items-center justify-between border-b border-tactical-border pb-2 gap-2">
@@ -6666,29 +7497,30 @@ cardsHtml += `
 <span class="text-[11px] font-mono theme-accent-text font-bold">${escapeHTML(c.subjectName || 'Geral')}</span>
 <div class="text-xs font-semibold text-white truncate">${escapeHTML(c.subtopicName || 'Assunto Geral')}</div>
 </div>
-<div class="flex items-center gap-1.5 shrink-0">
+<div class="flex items-center gap-1.5 shrink-0 flex-wrap justify-end">
+${masteryBtn}
 ${sourceBadge}
 <span class="px-2 py-0.5 rounded bg-tactical-bg text-xs font-mono text-slate-300">${escapeHTML(c.banca || 'Geral')}</span>
-<button onclick="openEditErrorCardModal('${c.id}')" title="Editar Card" class="p-1.5 rounded-lg hover:bg-tactical-card text-slate-400 hover:theme-accent-text transition">
+<button type="button" onclick="openEditErrorCardModal('${c.id}')" title="Editar Card" class="p-1.5 rounded-lg hover:bg-tactical-card text-slate-400 hover:theme-accent-text transition">
 <i data-lucide="edit-2" class="w-4 h-4"></i>
 </button>
-<button onclick="deleteErrorCardFromList('${c.id}')" title="Excluir da Lista (mantém nos Flashcards)" class="p-1.5 rounded-lg hover:bg-tactical-card text-slate-400 hover:theme-accent-text transition">
+<button type="button" onclick="deleteErrorCardFromList('${c.id}')" title="Excluir Card permanentemente" class="p-1.5 rounded-lg hover:bg-tactical-card text-slate-400 hover:theme-accent-text transition">
 <i data-lucide="trash-2" class="w-4 h-4"></i>
 </button>
 </div>
 </div>
 <div class="p-3 rounded-xl bg-tactical-bg border border-tactical-border">
 <div class="text-[10px] font-mono text-slate-400 mb-1">Pergunta:</div>
-<div class="text-xs sm:text-sm text-white leading-relaxed">${c.question}</div>
+<div class="error-card-content text-xs sm:text-sm text-white leading-relaxed">${safeQ}</div>
 </div>
 <div class="p-3 rounded-xl bg-tactical-bg border border-tactical-border">
 <div class="text-[10px] font-mono text-slate-400 mb-1">Resposta:</div>
-<div class="text-xs sm:text-sm text-slate-200 leading-relaxed">${c.answer}</div>
+<div class="error-card-content text-xs sm:text-sm text-slate-200 leading-relaxed">${safeA}</div>
 </div>
-${c.bizu ? `
+${stripHtmlToText(safeB) ? `
 <div class="p-3 rounded-xl bg-tactical-card border border-tactical-border">
 <div class="text-[10px] font-mono theme-accent-text font-bold mb-1">BIZU:</div>
-<div class="text-xs sm:text-sm text-white leading-relaxed">${c.bizu}</div>
+<div class="error-card-content text-xs sm:text-sm text-white leading-relaxed">${safeB}</div>
 </div>
 ` : ''}
 </div>
@@ -6712,28 +7544,33 @@ ${cardsHtml}
 });
 } else {
 if (filtered.length === 0) {
+resetFlashcardFlipUI();
 document.getElementById('flashcardCounterText').textContent = 'CARD 0 DE 0';
+document.getElementById('flashcardStatusBadge').textContent = '--';
 document.getElementById('fcFrontSubject').textContent = '--';
 document.getElementById('fcFrontSubtopic').textContent = '--';
 document.getElementById('fcFrontBanca').textContent = '--';
-document.getElementById('fcFrontQuestion').innerHTML = 'Nenhum flashcard disponível.';
+document.getElementById('fcFrontQuestion').innerHTML = 'Nenhum flashcard disponível para este filtro.';
 document.getElementById('fcBackAnswer').innerHTML = '--';
 document.getElementById('fcBackBizu').innerHTML = '--';
+document.getElementById('fcBackBizuBox')?.classList.add('hidden');
 return;
 }
 if (currentFlashcardIndex >= filtered.length) currentFlashcardIndex = 0;
+if (currentFlashcardIndex < 0) currentFlashcardIndex = filtered.length - 1;
 const card = filtered[currentFlashcardIndex];
 document.getElementById('flashcardCounterText').textContent = `CARD ${currentFlashcardIndex + 1} DE ${filtered.length}`;
 document.getElementById('flashcardStatusBadge').textContent = card.mastery || 'Revisão';
-document.getElementById('fcFrontSubject').textContent = card.subjectName;
-document.getElementById('fcFrontSubtopic').textContent = card.subtopicName;
-document.getElementById('fcFrontBanca').textContent = card.banca;
-document.getElementById('fcFrontQuestion').innerHTML = card.question;
-document.getElementById('fcBackAnswer').innerHTML = card.answer;
+document.getElementById('fcFrontSubject').textContent = card.subjectName || 'Geral';
+document.getElementById('fcFrontSubtopic').textContent = card.subtopicName || 'Assunto Geral';
+document.getElementById('fcFrontBanca').textContent = card.banca || 'Geral';
+document.getElementById('fcFrontQuestion').innerHTML = sanitizeErrorCardHtml(card.question || '');
+document.getElementById('fcBackAnswer').innerHTML = sanitizeErrorCardHtml(card.answer || '');
+const safeBizuFc = sanitizeErrorCardHtml(card.bizu || '');
 const bizuBox = document.getElementById('fcBackBizuBox');
-if (card.bizu && card.bizu.trim() !== '') {
+if (stripHtmlToText(safeBizuFc)) {
 bizuBox.classList.remove('hidden');
-document.getElementById('fcBackBizu').innerHTML = card.bizu;
+document.getElementById('fcBackBizu').innerHTML = safeBizuFc;
 } else {
 bizuBox.classList.add('hidden');
 }
@@ -6793,76 +7630,111 @@ const card = filtered[currentFlashcardIndex];
 if (card) openEditErrorCardModal(card.id);
 }
 function deleteErrorCardFromList(id) {
-const card = appState.errorCards.find(c => c.id === id);
+const card = (appState.errorCards || []).find(c => c.id === id);
 if (!card) return;
-card.showInList = false;
-if (card.showInList === false && card.showInFlashcard === false) {
+if (!confirm('Excluir este card permanentemente do Caderno de Erros (Lista e Flashcards)?')) return;
 appState.errorCards = appState.errorCards.filter(c => c.id !== id);
+if (Array.isArray(flashcardShuffleOrder)) {
+flashcardShuffleOrder = flashcardShuffleOrder.filter(x => x !== id);
 }
 saveAppState();
+populateAllSubjectSelects();
+populateAllBancaSelects();
 renderErrorNotebookModule();
-showToast('Removido da Lista (mantido nos Flashcards)!', 'info');
+showToast('Card excluído do Caderno de Erros!', 'info');
 }
 function deleteCurrentFlashcardOnly() {
 const filtered = getFilteredErrorCards('FLASHCARD');
 if (filtered.length === 0) return;
 const card = filtered[currentFlashcardIndex];
 if (!card) return;
-card.showInFlashcard = false;
-if (card.showInList === false && card.showInFlashcard === false) {
+if (!confirm('Excluir este card permanentemente do Caderno de Erros (Lista e Flashcards)?')) return;
 appState.errorCards = appState.errorCards.filter(c => c.id !== card.id);
+if (Array.isArray(flashcardShuffleOrder)) {
+flashcardShuffleOrder = flashcardShuffleOrder.filter(x => x !== card.id);
 }
-isFlashcardFlipped = false;
-document.getElementById('flashcardInner3D').classList.remove('rotate-y-180');
+resetFlashcardFlipUI();
 if (currentFlashcardIndex > 0) currentFlashcardIndex--;
 saveAppState();
+populateAllSubjectSelects();
+populateAllBancaSelects();
 renderErrorNotebookModule();
-showToast('Flashcard removido (mantido na Lista)!', 'info');
+showToast('Card excluído do Caderno de Erros!', 'info');
 }
 function flipCurrentFlashcard() {
+const filtered = getFilteredErrorCards('FLASHCARD');
+if (filtered.length === 0) return;
 isFlashcardFlipped = !isFlashcardFlipped;
 const inner = document.getElementById('flashcardInner3D');
+if (!inner) return;
 if (isFlashcardFlipped) inner.classList.add('rotate-y-180');
 else inner.classList.remove('rotate-y-180');
 }
 function nextFlashcard() {
 const filtered = getFilteredErrorCards('FLASHCARD');
 if (filtered.length === 0) return;
-isFlashcardFlipped = false;
-document.getElementById('flashcardInner3D').classList.remove('rotate-y-180');
+resetFlashcardFlipUI();
 currentFlashcardIndex = (currentFlashcardIndex + 1) % filtered.length;
 renderErrorNotebookModule();
 }
 function prevFlashcard() {
 const filtered = getFilteredErrorCards('FLASHCARD');
 if (filtered.length === 0) return;
-isFlashcardFlipped = false;
-document.getElementById('flashcardInner3D').classList.remove('rotate-y-180');
+resetFlashcardFlipUI();
 currentFlashcardIndex = (currentFlashcardIndex - 1 + filtered.length) % filtered.length;
 renderErrorNotebookModule();
 }
 function markFlashcardMastery(level) {
 const filtered = getFilteredErrorCards('FLASHCARD');
 if (filtered.length === 0) return;
-filtered[currentFlashcardIndex].mastery = level;
+const currentCard = filtered[currentFlashcardIndex];
+if (!currentCard) return;
+currentCard.mastery = level;
 saveAppState();
+showToast(level === 'Dominado' ? 'Card marcado como Dominado!' : 'Card marcado para Revisar.', 'info');
+const nextFiltered = getFilteredErrorCards('FLASHCARD');
+const stillInList = nextFiltered.some(c => c.id === currentCard.id);
+if (stillInList) {
 nextFlashcard();
+} else {
+resetFlashcardFlipUI();
+if (currentFlashcardIndex >= nextFiltered.length) {
+currentFlashcardIndex = 0;
 }
+renderErrorNotebookModule();
+}
+}
+document.addEventListener('keydown', (e) => {
+if (currentTab !== 'mod5' || currentErrorMode !== 'FLASHCARD') return;
+const tag = (e.target && e.target.tagName) ? e.target.tagName.toUpperCase() : '';
+if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (e.target && e.target.isContentEditable)) return;
+if (document.querySelector('[id^="modal"]:not(.hidden)')) return;
+if (e.code === 'Space') {
+e.preventDefault();
+flipCurrentFlashcard();
+} else if (e.key === 'ArrowRight') {
+e.preventDefault();
+nextFlashcard();
+} else if (e.key === 'ArrowLeft') {
+e.preventDefault();
+prevFlashcard();
+}
+});
 function handleAddErrorCard(e) {
 e.preventDefault();
 const editId = document.getElementById('errEditCardId').value;
 const subjectName = document.getElementById('errInputSubject').value || 'Geral';
 const banca = document.getElementById('errInputBanca').value || 'Geral';
 const subSel = document.getElementById('errInputSubtopic');
-const subtopicId = subSel.value;
-const subtopicName = subSel.options[subSel.selectedIndex]?.text || 'Geral';
+const subtopicId = subSel.value || 'geral';
+const subtopicName = subSel.options[subSel.selectedIndex]?.text || 'Assunto Geral';
 const qEl = document.getElementById('errInputQuestion');
 const aEl = document.getElementById('errInputAnswer');
 const bEl = document.getElementById('errInputBizu');
-const question = qEl.innerHTML.trim();
-const answer = aEl.innerHTML.trim();
-const bizu = bEl.innerHTML.trim();
-if (!question || !answer) {
+const question = sanitizeErrorCardHtml(qEl.innerHTML.trim());
+const answer = sanitizeErrorCardHtml(aEl.innerHTML.trim());
+const bizu = sanitizeErrorCardHtml(bEl.innerHTML.trim());
+if (!stripHtmlToText(question) || !stripHtmlToText(answer)) {
 showToast('Preencha pergunta e resposta.', 'warning');
 return;
 }
@@ -6875,7 +7747,7 @@ existing.subtopicName = subtopicName;
 existing.banca = banca;
 existing.question = question;
 existing.answer = answer;
-existing.bizu = bizu;
+existing.bizu = stripHtmlToText(bizu) ? bizu : '';
 }
 showToast('Card atualizado com sucesso!', 'success');
 } else {
@@ -6887,7 +7759,7 @@ subtopicName,
 banca,
 question,
 answer,
-bizu,
+bizu: stripHtmlToText(bizu) ? bizu : '',
 mastery: 'Revisão',
 showInList: true,
 showInFlashcard: true
@@ -6898,7 +7770,10 @@ document.getElementById('errEditCardId').value = '';
 qEl.innerHTML = '';
 aEl.innerHTML = '';
 bEl.innerHTML = '';
+savedErrorEditorRange = null;
 saveAppState();
+populateAllSubjectSelects();
+populateAllBancaSelects();
 closeModal('modalAddErrorCard');
 renderErrorNotebookModule();
 }
@@ -7532,6 +8407,13 @@ populateAllSubjectSelects();
 populateAllBancaSelects();
 if (id === 'modalAddErrorCard' && !document.getElementById('errEditCardId').value) {
 document.getElementById('modalErrorCardTitle').textContent = 'Novo Card de Erro';
+const qEl = document.getElementById('errInputQuestion');
+const aEl = document.getElementById('errInputAnswer');
+const bEl = document.getElementById('errInputBizu');
+if (qEl) qEl.innerHTML = '';
+if (aEl) aEl.innerHTML = '';
+if (bEl) bEl.innerHTML = '';
+savedErrorEditorRange = null;
 }
 if (id === 'modalEditTargetExam') {
 document.getElementById('targetExamInputName').value = appState.targetExamName || '';
@@ -7869,6 +8751,13 @@ function closeModal(id) {
     }
     if (id === 'modalAddErrorCard') {
         document.getElementById('errEditCardId').value = '';
+        const qEl = document.getElementById('errInputQuestion');
+        const aEl = document.getElementById('errInputAnswer');
+        const bEl = document.getElementById('errInputBizu');
+        if (qEl) qEl.innerHTML = '';
+        if (aEl) aEl.innerHTML = '';
+        if (bEl) bEl.innerHTML = '';
+        savedErrorEditorRange = null;
     }
     if (id === 'modalAddPlatformCard') {
         const pe = document.getElementById('platEditId');
@@ -9089,7 +9978,10 @@ showToast('Dados limpos!', 'info');
             }
         });
 
-        window.onload = function() {
+        let organizeAppBooted = false;
+        function bootOrganizeApp() {
+            if (organizeAppBooted) return;
+            organizeAppBooted = true;
             injectAnkiModuleDOMAndScripts();
             initPipCanvas();
             loadThemePreference();
@@ -9106,11 +9998,23 @@ showToast('Dados limpos!', 'info');
             renderNetflixProfilesGrid();
             switchTab('mod7');
             if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
-            setTimeout(initGoogleDriveClients, 800);
-
-            playOrganizeLoginVignette(1650);
+            initGoogleDriveClients();
+            playOrganizeLoginVignette(450);
+            // Registra Service Worker leve para habilitar instalação como app (PWA) em PC e Celular
+            if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            }
             window.postMessage({ source: 'ORGANIZE_APP', type: 'ORGANIZE_BRIDGE_READY' }, '*');
-        };
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', bootOrganizeApp);
+        } else {
+            bootOrganizeApp();
+        }
+        window.addEventListener('load', () => {
+            initGoogleDriveClients();
+            if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+        });
     </script>
 </body>
 </html>
