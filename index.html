@@ -1304,6 +1304,9 @@ Conectar
 <i data-lucide="cloud-upload" class="w-3.5 h-3.5 shrink-0"></i> <span>Salvar Drive</span>
 </button>
 </div>
+<button type="button" id="btnInstallAppSidebar" onclick="handleInstallAppClick()" title="Instalar o Organize como aplicativo no PC ou Celular (com Google Drive ativo)" class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded bg-tactical-card hover:bg-tactical-surface border border-tactical-border text-[11px] font-semibold text-slate-200 hover:text-white transition cursor-pointer">
+<i data-lucide="monitor-down" class="w-3.5 h-3.5 theme-accent-text shrink-0"></i> <span>Instalar App (PC/Celular)</span>
+</button>
 <button type="button" onclick="openResetModal()" class="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded hover:bg-tactical-card text-[11px] font-mono text-slate-400 hover:text-white transition">
 <i data-lucide="refresh-cw" class="w-3 h-3"></i> Restaurar Dados
 </button>
@@ -1375,6 +1378,11 @@ G
 <button type="button" onclick="handleDriveAuthClick()" id="headerDriveBtn" class="px-1.5 sm:px-2.5 py-1.5 rounded bg-tactical-card hover:bg-tactical-surface text-xs font-medium text-slate-200 flex items-center gap-1.5 transition shrink-0">
 <i data-lucide="cloud" class="w-4 h-4 theme-accent-text"></i>
 <span id="headerDriveBtnText" class="hidden sm:inline">Drive</span>
+</button>
+<!-- Botão Instalar Aplicativo (PWA no PC / Celular) -->
+<button type="button" onclick="handleInstallAppClick()" id="btnInstallAppHeader" title="Instalar Organize no PC ou Celular como aplicativo (mantém o Google Drive funcionando)" class="px-1.5 sm:px-2.5 py-1.5 rounded theme-accent-soft-bg hover:brightness-110 text-xs font-semibold flex items-center gap-1.5 transition shrink-0 cursor-pointer">
+<i data-lucide="monitor-down" class="w-4 h-4 shrink-0"></i>
+<span class="hidden md:inline">Instalar App</span>
 </button>
 </div>
 </header>
@@ -2695,6 +2703,28 @@ Editar Registro do Histórico
 <button type="submit" class="px-5 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold">Salvar Alterações</button>
 </div>
 </form>
+</div>
+</div>
+<!-- MODAL: INSTALAR APLICATIVO (PWA) -->
+<div id="modalInstallAppGuide" class="fixed inset-0 bg-black/75 z-50 hidden items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+<div class="bg-tactical-surface border border-tactical-border rounded-2xl max-w-md w-full p-5 sm:p-6 space-y-4 my-auto max-h-[92dvh] overflow-y-auto">
+<div class="flex items-center justify-between gap-2">
+<h3 class="text-base font-bold text-white flex items-center gap-2">
+<i data-lucide="monitor-down" class="w-5 h-5 theme-accent-text"></i>
+Instalar Organize no PC / Celular
+</h3>
+<button type="button" onclick="closeModal('modalInstallAppGuide')" class="p-1.5 rounded-lg bg-tactical-card text-slate-400 hover:text-white transition">
+<i data-lucide="x" class="w-4 h-4"></i>
+</button>
+</div>
+<div id="installAppGuideBody" class="space-y-3 text-xs text-slate-300 leading-relaxed"></div>
+<div class="p-3 rounded-xl bg-tactical-card/80 border border-tactical-border text-[11px] text-slate-300 flex items-start gap-2">
+<i data-lucide="cloud" class="w-4 h-4 theme-accent-text shrink-0 mt-0.5"></i>
+<span><strong>Google Drive preservado:</strong> ao instalar como aplicativo via HTTPS ou <code class="font-mono text-white">localhost</code>, o login Google e os botões de <strong>Salvar / Puxar Drive</strong> continuam funcionando exatamente igual.</span>
+</div>
+<div class="flex justify-end gap-2 pt-1">
+<button type="button" onclick="closeModal('modalInstallAppGuide')" class="px-4 py-2 rounded-xl bg-tactical-accent hover:bg-tactical-accentHover text-white keep-white text-xs font-semibold">Entendi</button>
+</div>
 </div>
 </div>
 <!-- MODAL: RESTAURAR DADOS -->
@@ -9978,6 +10008,109 @@ showToast('Dados limpos!', 'info');
             }
         });
 
+        let deferredPwaInstallPrompt = null;
+
+        function isRunningAsInstalledPwa() {
+            return Boolean(
+                (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+                window.navigator.standalone === true
+            );
+        }
+
+        function updateInstallAppButtonsUI() {
+            const installed = isRunningAsInstalledPwa();
+            const headerBtn = document.getElementById('btnInstallAppHeader');
+            const sidebarBtn = document.getElementById('btnInstallAppSidebar');
+            if (headerBtn) {
+                headerBtn.classList.toggle('hidden', installed);
+                headerBtn.title = deferredPwaInstallPrompt
+                    ? 'Clique para instalar o Organize como aplicativo no seu dispositivo (com Google Drive ativo)'
+                    : 'Instalar Organize no PC ou Celular como aplicativo (mantém o Google Drive funcionando)';
+            }
+            if (sidebarBtn) {
+                sidebarBtn.classList.toggle('hidden', installed);
+            }
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPwaInstallPrompt = e;
+            updateInstallAppButtonsUI();
+        });
+
+        window.addEventListener('appinstalled', () => {
+            deferredPwaInstallPrompt = null;
+            updateInstallAppButtonsUI();
+            if (typeof showToast === 'function') {
+                showToast('Organize instalado como aplicativo! Seus dados no Google Drive continuam sincronizados.', 'success');
+            }
+        });
+
+        async function handleInstallAppClick() {
+            if (isRunningAsInstalledPwa()) {
+                if (typeof showToast === 'function') {
+                    showToast('O Organize já está instalado como aplicativo neste dispositivo!', 'success');
+                }
+                return;
+            }
+            if (deferredPwaInstallPrompt) {
+                try {
+                    deferredPwaInstallPrompt.prompt();
+                    const choice = await deferredPwaInstallPrompt.userChoice;
+                    deferredPwaInstallPrompt = null;
+                    updateInstallAppButtonsUI();
+                    if (choice && choice.outcome === 'accepted') {
+                        if (typeof showToast === 'function') {
+                            showToast('Instalação iniciada! O Organize aparecerá com seu ícone no PC/Celular.', 'success');
+                        }
+                        return;
+                    }
+                } catch (err) {
+                    console.warn('Erro ao abrir prompt de instalação PWA:', err);
+                    deferredPwaInstallPrompt = null;
+                }
+            }
+            const guideBody = document.getElementById('installAppGuideBody');
+            if (guideBody) {
+                const isFileProto = location.protocol === 'file:';
+                const ua = navigator.userAgent || '';
+                const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+                if (isFileProto) {
+                    guideBody.innerHTML = `
+                        <p class="text-amber-300 font-medium">Você está abrindo o arquivo diretamente do computador (<code class="font-mono">file://</code>).</p>
+                        <p>Para instalar o Organize como aplicativo com o <strong>Google Drive funcionando</strong>, abra-o através de um endereço <strong>HTTPS</strong> (ex.: GitHub Pages, Netlify ou Vercel) ou servidor local (<code class="font-mono text-white">http://localhost</code>).</p>
+                        <p>Assim que abrir por HTTPS ou <code class="font-mono text-white">localhost</code> no Chrome ou Edge, clique novamente em <strong>Instalar App</strong> para instalar em 1 clique.</p>
+                    `;
+                } else if (isIOS) {
+                    guideBody.innerHTML = `
+                        <p>No <strong>iPhone / iPad (Safari)</strong>, a instalação é feita pelo menu do navegador:</p>
+                        <ol class="list-decimal list-inside space-y-1.5 text-slate-200">
+                            <li>Toque no ícone de <strong>Compartilhar</strong> (quadrado com seta para cima) na barra do Safari.</li>
+                            <li>Role para baixo e toque em <strong>Adicionar à Tela de Início</strong>.</li>
+                            <li>Toque em <strong>Adicionar</strong> no canto superior direito.</li>
+                        </ol>
+                    `;
+                } else {
+                    guideBody.innerHTML = `
+                        <p>Se o aviso automático de instalação não apareceu (ou se você já instalou antes), instale manualmente pelo navegador:</p>
+                        <ol class="list-decimal list-inside space-y-1.5 text-slate-200">
+                            <li>No <strong>Chrome</strong> ou <strong>Edge</strong> (PC), clique no ícone de <strong>Instalar</strong> no canto direito da barra de endereço — ou abra o menu <strong>⋮</strong> → <strong>Transmitir, salvar e compartilhar</strong> → <strong>Instalar Organize</strong>.</li>
+                            <li>No <strong>Android (Chrome)</strong>, toque no menu <strong>⋮</strong> → <strong>Instalar aplicativo</strong> ou <strong>Adicionar à tela inicial</strong>.</li>
+                        </ol>
+                    `;
+                }
+            }
+            if (typeof openModal === 'function') {
+                openModal('modalInstallAppGuide');
+                if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                    const modalEl = document.getElementById('modalInstallAppGuide');
+                    if (modalEl) {
+                        try { lucide.createIcons({ nodes: [modalEl] }); } catch (e) { lucide.createIcons(); }
+                    }
+                }
+            }
+        }
+
         let organizeAppBooted = false;
         function bootOrganizeApp() {
             if (organizeAppBooted) return;
@@ -9995,6 +10128,7 @@ showToast('Dados limpos!', 'info');
                 renderAvatarElementContent(headerAvatar, defaultProf, 'w-6 h-6 rounded theme-accent-bg flex items-center justify-center shrink-0', 'text-white keep-white font-black text-[11px]');
             }
             updateDriveStatusUI(isRealOAuthToken());
+            updateInstallAppButtonsUI();
             renderNetflixProfilesGrid();
             switchTab('mod7');
             if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
